@@ -1,0 +1,55 @@
+<div class="create-property-container">
+    <h1>Create Property</h1>
+    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="address">Address:</label>
+        <input id="address" type="text" formControlName="address" />
+      </div>
+      <div class="form-group">
+        <label for="type">Type:</label>
+        <input id="type" type="text" formControlName="type" />
+      </div>
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input id="price" type="number" formControlName="price" />
+      </div>
+      <div class="form-group">
+        <label for="squareFootage">Square Footage:</label>
+        <input id="squareFootage" type="number" formControlName="squareFootage" />
+      </div>
+      <div class="form-group">
+        <label for="numberOfBedrooms">Number of Bedrooms:</label>
+        <input id="numberOfBedrooms" type="number" formControlName="numberOfBedrooms" />
+      </div>
+      <div class="form-group">
+        <label for="numberOfBathrooms">Number of Bathrooms:</label>
+        <input id="numberOfBathrooms" type="number" formControlName="numberOfBathrooms" />
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" formControlName="description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select id="status" formControlName="status">
+          <option value="available">Available</option>
+          <option value="sold">Sold</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="listingDate">Listing Date:</label>
+        <input id="listingDate" type="date" formControlName="listingDate" />
+      </div>
+      <div class="form-group">
+        <label for="imageUrls">Image URL:</label>
+        <input id="imageUrls" type="url" formControlName="imageUrls" />
+      </div>
+      <div class="form-group">
+        <label for="userId">User ID:</label>
+        <input id="userId" type="text" formControlName="userId" />
+      </div>
+      <button type="submit" [disabled]="propertyForm.invalid">Create Property</button>
+    </form>
+  </div>
+  

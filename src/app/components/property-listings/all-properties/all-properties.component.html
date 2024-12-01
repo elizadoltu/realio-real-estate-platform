@@ -1,0 +1,24 @@
+<div class="properties-container">
+    <h1 class="properties-title">All Properties</h1>
+  
+    <!-- Display all properties in a grid -->
+    <div class="properties-grid">
+      <div class="property-card" *ngFor="let property of properties">
+        <img class="property-image" [src]="property.imageUrls" alt="Property Image" />
+        <div class="property-details">
+          <h2 class="property-address">{{ property.address }}</h2>
+          <p class="property-type">{{ property.type }}</p>
+          <p class="property-price">Price: ${{ property.price | number }}</p>
+          <p class="property-bedrooms">Bedrooms: {{ property.numberOfBedrooms }}</p>
+          <p class="property-bathrooms">Bathrooms: {{ property.numberOfBathrooms }}</p>
+          <p class="property-description">{{ property.description }}</p>
+          <p class="property-status">Status: {{ property.status }}</p>
+          <p class="property-listing-date">Listing Date: {{ property.listingDate | date }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Button to navigate to Create Property page -->
+    <button class="create-property-button" (click)="navigateToCreate()">Create Property</button>
+  </div>
+  
