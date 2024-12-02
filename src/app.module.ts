@@ -7,6 +7,7 @@ import { appRoutes } from './app.routes';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { PropertyService } from './app/services/property.service';
+import { GetByIdComponent } from './app/components/property-listings/get-by-id/get-by-id.component';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { PropertyService } from './app/services/property.service';
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
         BrowserAnimationsModule,
+        HttpClientModule
     ],
     providers: [
         provideHttpClient(),
