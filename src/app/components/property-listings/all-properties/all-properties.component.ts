@@ -30,4 +30,8 @@ export class AllPropertiesComponent implements OnInit {
   navigateToCreate() {
     this.router.navigate(['property-listings/create-property']);
   }
+
+  navigateToDelete() {
+    this.router.navigate(['property-listings/delete-property']);
+  }
 }

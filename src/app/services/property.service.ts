@@ -18,4 +18,8 @@ export class PropertyService {
   public createProperty(property: PropertyListing) : Observable<any> {
     return this.http.post<PropertyListing>(this.apiUrl, property);
   }
+
+  public deleteProperty(id: string) : Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }
