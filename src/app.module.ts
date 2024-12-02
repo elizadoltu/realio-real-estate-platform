@@ -1,7 +1,7 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { appRoutes } from './app.routes';
 import { NgModule } from '@angular/core';
@@ -14,7 +14,7 @@ import { PropertyService } from './app/services/property.service';
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
     ],
     providers: [
         provideHttpClient(),
