@@ -22,4 +22,7 @@ export class PropertyService {
   public deleteProperty(id: string) : Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+  public getPropertyById(id: string) : Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
 }

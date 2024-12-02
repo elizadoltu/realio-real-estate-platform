@@ -1,0 +1,32 @@
+<div class="get-by-id-container">
+    <h2>Get Property by ID</h2>
+    <form [formGroup]="getByIdForm" (ngSubmit)="onGetById()">
+        <div class="form-group">
+            <label for="propertyId">Property ID</label>
+            <input type="text" id="propertyId" formControlName="propertyId" class="form-control"
+                placeholder="Enter Property ID" />
+            <div *ngIf="getByIdForm.controls['propertyId'].invalid && getByIdForm.controls['propertyId'].touched"
+                class="error">
+                Property ID is required.
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="getByIdForm.invalid" class="btn btn-primary">Get Property</button>
+    </form>
+
+    <div *ngIf="property" class="property-details">
+        <h3>Property Details</h3>
+        <p><strong>ID:</strong> {{ property.propertyId }}</p>
+        <p><strong>Address:</strong> {{ property.address }}</p>
+        <p><strong>Type:</strong> {{ property.type }}</p>
+        <p><strong>Price:</strong> {{ property.price }}</p>
+        <p><strong>Square Footage:</strong> {{ property.squareFootage }}</p>
+        <p><strong>Number of Bedrooms:</strong> {{ property.numberOfBedrooms }}</p>
+        <p><strong>Number of Bathrooms:</strong> {{ property.numberOfBathrooms }}</p>
+        <p><strong>Description:</strong> {{ property.description }}</p>
+        <p><strong>Status:</strong> {{ property.status }}</p>
+        <p><strong>Listing Date:</strong> {{ property.listingDate }}</p>
+        <img [src]="property.imageURLs" alt="Property Image" style="max-width: 100%; height: auto;">
+        <p><strong>User ID:</strong> {{ property.userID }}</p>
+    </div>
+</div>

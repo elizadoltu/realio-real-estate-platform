@@ -34,4 +34,7 @@ export class AllPropertiesComponent implements OnInit {
   navigateToDelete() {
     this.router.navigate(['property-listings/delete-property']);
   }
+  navigateToGetById() {
+    this.router.navigate(['property-listings/get-by-id']);
+  }  
 }
