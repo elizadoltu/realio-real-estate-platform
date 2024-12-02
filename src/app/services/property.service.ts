@@ -22,6 +22,10 @@ export class PropertyService {
   public deleteProperty(id: string) : Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  public updateProperty(id: string, property: PropertyListing) : Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, property);
+  }
   public getPropertyById(id: string) : Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }

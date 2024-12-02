@@ -37,4 +37,8 @@ export class AllPropertiesComponent implements OnInit {
   navigateToGetById() {
     this.router.navigate(['property-listings/get-by-id']);
   }  
+
+  navigateToUpdate() {
+    this.router.navigate(['property-listings/update-property']);
+  }
 }
