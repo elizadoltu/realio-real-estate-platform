@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { title } from 'node:process';
 
 describe('CreatePropertyComponent', () => {
   let component: CreatePropertyComponent;
@@ -35,6 +36,7 @@ describe('CreatePropertyComponent', () => {
 
   it('should call createProperty and navigate on successful form submission', () => {
     const formData = {
+      title: 'Large Family Home',
       address: '123 Main St',
       type: 'House',
       price: 300000,
@@ -61,6 +63,7 @@ describe('CreatePropertyComponent', () => {
 
   it('should not call createProperty if the form is invalid', () => {
     component.propertyForm.setValue({
+      title: '',
       address: '',
       type: '',
       price: null,
@@ -81,6 +84,7 @@ describe('CreatePropertyComponent', () => {
 
   it('should handle errors from the property service and log them', () => {
     const formData = {
+      title: 'Large Family Home',
       address: '123 Main St',
       type: 'House',
       price: 300000,

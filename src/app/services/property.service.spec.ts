@@ -27,8 +27,8 @@ describe('PropertyService', () => {
 
   it('should fetch properties from the API', () => {
     const mockProperties: PropertyListing[] = [
-      { id: '1', address: '123 Main St', type: 'House', price: 300000, squareFootage: 1500, numberOfBedrooms: 3, numberOfBathrooms: 2, description: 'A beautiful house', status: 'Available', listingDate: '2024-12-01', imageUrls: 'http://example.com/image.jpg' },
-      { id: '2', address: '456 Oak Ave', type: 'Apartment', price: 200000, squareFootage: 1200, numberOfBedrooms: 2, numberOfBathrooms: 1, description: 'A cozy apartment', status: 'Sold', listingDate: '2024-11-15', imageUrls: 'http://example.com/image2.jpg' }
+      { id: '1',title: 'Large Family Home' , address: '123 Main St', type: 'House', price: 300000, squareFootage: 1500, numberOfBedrooms: 3, numberOfBathrooms: 2, description: 'A beautiful house', status: 'Available', listingDate: '2024-12-01', imageUrls: 'http://example.com/image.jpg' },
+      { id: '2', title: 'Family Loft' , address: '456 Oak Ave', type: 'Apartment', price: 200000, squareFootage: 1200, numberOfBedrooms: 2, numberOfBathrooms: 1, description: 'A cozy apartment', status: 'Sold', listingDate: '2024-11-15', imageUrls: 'http://example.com/image2.jpg' }
     ];
 
     service.getProperties().subscribe(properties => {
@@ -43,6 +43,7 @@ describe('PropertyService', () => {
 
   it('should create a property', () => {
     const newProperty: PropertyListing = {
+      title: 'Large Family Home',
       address: '789 Pine Blvd',
       type: 'House',
       price: 350000,
