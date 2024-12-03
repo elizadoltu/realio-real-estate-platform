@@ -44,7 +44,6 @@ export class CreatePropertyComponent implements OnInit {
     }
   
     const formData = this.propertyForm.value;
-    formData.type = formData.type.toLowerCase();
     
     const utcListingDate = new Date(formData.listingDate).toISOString();
   
