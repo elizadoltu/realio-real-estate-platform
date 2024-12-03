@@ -35,6 +35,11 @@ describe('DeletePropertyComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    (propertyService.deleteProperty as jasmine.Spy).calls.reset();
+    (router.navigate as jasmine.Spy).calls.reset();
+  });
+
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
@@ -70,7 +75,8 @@ describe('DeletePropertyComponent', () => {
 
   it('should handle error when deleteProperty fails', () => {
     const errorResponse = { error: 'Error' };
-    spyOn(propertyService, 'deleteProperty').and.returnValue(throwError(errorResponse));
+    
+    (propertyService.deleteProperty as jasmine.Spy).and.returnValue(throwError(errorResponse));
 
     spyOn(console, 'error'); 
 

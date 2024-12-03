@@ -78,10 +78,10 @@ describe('UpdatePropertyComponent', () => {
   });
 
   it('should handle errors when the update fails', () => {
-    spyOn(propertyService, 'updateProperty').and.returnValue(throwError({ error: 'Error' }));
+    (propertyService.updateProperty as jasmine.Spy).and.returnValue(throwError({ error: 'Error' }));
     
     spyOn(console, 'error'); 
-
+  
     component.updateForm.setValue({
       propertyId: '123',
       title: 'Test Property',
@@ -97,9 +97,10 @@ describe('UpdatePropertyComponent', () => {
       userID: 'user123',
       imageUrls: 'image1.jpg',
     });
-
+  
     component.onUpdate();
-
+  
     expect(console.error).toHaveBeenCalledWith('Error updating property:', { error: 'Error' });
   });
+  
 });
