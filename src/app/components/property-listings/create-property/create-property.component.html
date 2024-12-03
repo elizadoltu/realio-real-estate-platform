@@ -2,6 +2,10 @@
     <h1>Create Property</h1>
     <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
+        <label for="title">Title:</label>
+        <input id="title" type="text" formControlName="title" />
+      </div>
+      <div class="form-group">
         <label for="address">Address:</label>
         <input id="address" type="text" formControlName="address" />
       </div>

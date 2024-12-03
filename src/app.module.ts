@@ -8,6 +8,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { PropertyService } from './app/services/property.service';
 import { GetByIdComponent } from './app/components/property-listings/get-by-id/get-by-id.component';
+import { FormsModule } from '@angular/forms';
+import { AppComponent } from './app/app.component';
 
 @NgModule({
     imports: [
@@ -16,11 +18,12 @@ import { GetByIdComponent } from './app/components/property-listings/get-by-id/g
         ReactiveFormsModule,
         RouterModule.forRoot(appRoutes),
         BrowserAnimationsModule,
-        HttpClientModule
+        HttpClientModule,
+        FormsModule,
     ],
     providers: [
         provideHttpClient(),
         PropertyService
-    ]
+    ],
     })
 export class AppModule { }

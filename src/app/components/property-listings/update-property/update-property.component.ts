@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { PropertyService } from '../../../services/property.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { title } from 'process';
 
 @Component({
   selector: 'app-update-property',

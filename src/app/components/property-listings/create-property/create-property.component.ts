@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PropertyService } from '../../../services/property.service';
 import { Router } from '@angular/router';
-import { title } from 'node:process';
 
 @Component({
   selector: 'app-create-property',

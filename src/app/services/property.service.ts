@@ -11,8 +11,12 @@ export class PropertyService {
   private apiUrl = 'http://localhost:5047/api/PropertyListings';
   constructor( private http: HttpClient ) { }
 
-  public getProperties() : Observable<PropertyListing[]> {
-    return this.http.get<PropertyListing[]>(this.apiUrl);
+  // public getProperties() : Observable<PropertyListing[]> {
+  //   return this.http.get<PropertyListing[]>(this.apiUrl);
+  // }
+  public getPaginatedProperties(page: number, pageSize: number, filters?: any): Observable<any> {
+    const params: any = { page, pageSize, ...filters };
+    return this.http.get<any>(`${this.apiUrl}/paginated`, { params });
   }
 
   public createProperty(property: PropertyListing) : Observable<any> {
