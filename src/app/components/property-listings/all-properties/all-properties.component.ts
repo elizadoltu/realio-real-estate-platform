@@ -42,13 +42,22 @@ export class AllPropertiesComponent implements OnInit {
   }
 
   fetchProperties() {
+    const filters = {
+      ...this.filters,
+      Type: this.filters.Type?.toLowerCase() 
+    };
+  
     this.propertyService
-      .getPaginatedProperties(this.currentPage, this.pageSize, this.filters)
+      .getPaginatedProperties(this.currentPage, this.pageSize, filters)
       .subscribe(
         (response) => {
           console.log('API Response:', response); 
           if (response.isSuccess) {
-            this.properties = response.data.data;
+            
+            this.properties = response.data.data.map((property: PropertyListing) => ({
+              ...property,
+              type: property.type.toLowerCase() 
+            }));
             this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
           } else {
             console.error('Error in API response:', response.errorMessage);
@@ -59,6 +68,7 @@ export class AllPropertiesComponent implements OnInit {
         }
       );
   }
+  
 
   goToPage(page: number): void {
     this.currentPage = page;
