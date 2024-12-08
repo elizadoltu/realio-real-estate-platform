@@ -14,7 +14,15 @@ module.exports = {
         'general-regular': ['General Sans Regular', 'sans-serif'],
         'general-medium': ['General Sans Medium', 'sans-serif'],
         'general-bold': ['General Sans Bold', 'sans-serif'],
-        'general-semibold': ['General Sans SemiBold', 'sans-serif'],
+        'general-semibold': ['General Sans Semibold', 'sans-serif'],
+        'urbanist': ['Urbanist', 'sans-serif'],
+      },
+      colors: {
+        'primary-black': '#181818',
+        'primary-white': '#f6f6f6',
+      },
+      fontSize: {
+        '10xl': '34rem'
       }
     },
   },

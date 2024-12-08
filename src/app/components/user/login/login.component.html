@@ -1,1 +1,85 @@
-<p>login works!</p>
+<div>
+    <div class="border-b border-slate-600 pb-4 mt-2">
+        <button (click)="navigateHome()" class="font-general-semibold text-2xl"> ← Home </button>
+    </div>
+</div>
+
+<div class="flex justify-center mr-40 font-switzer-regular">
+    <div class="mt-10 w-96">
+        <h1 class="font-general-semibold text-2xl">Log in</h1>
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="mt-10 text-lg" autocomplete="off">
+            <!-- Email Field -->
+            <div class="form-group border-b border-zinc-800 w-96">
+              <label for="email" class="text-slate-500">Email</label>
+              <div class="flex items-center">
+                <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                [(ngModel)]="email"
+                required
+                #email="ngModel"
+                class="w-96 bg-transparent"
+              />
+              <img src="assets/arrow-login-svg.png" />
+
+              </div>
+              
+              <div *ngIf="email.invalid && email.touched" class="error-message">
+                Please enter a valid email address.
+              </div>
+            </div>
+        
+            <div class="form-group border-b border-zinc-800 mt-10">
+              <label for="password" class="text-slate-500">Password</label>
+              <div class="flex items-center">
+                <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                [(ngModel)]="password"
+                required
+                #password="ngModel"
+                class="w-96 bg-transparent"
+              />
+              <img src="assets/arrow-login-svg.png" />
+              </div>
+              
+
+              <div *ngIf="password.invalid && password.touched" class="error-message">
+                Please enter your password.
+              </div>
+            </div>
+        
+            <div class="form-group bg-primary-black flex justify-center items-center p-2 rounded-lg mt-10">
+              <button type="submit" class="btn btn-primary text-primary-white font-general-semibold" [disabled]="loginForm.invalid">
+                Log In
+              </button>
+            </div>
+        
+            <div class="form-group flex justify-between mt-2">
+              <p>Don't have an account?</p>
+              <button (click)="navigateToRegister()" class="font-general-semibold">
+                Sign Up
+              </button>
+            </div>
+          </form>
+    </div>
+</div>
+
+<div class="mt-20 border-b border-slate-600 pb-4">
+    <div class="flex items-end">
+        <img src="assets/login-image.png" alt="">
+        <div class="font-general-medium ml-4">
+            <button (click)="scrollToAboutSection('about')" class="mr-10">About</button>
+            <button (click)="navigateToExplore()" class="mr-10">Explore</button>
+            <button (click)="navigateToSearch()" class="mr-10">Search</button>
+        </div>
+    </div>
+</div>
+
+<div class="font-general-bold flex justify-center items-center -z-10 relative">
+    <h1 class="text-10xl mb-0 p-0 leading-none block">REALIO</h1>
+</div>
