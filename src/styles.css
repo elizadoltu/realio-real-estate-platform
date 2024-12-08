@@ -1,79 +1,84 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&family=Roboto+Slab:wght@100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
     overflow-x: hidden;
-    font-family: 'Switzer Regular', sans-serif;
     padding: 10px;
 }
 
 @font-face {
-    font-family: 'General Sans Bold', sans-serif;
-    src: url('./app/fonts/GeneralSans/GeneralSans-Bold.otf') format('opentype');
+    font-family: 'General Sans Bold';
+    src: url('/src/app/fonts/GeneralSans/GeneralSans-Bold.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'General Sans Regular', sans-serif;
-    src: url('./app/fonts/GeneralSans/GeneralSans-Regular.otf') format('opentype');
+    font-family: 'General Sans Regular';
+    src: url('/src/app/fonts/GeneralSans/GeneralSans-Regular.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'General Sans Light', sans-serif;
-    src: url('./app/fonts/GeneralSans/GeneralSans-Light.otf') format('opentype');
+    font-family: 'General Sans Light';
+    src: url('/src/app/fonts/GeneralSans/GeneralSans-Light.otf') format('opentype');
 }
 
 
 @font-face {
-    font-family: 'General Sans ExtraLight', sans-serif;
-    src: url('./app/fonts/GeneralSans/GeneralSans-ExtraLight.otf') format('opentype');
+    font-family: 'General Sans ExtraLight';
+    src: url('/src/app/fonts/GeneralSans/GeneralSans-ExtraLight.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'General Sans Medium', sans-serif;
-    src: url('./app/fonts/GeneralSans/GeneralSans-Medium.otf') format('opentype');
+    font-family: 'General Sans Medium';
+    src: url('/src/app/fonts/GeneralSans/GeneralSans-Medium.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'General Sans SemiBold', sans-serif;
-    src: url('./app/fonts/GeneralSans/GeneralSans-SemiBold.otf') format('opentype');
+    font-family: 'General Sans SemiBold';
+    src: url('/src/app/fonts/GeneralSans/GeneralSans-SemiBold.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer Regular', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-Regular.otf') format('opentype');
+    font-family: 'Switzer Regular';
+    src: url('/src/app/fonts/Switzer/Switzer-Regular.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer Light', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-Light.otf') format('opentype');
+    font-family: 'Switzer Light';
+    src: url('/src/app/fonts/Switzer/Switzer-Light.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer Bold', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-Bold.otf') format('opentype');
+    font-family: 'Switzer Bold';
+    src: url('/src/app/fonts/Switzer/Switzer-Bold.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer Medium', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-Medium.otf') format('opentype');
+    font-family: 'Switzer Medium';
+    src: url('/src/app/fonts/Switzer/Switzer-Medium.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer SemiBold', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-SemiBold.otf') format('opentype');
+    font-family: 'Switzer SemiBold';
+    src: url('/src/app/fonts/Switzer/Switzer-SemiBold.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer ExtraLight', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-ExtraLight.otf') format('opentype');
+    font-family: 'Switzer ExtraLight';
+    src: url('/src/app/fonts/Switzer/Switzer-ExtraLight.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer ExtraBold', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-ExtraBold.otf') format('opentype');
+    font-family: 'Switzer ExtraBold';
+    src: url('/src/app/fonts/Switzer/Switzer-ExtraBold.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Switzer Black', sans-serif;
-    src: url('./app/fonts/Switzer/Switzer-Black.otf') format('opentype');
+    font-family: 'Switzer Black';
+    src: url('/src/app/fonts/Switzer/Switzer-Black.otf') format('opentype');
 }
+
+

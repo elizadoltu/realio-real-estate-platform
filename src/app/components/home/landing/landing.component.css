@@ -1,0 +1,19 @@
+/* .header-button {
+    font-family: 'General Sans Medium', sans-serif;
+    margin-right: 20px;
+}
+
+.header-user-button {
+    font-family: 'General Sans SemiBold', sans-serif;
+    margin-left: 20px;
+} */
+
+button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.1rem;
+}
+
+button:hover {
+    cursor: pointer;
+}
