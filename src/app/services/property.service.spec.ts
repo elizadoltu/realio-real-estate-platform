@@ -6,7 +6,7 @@ import { PropertyListing } from '../models/property.model';
 describe('PropertyService', () => {
   let service: PropertyService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'http://localhost:5047/api/PropertyListings';
+  const apiUrl = 'https://abundant-reflection-production.up.railway.app/api/PropertyListings';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

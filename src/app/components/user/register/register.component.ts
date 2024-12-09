@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css', '/src/styles.css'],
+  styleUrl: './register.component.css', 
 })
 export class RegisterComponent {
   fullName: string = '';
