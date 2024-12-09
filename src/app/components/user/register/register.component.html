@@ -1,15 +1,16 @@
-<div>
+  <!-- Header -->
+  <div>
     <div class="border-b border-slate-600 pb-4 mt-2">
-      <button (click)="navigateHome()" class="font-general-semibold text-2xl"> ← Home </button>
+        <button (click)="navigateHome()" class="font-general-semibold desktop:text-2xl mobile:text-lg"> ← Home </button>
     </div>
-  </div>
-  
-  <div class="flex justify-center mr-40 font-switzer-regular">
-    <div class="mt-10 w-96">
-      <h1 class="font-general-semibold text-2xl">Create an account</h1>
+</div>
+  <!-- Form Section -->
+  <div class="flex justify-center mr-40 -ml-4 font-switzer-regular w-screen">
+    <div class="mt-10 desktop:w-96 mobile:w-80 flex justify-center flex-col">
+      <h1 class="font-general-semibold desktop:text-2xl mobile:text-lg">Create an account</h1>
       <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="mt-10 text-lg" autocomplete="off">
         <!-- Full Name -->
-        <div class="form-group border-b border-zinc-800 w-96">
+        <div class="form-group border-b border-zinc-800 desktop:w-96 mobile:w-80">
           <label for="fullName" class="text-slate-500">Full Name</label>
           <div class="flex items-center">
             <input
@@ -18,17 +19,17 @@
               name="fullName"
               [(ngModel)]="fullName"
               required
-              class="w-96 bg-transparent"
+              class="w-full bg-transparent py-2 focus:outline-none"
             />
-            <img src="assets/arrow-login-svg.png" />
+            <img src="assets/arrow-login-svg.png" class="w-4 h-4 ml-2" />
           </div>
-          <div *ngIf="registerForm.submitted && !fullName" class="error-message">
+          <div *ngIf="registerForm.submitted && !fullName" class="text-red-500 text-sm">
             Please enter your full name.
           </div>
         </div>
   
         <!-- Phone Number -->
-        <div class="form-group border-b border-zinc-800 mt-10">
+        <div class="form-group border-b border-zinc-800 desktop:w-96 mobile:w-80 mt-10">
           <label for="phoneNumber" class="text-slate-500">Phone Number</label>
           <div class="flex items-center">
             <input
@@ -37,17 +38,17 @@
               name="phoneNumber"
               [(ngModel)]="phoneNumber"
               required
-              class="w-96 bg-transparent"
+              class="w-full bg-transparent py-2 focus:outline-none"
             />
-            <img src="assets/arrow-login-svg.png" />
+            <img src="assets/arrow-login-svg.png" class="w-4 h-4 ml-2" />
           </div>
-          <div *ngIf="registerForm.submitted && !phoneNumber" class="error-message">
+          <div *ngIf="registerForm.submitted && !phoneNumber" class="text-red-500 text-sm">
             Please enter a valid phone number.
           </div>
         </div>
   
         <!-- Email -->
-        <div class="form-group border-b border-zinc-800 mt-10">
+        <div class="form-group border-b border-zinc-800 desktop:w-96 mobile:w-80 mt-10">
           <label for="email" class="text-slate-500">Email</label>
           <div class="flex items-center">
             <input
@@ -56,17 +57,17 @@
               name="email"
               [(ngModel)]="email"
               required
-              class="w-96 bg-transparent"
+              class="w-full bg-transparent py-2 focus:outline-none"
             />
-            <img src="assets/arrow-login-svg.png" />
+            <img src="assets/arrow-login-svg.png" class="w-4 h-4 ml-2" />
           </div>
-          <div *ngIf="registerForm.submitted && !email" class="error-message">
+          <div *ngIf="registerForm.submitted && !email" class="text-red-500 text-sm">
             Please enter a valid email address.
           </div>
         </div>
   
         <!-- Password -->
-        <div class="form-group border-b border-zinc-800 mt-10">
+        <div class="form-group border-b border-zinc-800 desktop:w-96 mobile:w-80 mt-10">
           <label for="password" class="text-slate-500">Password</label>
           <div class="flex items-center">
             <input
@@ -75,11 +76,11 @@
               name="password"
               [(ngModel)]="password"
               required
-              class="w-96 bg-transparent"
+              class="w-full bg-transparent py-2 focus:outline-none"
             />
-            <img src="assets/arrow-login-svg.png" />
+            <img src="assets/arrow-login-svg.png" class="w-4 h-4 ml-2" />
           </div>
-          <div *ngIf="registerForm.submitted && !password" class="error-message">
+          <div *ngIf="registerForm.submitted && !password" class="text-red-500 text-sm">
             Please enter your password.
           </div>
         </div>
@@ -88,35 +89,38 @@
         <div class="form-group bg-primary-black flex justify-center items-center p-2 rounded-lg mt-10">
           <button
             type="submit"
-            class="btn btn-primary text-primary-white font-general-semibold"
+            class="btn btn-primary text-primary-white font-general-semibold desktop:w-96 mobile:w-80"
             [disabled]="registerForm.invalid"
           >
             Sign Up
           </button>
         </div>
-  
-        <div class="form-group flex justify-between mt-2">
-          <p>Already have an account?</p>
-          <button (click)="navigateToLogin()" class="font-general-semibold">
-            Log In
-          </button>
-        </div>
       </form>
-    </div>
-  </div>
   
-  <div class="mt-20 border-b border-slate-600 pb-4">
-    <div class="flex items-end">
-      <img src="assets/login-image.png" alt="">
-      <div class="font-general-medium ml-4">
-        <button (click)="scrollToAboutSection('about')" class="mr-10">About</button>
-        <button (click)="navigateToExplore()" class="mr-10">Explore</button>
-        <button (click)="navigateToSearch()" class="mr-10">Search</button>
+      <!-- Redirect to Login -->
+      <div class="form-group flex justify-between mt-2">
+        <p>Already have an account?</p>
+        <button (click)="navigateToLogin()" class="font-general-semibold">
+          Log In
+        </button>
       </div>
     </div>
   </div>
   
+  <!-- Footer -->
+  <div class="mt-20 border-b border-slate-600 pb-4">
+    <div class="flex items-end">
+        <img src="assets/login-image.png" alt="">
+        <div class="font-general-medium ml-4">
+            <button (click)="scrollToAboutSection('about')" class="mr-10">About</button>
+            <button (click)="navigateToExplore()" class="mr-10">Explore</button>
+            <button (click)="navigateToSearch()" class="mr-10">Search</button>
+        </div>
+    </div>
+</div>
+
+  <!-- Logo -->
   <div class="font-general-bold flex justify-center items-center -z-10 relative">
-    <h1 class="text-30xl mb-0 p-0 leading-none block">REALIO</h1>
-  </div>
-  
+    <h1 class="desktop:text-30xl mb-0 p-0 leading-none block mobile:text-8xl tablet:text-20xl">REALIO</h1>
+</div>
+
