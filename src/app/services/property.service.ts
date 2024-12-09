@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class PropertyService {
 
-  private apiUrl = environment.apiUrl;
+  private apiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListings";
   constructor( private http: HttpClient ) { }
 
   // public getProperties() : Observable<PropertyListing[]> {
