@@ -1,15 +1,15 @@
 <div>
     <div class="border-b border-slate-600 pb-4 mt-2">
-        <button (click)="navigateHome()" class="font-general-semibold text-2xl"> ← Home </button>
+        <button (click)="navigateHome()" class="font-general-semibold desktop:text-2xl mobile:text-lg"> ← Home </button>
     </div>
 </div>
 
-<div class="flex justify-center mr-40 font-switzer-regular">
-    <div class="mt-10 w-96">
-        <h1 class="font-general-semibold text-2xl">Log in</h1>
+<div class="flex justify-center mr-40 -ml-4 font-switzer-regular w-screen">
+    <div class="mt-10 desktop:w-96 mobile:w-80 flex justify-center flex-col">
+        <h1 class="font-general-semibold desktop:text-2xl mobile:text-lg">Log in</h1>
         <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="mt-10 text-lg" autocomplete="off">
             <!-- Email Field -->
-            <div class="form-group border-b border-zinc-800 w-96">
+            <div class="form-group border-b border-zinc-800 desktop:w-96 mobile:w-80">
               <label for="email" class="text-slate-500">Email</label>
               <div class="flex items-center">
                 <input
@@ -81,5 +81,5 @@
 </div>
 
 <div class="font-general-bold flex justify-center items-center -z-10 relative">
-    <h1 class="text-10xl mb-0 p-0 leading-none block">REALIO</h1>
+    <h1 class="desktop:text-30xl mb-0 p-0 leading-none block mobile:text-8xl tablet:text-20xl">REALIO</h1>
 </div>

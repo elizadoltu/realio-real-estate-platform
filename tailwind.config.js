@@ -22,7 +22,13 @@ module.exports = {
         'primary-white': '#f6f6f6',
       },
       fontSize: {
-        '10xl': '34rem'
+        '30xl': '34rem',
+        '20xl': '20rem',
+      },
+      screens: {
+        'mobile': '300px',
+        'tablet': '768px',
+        'desktop': '1500px'
       }
     },
   },
