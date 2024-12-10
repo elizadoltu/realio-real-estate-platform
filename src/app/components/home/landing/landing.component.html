@@ -1,51 +1,75 @@
-<div class="flex justify-between items-center p-4">
-    <div class="flex space-x-10">
-      <button (click)="navigateToHome()" class="font-medium text-lg">About</button>
-      <button (click)="navigateToExplore()" class="font-medium text-lg">Explore</button>
-      <button (click)="navigateToSearch()" class="font-medium text-lg">Search</button>
-      <button (click)="navigateToPostProperty()" class="font-medium text-lg">Post</button>
-    </div>
-    <div class="flex space-x-6">
-      <button (click)="navigateToRegister()" class="font-semibold text-lg">Create an account</button>
-      <button (click)="navigateToLogin()" class="font-semibold text-lg">Log In</button>
-    </div>
+<div class="flex justify-between items-center p-4 m-4">
+  <div class="flex space-x-10">
+    <button (click)="navigateToHome()" class="font-medium text-lg">Home</button>
+    <button (click)="navigateToExplore()" class="font-medium text-lg">
+      Explore
+    </button>
+    <button (click)="navigateToSearch()" class="font-medium text-lg">
+      Search
+    </button>
+    <button (click)="navigateToPostProperty()" class="font-medium text-lg">
+      Post
+    </button>
   </div>
-  
-  <div class="font-general-bold flex justify-center items-center -z-10 relative">
-    <h1 class="desktop:text-30xl mb-0 p-0 leading-none block mobile:text-8xl tablet:text-20xl">REALIO</h1>
+  <div class="flex space-x-6">
+    <button (click)="navigateToRegister()" class="font-semibold text-lg">
+      Create an account
+    </button>
+    <button (click)="navigateToLogin()" class="font-semibold text-lg">
+      Log In
+    </button>
   </div>
-  
-  <div class="grid grid-cols-2 items-start px-16 my-10">
-    <div>
-      <p class="text-left text-xl font-medium">
-        Effortless property management, where real estate meets innovation.
-      </p>
-    </div>
-    <div>
-      <img src="assets/landing-image.jpg" alt="Living room" class="w-full h-auto rounded-lg shadow-md" />
-    </div>
-  </div>
-  
-  <hr class="border-black my-10" />
-  
-  <div class="bg-white px-16 py-10">
-    <div class="grid grid-cols-3 gap-16 items-start">
-      <h2 class="text-6xl font-bold uppercase">ABOUT US</h2>
-      <p class="text-lg leading-relaxed">
-        At Realio, we believe in transforming the way people manage, buy, and sell properties. Our platform is designed to provide a seamless experience for both buyers and sellers, empowering users to take full control of their real estate journey.
-      </p>
-      <p class="text-lg leading-relaxed">
-        Whether you're looking to sell your house, apartment, or land, or searching for your dream property, Realio makes it easy to connect with the right opportunities. Every user can create and manage their own account, post property listings, and explore available options with just a few clicks.
-      </p>
-    </div>
-  </div>
-  
-  <hr class="border-black my-10" />
-  
-  <div class="grid grid-rows-2 gap-10 px-16">
+</div>
 
-<!-- Grila cu imagini -->
-<div class="grid grid-cols-2 gap-4 mb-10 px-16">
+<div class="font-general-bold flex justify-center items-center -z-10 relative">
+  <h1
+    class="desktop:text-30xl mb-0 p-0 leading-none block mobile:text-8xl tablet:text-20xl"
+  >
+    REALIO
+  </h1>
+</div>
+
+<div class="grid grid-cols-2 items-start px-6 my-10">
+  <div>
+    <p class="text-left text-xl font-medium">
+      Effortless property management, where real estate meets innovation.
+    </p>
+  </div>
+  <div>
+    <img
+      src="assets/landing-image.jpg"
+      alt="Living room"
+      class="shadow-md"
+    />
+  </div>
+</div>
+
+<hr class="border-primary-black my-10" />
+
+<div class="bg-primary-white px-16 py-10 font-switzer-regular">
+  <div class="grid grid-cols-3 gap-16 items-start">
+    <h2 class="text-6xl font-general-bold uppercase">ABOUT US</h2>
+    <p class="text-2xl leading-relaxed">
+      At Realio, we believe in transforming the way people manage, buy, and sell
+      properties. Our platform is designed to provide a seamless experience for
+      both buyers and sellers, empowering users to take full control of their
+      real estate journey.
+    </p>
+    <p class="text-2xl leading-relaxed">
+      Whether you're looking to sell your house, apartment, or land, or
+      searching for your dream property, Realio makes it easy to connect with
+      the right opportunities. Every user can create and manage their own
+      account, post property listings, and explore available options with just a
+      few clicks.
+    </p>
+  </div>
+</div>
+
+<hr class="border-primary-black my-10" />
+
+<div class="grid grid-rows-2 gap-10 px-16">
+  <!-- Grila cu imagini -->
+  <div class="grid grid-cols-2 gap-1 mb-10 px-16">
     <!-- Prima imagine mare -->
     <div class="h-[20rem] md:h-[25rem] lg:h-[30rem] xl:h-[35rem]">
       <img src="assets/testimage-1.jpg" alt="Image 1" class="w-full h-full max-h-[35rem] rounded-lg shadow-md object-cover" />
@@ -56,61 +80,86 @@
       <img src="assets/testimage-3.jpg" alt="Image 3" class="w-full h-[10rem] md:h-[12.5rem] lg:h-[15rem] xl:h-[17rem] rounded-lg shadow-md object-cover" />
     </div>
   </div>
-  
-  
-  
-  <div class="mt-20 px-16">
-    <p class="text-lg leading-relaxed mb-6">
-      Our system provides sellers with property price estimates based on real-time market trends, powered by machine learning. Buyers can search properties using various criteria and initiate transactions, which are verified by the seller for a smooth process.
-    </p>
-    <p class="text-lg leading-relaxed">
-      Realio is more than just a platform—it’s a smart, reliable tool for managing real estate. We help you make informed decisions and confidently navigate your real estate journey. Join us today and experience the future of real estate management!
-    </p>
+
+  <div class="mt-20 px-16 font-switzer-regular grid grid-cols-2">
+    <div>
+      <p class="text-2xl leading-relaxed mb-10">
+        Our system provides sellers with property price estimates based on
+        real-time market trends, powered by machine learning. Buyers can search
+        properties using various criteria and initiate transactions, which are
+        verified by the seller for a smooth process.
+      </p>
+      <p class="text-2xl leading-relaxed">
+        Realio is more than just a platform—it’s a smart, reliable tool for
+        managing real estate. We help you make informed decisions and
+        confidently navigate your real estate journey. Join us today and
+        experience the future of real estate management!
+      </p>
+    </div>
   </div>
 </div>
 
 <div class="bg-gray-950 rounded-t-3xl text-white py-16">
-    <div class="px-16 mb-10">
-      <div class="flex justify-between items-start">
-        <div class="w-1/2">
-          <h2 class="text-3xl font-bold">Is Realio right for you?</h2>
-        </div>
-        <div class="w-1/2">
-          <p class="text-lg leading-relaxed mb-4">
-            Join our community of buyers and sellers who are shaping the future of real estate. Create an account today and start managing your property journey with convenience and control.
-          </p>
-          <div class="flex space-x-4">
-            <button
-              (click)="navigateToRegister()"
-              class="bg-white text-black font-medium py-2 px-6 rounded-md border border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-            >
-              Create an account
-            </button>
-            <button
-              (click)="navigateToLogin()"
-              class="bg-transparent text-white font-medium py-2 px-6 rounded-md border border-white hover:bg-gray-800 hover:text-gray-200"
-            >
-              Log In
-            </button>
-          </div>
+  <div class="px-16 mb-10">
+    <div class="flex justify-between items-start">
+      <div class="w-1/2">
+        <h2 class="text-3xl font-bold">Is Realio right for you?</h2>
+      </div>
+      <div class="w-1/2">
+        <p class="text-2xl leading-relaxed mb-4">
+          Join our community of buyers and sellers who are shaping the future of
+          real estate. Create an account today and start managing your property
+          journey with convenience and control.
+        </p>
+        <div class="flex space-x-4">
+          <button
+            (click)="navigateToRegister()"
+            class="px-6 py-2 bg-primary-white text-primary-black font-medium rounded-md border border-gray-300 relative z-10"
+          >
+            Create an account
+          </button>
+          <button
+            (click)="navigateToLogin()"
+            class="bg-transparent text-primary-white font-medium py-2 px-6 rounded-md border border-primary-white hover:bg-gray-800 hover:text-gray-200"
+          >
+            Log In
+          </button>
         </div>
       </div>
     </div>
-  
-    <div class="font-general-bold flex justify-center items-center relative">
-        <h1 class="desktop:text-30xl mb-0 p-0 font-bold text-white opacity-30 leading-none block mobile:text-8xl tablet:text-20xl">
-          REALIO
-        </h1>
-      </div>
-  
-  <div class="flex justify-between items-center mt-6 px-16">
-    <div class="flex space-x-10">
-      <button (click)="navigateToHome()" class="font-medium text-lg hover:underline">About</button>
-      <button (click)="navigateToExplore()" class="font-medium text-lg hover:underline">Explore</button>
-      <button (click)="navigateToSearch()" class="font-medium text-lg hover:underline">Search</button>
-    </div>
-    <p class="text-sm text-white">&copy;2024. All rights reserved</p>
   </div>
-  
-  
-  
+
+  <div class="font-general-bold flex justify-center items-center relative">
+    <h1
+      class="desktop:text-30xl mb-0 p-0 font-bold text-primary-white opacity-30 leading-none block mobile:text-8xl tablet:text-20xl"
+    >
+      REALIO
+    </h1>
+  </div>
+
+  <div class="flex justify-between items-center mt-6 px-16 relative z-20">
+    <div class="flex space-x-10">
+      <button
+        (click)="navigateToHome()"
+        class="font-medium text-lg hover:underline"
+      >
+        About
+      </button>
+      <button
+        (click)="navigateToExplore()"
+        class="font-medium text-lg hover:underline"
+      >
+        Explore
+      </button>
+      <button
+        (click)="navigateToSearch()"
+        class="font-medium text-lg hover:underline"
+      >
+        Search
+      </button>
+    </div>
+    <p class="text-sm text-primary-white font-switzer-medium">
+      &copy;2024. All rights reserved
+    </p>
+  </div>
+</div>

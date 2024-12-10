@@ -12,7 +12,6 @@
 
 body {
     overflow-x: hidden;
-    padding: 10px;
     background-color: var(--background-color);
     color: var(--font-color);
 }

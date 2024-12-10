@@ -22,7 +22,7 @@ module.exports = {
         'primary-white': '#f6f6f6',
       },
       fontSize: {
-        '30xl': '34rem',
+        '30xl': '31rem',
         '20xl': '20rem',
       },
       screens: {
@@ -31,7 +31,7 @@ module.exports = {
         'desktop': '1500px'
       },
       width: {
-        '250': '31rem',
+        '250': '28rem',
       }
     },
   },
