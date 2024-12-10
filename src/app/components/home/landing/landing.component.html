@@ -1,11 +1,24 @@
 <div class="flex justify-between text-lg ml-4 mr-4 mt-2">
     <div class="font-general-medium">
-        <button (click)="scrollToAboutSection('about')" class="mr-10">About</button>
+        <button (click)="navigateToHome()" class="mr-10">Home</button>
         <button (click)="navigateToExplore()" class="mr-10">Explore</button>
         <button (click)="navigateToSearch()" class="mr-10">Search</button>
+        <button (click)="navigateToPostProperty()" class="mr-10">Post</button>
+
     </div>
     <div class="font-general-semibold">
         <button (click)="navigateToRegister()" class="mr-10">Create an account</button>
         <button (click)="navigateToLogin()" class="header-user-button">Log In</button>
+    </div>
+</div>
+
+<div class="w-screen flex justify-center items-center mb-0 leading-none relative -z-10">
+    <h1 class="font-general-bold text-30xl leading-none">REALIO</h1>
+</div>
+
+<div class="grid grid-cols-2">
+    <p class="font-switzer-medium text-2xl ml-16">Effortless property management, where real estate meets innovation.</p>
+    <div>
+        <img src="assets/landing-image.jpg" alt="image wit a living room">
     </div>
 </div>

@@ -12,11 +12,8 @@ export class LandingComponent {
 
   constructor(private router: Router) {}
 
-  scrollToAboutSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  navigateToHome() {
+    this.router.navigate(['/']);
   }
 
   navigateToExplore() {
@@ -33,5 +30,9 @@ export class LandingComponent {
 
   navigateToSearch() {
     this.router.navigate(['/search']);
+  }
+
+  navigateToPostProperty() {
+    this.router.navigate(['/post-property']);
   }
 }

@@ -29,6 +29,9 @@ module.exports = {
         'mobile': '300px',
         'tablet': '768px',
         'desktop': '1500px'
+      },
+      width: {
+        '250': '31rem',
       }
     },
   },

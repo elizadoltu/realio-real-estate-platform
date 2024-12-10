@@ -11,6 +11,7 @@ import { LandingComponent } from './app/components/home/landing/landing.componen
 import { SearchComponent } from './app/components/home/search/search.component';
 import { ExploreComponent } from './app/components/home/explore/explore.component';
 import { AccountComponent } from './app/components/user/account/account.component';
+import { PostPropertyComponent } from './app/components/home/post-property/post-property.component';
 
 export const appRoutes: Routes = [
     { path: '', pathMatch: 'full', component: LandingComponent },
@@ -23,5 +24,6 @@ export const appRoutes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'search', component: SearchComponent },
     { path: 'explore', component: ExploreComponent },
-    { path: 'account', component: AccountComponent }
+    { path: 'account', component: AccountComponent },
+    { path: 'post-property', component: PostPropertyComponent }
 ]

@@ -1,1 +1,78 @@
-<p>explore works!</p>
+<div
+  class="flex justify-between text-lg ml-4 mr-4 mt-2 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2"
+>
+  <div class="font-general-medium">
+    <button (click)="navigateToHome()" class="mr-10">Home</button>
+    <button (click)="navigateToExplore()" class="mr-10">Explore</button>
+    <button (click)="navigateToSearch()" class="mr-10">Search</button>
+    <button (click)="navigateToPostProperty()" class="mr-10">Post</button>
+  </div>
+</div>
+
+<div class="flex items-center">
+  <h1 class="text-20xl font-general-semibold">EXPLORE</h1>
+  <div class="mt-52">
+    <p class="font-switzer-medium">
+      Discover the latest property listings and find your perfect match. Browse
+      through fresh posts and stay up-to-date with new opportunities in real
+      estate.
+    </p>
+  </div>
+</div>
+
+<div
+  class="flex justify-between font-general-medium text-lg ml-4 mr-4 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2"
+>
+  <div class="flex">
+    <p>All properties</p>
+    <div class="flex items-center ml-20">
+      <p>Filter</p>
+      <img src="assets/filter-png.png" alt="filter icon" />
+    </div>
+  </div>
+  <div class="flex">
+    <img src="assets/grid-png.png" alt="grid icon" />
+    <img src="assets/list-png.png" alt="list icon" class="ml-4" />
+  </div>
+</div>
+
+<div class="grid grid-cols-4 gap-1 mt-4 ml-4 mr-4">
+  <div
+    class="border border-slate-400 pb-2 w-250 rounded-md transition ease-in delay-100 bg-primary-white text-primary-black hover:bg-primary-black hover:text-primary-white hover:cursor-pointer duration-100"  
+    *ngFor="let property of properties"
+  >
+    <img [src]="property.imageUrls" alt="property image" />
+    <div
+      class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular text-lg"
+    >
+      <div>
+        <h2 class="font-switzer-bold text-2xl">
+          {{ property.title }}
+        </h2>
+        <div class="flex items-center mt-4">
+          <h2 class="flex items-center">
+            <img src="assets/location.png" alt="location icon" class="mr-1"/>{{
+              property.address
+            }}
+          </h2>
+          <p class="flex ml-4 items-center">
+            <img src="assets/square-meters.png" alt="square meters icon" class="mr-1" />
+            {{ property.squareFootage | number }} sq ft
+          </p>
+        </div>
+
+        <p class="flex items-center mt-2">
+          <img src="assets/price.png" alt="price icon" class="mr-1"/> ${{
+            property.price | number
+          }}
+        </p>
+      </div>
+      <div class="mt-10">
+        <p><span class="font-bold">Status:</span> {{ property.status }}</p>
+        <p>
+          <span class="font-bold">Listing Date:</span> {{ property.listingDate | date }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
