@@ -1,65 +1,78 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LandingComponent } from './landing.component';
 import { Router } from '@angular/router';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { LandingComponent } from './landing.component';
+import { AuthService } from '../../../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { of } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
+  let authService: AuthService;
+  let router: Router;
 
-  beforeEach(async () => {
-    // Create a mock router object
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+  beforeEach(() => {
+    const mockRouter = {
+      navigate: jasmine.createSpy('navigate'),
+    };
 
-    await TestBed.configureTestingModule({
-      imports: [LandingComponent],
+    TestBed.configureTestingModule({
+      imports: [CommonModule, LandingComponent, AuthService, HttpClientModule],
       providers: [
-        { provide: Router, useValue: mockRouter } 
+        { provide: Router, useValue: mockRouter },
+        AuthService, 
       ],
-      schemas: [NO_ERRORS_SCHEMA] 
     }).compileComponents();
 
     fixture = TestBed.createComponent(LandingComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    authService = TestBed.inject(AuthService);
+    router = TestBed.inject(Router);
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    localStorage.clear(); 
+  });
+
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should call scrollToAboutSection with valid sectionId', () => {
-  //   const sectionId = 'aboutSection';
-  //   const scrollIntoViewSpy = spyOn(document, 'getElementById').and.returnValue({ scrollIntoView: jasmine.createSpy() });
-    
-  //   component.scrollToAboutSection(sectionId);
+  describe('Navigation methods', () => {
+    it('should navigate to account when navigateToAccount is called', () => {
+      component.navigateToAccount();
+      expect(router.navigate).toHaveBeenCalledWith(['/account']);
+    });
 
-  //   expect(scrollIntoViewSpy).toHaveBeenCalledWith(sectionId);
-  //   expect(scrollIntoViewSpy().scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
-  // });
+    it('should navigate to home when navigateToHome is called', () => {
+      component.navigateToHome();
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+    });
 
-  it('should navigate to explore', () => {
-    component.navigateToExplore();
-    
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/explore']);
-  });
+    it('should navigate to explore when navigateToExplore is called', () => {
+      component.navigateToExplore();
+      expect(router.navigate).toHaveBeenCalledWith(['/explore']);
+    });
 
-  it('should navigate to login', () => {
-    component.navigateToLogin();
-    
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
-  });
+    it('should navigate to login when navigateToLogin is called', () => {
+      component.navigateToLogin();
+      expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    });
 
-  it('should navigate to register', () => {
-    component.navigateToRegister();
-    
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/register']);
-  });
+    it('should navigate to register when navigateToRegister is called', () => {
+      component.navigateToRegister();
+      expect(router.navigate).toHaveBeenCalledWith(['/register']);
+    });
 
-  it('should navigate to search', () => {
-    component.navigateToSearch();
-    
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/search']);
+    it('should navigate to search when navigateToSearch is called', () => {
+      component.navigateToSearch();
+      expect(router.navigate).toHaveBeenCalledWith(['/search']);
+    });
+
+    it('should navigate to post-property when navigateToPostProperty is called', () => {
+      component.navigateToPostProperty();
+      expect(router.navigate).toHaveBeenCalledWith(['/post-property']);
+    });
   });
 });

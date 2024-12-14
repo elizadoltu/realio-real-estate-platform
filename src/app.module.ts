@@ -11,6 +11,9 @@ import { GetByIdComponent } from './app/components/property-listings/get-by-id/g
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app/app.component';
 import { LoginComponent } from './app/components/user/login/login.component';
+import { AuthService } from './app/services/auth.service';
+import { LandingComponent } from './app/components/home/landing/landing.component';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 @NgModule({
     imports: [
@@ -22,10 +25,13 @@ import { LoginComponent } from './app/components/user/login/login.component';
         HttpClientModule,
         FormsModule,
         LoginComponent,
+        LandingComponent,
     ],
     providers: [
         provideHttpClient(),
-        PropertyService
+        PropertyService,
+        AuthService,
+        provideHttpClientTesting()
     ],
     })
 export class AppModule { }
