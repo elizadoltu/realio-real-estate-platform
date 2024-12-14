@@ -1,0 +1,7 @@
+{
+    "/api": {
+      "target": "https://abundant-reflection-production.up.railway.app",
+      "secure": false
+    }
+  }
+  

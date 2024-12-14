@@ -9,6 +9,7 @@
     "test": "ng test",
     "serve:ssr:real-estate-management-frontend": "node dist/real-estate-management-frontend/server/server.mjs"
   },
+  "proxy": "https://abundant-reflection-production.up.railway.app",
   "private": true,
   "dependencies": {
     "@angular/animations": "^18.2.0",

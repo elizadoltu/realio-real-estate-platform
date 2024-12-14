@@ -86,6 +86,9 @@
             },
             "development": {
               "buildTarget": "real-estate-management-frontend:build:development"
+            },
+            "options": {
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

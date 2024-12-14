@@ -1,27 +1,64 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service'; 
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css', 
+  styleUrls: ['./login.component.css'], 
 })
 export class LoginComponent {
-  constructor(private router: Router) {}
-
   email: string = '';
   password: string = '';
+  tokenKey: string = 'authToken'; 
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
+    const loginData = {
+      email: this.email,
+      password: this.password,
+    };
 
+    this.authService.login(loginData).subscribe(
+      (response: any) => {
+        console.log('Login successful', response);
+
+        // Storing the token and user details in localStorage
+        const token = response.token;
+        const userDetails = {
+          name: response.name,
+          email: response.email,
+          phoneNumber: response.phoneNumber,
+        };
+
+        localStorage.setItem(this.tokenKey, token);
+        localStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+        // Navigate to the account page
+        this.router.navigate(['/account']);
+
+        // Example of making an authenticated request after login
+        this.authService.makeAuthenticatedRequest('/api/protected-endpoint', 'GET').subscribe(
+          (data) => {
+            console.log('Authenticated request success:', data);
+          },
+          (error) => {
+            console.error('Authenticated request failed:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Login failed', error);
+      }
+    );
   }
 
+  // Other navigation methods...
   navigateHome() {
     this.router.navigate(['/']);
   }
@@ -37,7 +74,6 @@ export class LoginComponent {
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
-
 
   navigateToSearch() {
     this.router.navigate(['/search']);

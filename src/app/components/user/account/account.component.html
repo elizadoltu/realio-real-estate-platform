@@ -1,1 +1,11 @@
-<p>account works!</p>
+<div class="profile-container">
+    <h2>User Profile</h2>
+    <div *ngIf="userDetails; else noUser">
+      <p><strong>Email:</strong> {{ userDetails.email }}</p>
+      <button (click)="logout()">Logout</button>
+    </div>
+    <ng-template #noUser>
+      <p>No user details found. Please log in.</p>
+    </ng-template>
+  </div>
+  

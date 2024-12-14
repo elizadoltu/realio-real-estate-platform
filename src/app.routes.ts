@@ -12,6 +12,7 @@ import { SearchComponent } from './app/components/home/search/search.component';
 import { ExploreComponent } from './app/components/home/explore/explore.component';
 import { AccountComponent } from './app/components/user/account/account.component';
 import { PostPropertyComponent } from './app/components/home/post-property/post-property.component';
+import { AuthGuard } from './app/auth.guard';
 
 export const appRoutes: Routes = [
     { path: '', pathMatch: 'full', component: LandingComponent },
@@ -24,6 +25,6 @@ export const appRoutes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'search', component: SearchComponent },
     { path: 'explore', component: ExploreComponent },
-    { path: 'account', component: AccountComponent },
-    { path: 'post-property', component: PostPropertyComponent }
+    { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
+    { path: 'post-property', component: PostPropertyComponent, canActivate: [AuthGuard] },
 ]
