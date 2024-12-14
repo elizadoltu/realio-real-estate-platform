@@ -1,25 +1,29 @@
 <div class="flex justify-between items-center p-4 m-4">
   <div class="flex space-x-10">
     <button (click)="navigateToHome()" class="font-medium text-lg">Home</button>
-    <button (click)="navigateToExplore()" class="font-medium text-lg">
-      Explore
-    </button>
-    <button (click)="navigateToSearch()" class="font-medium text-lg">
-      Search
-    </button>
-    <button (click)="navigateToPostProperty()" class="font-medium text-lg">
-      Post
-    </button>
+    <button (click)="navigateToExplore()" class="font-medium text-lg">Explore</button>
+    <button (click)="navigateToSearch()" class="font-medium text-lg">Search</button>
+    <button (click)="navigateToPostProperty()" class="font-medium text-lg">Post</button>
   </div>
+  
   <div class="flex space-x-6">
-    <button (click)="navigateToRegister()" class="font-semibold text-lg">
-      Create an account
-    </button>
-    <button (click)="navigateToLogin()" class="font-semibold text-lg">
-      Log In
-    </button>
+    <ng-container *ngIf="!authService.getAuthToken(); else accountLink">
+      <button (click)="navigateToRegister()" class="font-semibold text-lg">
+        Create an account
+      </button>
+      <button (click)="navigateToLogin()" class="font-semibold text-lg">
+        Log In
+      </button>
+    </ng-container>
+
+    <ng-template #accountLink>
+      <button (click)="navigateToAccount()" class="font-semibold text-lg">
+        Account
+      </button>
+    </ng-template>
   </div>
 </div>
+
 
 <div class="font-general-bold flex justify-center items-center -z-10 relative">
   <h1

@@ -23,7 +23,10 @@ export class AuthService {
   }
 
   getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('authToken');
+    }
+    return null;
   }
 
   makeAuthenticatedRequest(endpoint: string, method: string = 'GET', body: any = null): Observable<Object> {

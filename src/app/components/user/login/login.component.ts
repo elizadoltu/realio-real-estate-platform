@@ -22,14 +22,18 @@ export class LoginComponent {
   onSubmit(data: { email: string; password: string }) {
     console.log('Entered Email:', data.email);
     console.log('Entered Password:', data.password);
-
+  
     if (data.email && data.password) {
       this.authService.login(data).subscribe(
         (response: any) => {
           console.log('Login successful', response);
           const token = response.token;
+  
           localStorage.setItem(this.tokenKey, token);
-          this.router.navigate(['/account']);
+          localStorage.setItem('email', data.email);  
+          localStorage.setItem('password', data.password);  
+          
+          this.router.navigate(['/']);
         },
         (error) => {
           console.error('Login failed', error);
@@ -37,6 +41,7 @@ export class LoginComponent {
       );
     }
   }
+  
   
   navigateHome() {
     this.router.navigate(['/']);
