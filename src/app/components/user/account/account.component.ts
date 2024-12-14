@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { jwtDecode } from 'jwt-decode'; 
 import { UserService } from '../../../services/user.service';
+import { NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -14,13 +15,19 @@ import { UserService } from '../../../services/user.service';
 export class AccountComponent implements OnInit {
   userDetails: any = null;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     const token = localStorage.getItem('authToken');
     const email = localStorage.getItem('email');
     const password = localStorage.getItem('password');
 
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    
     if (token) {
 
       this.userService.getUserDetails().subscribe(
@@ -40,10 +47,6 @@ export class AccountComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('email');
-    localStorage.removeItem('password');
-    localStorage.removeItem('userDetails');
-    alert('You have been logged out');
+    this.userService.logout();  
   }
 }

@@ -14,7 +14,7 @@ export class UserService {
 
     getUserDetails(): Observable<any> {
         const token = localStorage.getItem('authToken');
-        console.log('Token:', token);  // Log the token for debugging
+        console.log('Token:', token);  
         if (!token) {
             throw new Error('No authentication token found');
         }
@@ -43,6 +43,8 @@ export class UserService {
 
     logout(): void {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
         localStorage.removeItem('userDetails');
         alert('You have been logged out');
     }

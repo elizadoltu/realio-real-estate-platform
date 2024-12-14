@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service'; 
 
 @Component({
@@ -18,6 +18,14 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   tokenKey: string = 'authToken'; 
+
+  ngOnInit(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
 
   onSubmit(data: { email: string; password: string }) {
     console.log('Entered Email:', data.email);
