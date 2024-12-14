@@ -21,8 +21,8 @@ export class UserService {
     
         try {
             const decodedToken: any = jwtDecode(token);
-            console.log('Decoded token:', decodedToken);  // Log the decoded token for debugging
-            const userId = decodedToken.userId;  
+            console.log('Decoded token:', decodedToken); 
+            const userId = decodedToken.nameid;  
     
             if (!userId) {
                 throw new Error('User ID not found in the token');

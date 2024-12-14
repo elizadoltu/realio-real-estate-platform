@@ -22,8 +22,6 @@ export class AccountComponent implements OnInit {
     const password = localStorage.getItem('password');
 
     if (token) {
-      const decodedToken: any = jwtDecode(token);
-      const userId = decodedToken.userId;
 
       this.userService.getUserDetails().subscribe(
         (data) => {
