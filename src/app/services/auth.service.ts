@@ -1,43 +1,43 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Auth';
+    private loginUrl = 'https://abundant-reflection-production.up.railway.app/api/Auth/login';
 
   constructor(private http: HttpClient) {}
 
-  // Login method that returns the token
-  login(data: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, data, {
-      headers: { 'Content-Type': 'application/json' },
-    }).pipe(
-      catchError((error) => {
-        console.error('Login failed:', error);
-        return throwError(() => new Error('Login failed. Please try again.'));
+  login(email: string, password: string): Observable<any> {
+    const body = { email, password };
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    
+    return this.http.post<any>(this.loginUrl, body, { headers }).pipe(
+      tap(response => {
+        console.log('API response:', response);
       })
     );
   }
+    
 
-  // Method to get the stored auth token from localStorage
   getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('token');
   }
+  
 
-  // Make authenticated request by including token in headers
   makeAuthenticatedRequest(endpoint: string, method: string = 'GET', body: any = null): Observable<Object> {
     const token = this.getAuthToken();
 
     if (!token) {
-      throw new Error('No authentication token found');
+      console.error('No token available');
+      return throwError(() => new Error('No authentication token found'));
     }
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,  // Add the token in the Authorization header
+      'Authorization': `Bearer ${token}`,  
       'Content-Type': 'application/json',
     });
 
@@ -58,7 +58,6 @@ export class AuthService {
         })
       );
     } else {
-      // Return an observable with an error message if the method is unsupported
       return throwError(() => new Error('Unsupported HTTP method.'));
     }
   }

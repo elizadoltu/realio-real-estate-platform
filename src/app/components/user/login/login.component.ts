@@ -1,64 +1,54 @@
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service'; 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'], 
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  tokenKey: string = 'authToken'; 
+  errorMessage: string = '';
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  onSubmit() {
-    const loginData = {
-      email: this.email,
-      password: this.password,
-    };
-
-    this.authService.login(loginData).subscribe(
-      (response: any) => {
-        console.log('Login successful', response);
-
-        // Storing the token and user details in localStorage
-        const token = response.token;
-        const userDetails = {
-          name: response.name,
-          email: response.email,
-          phoneNumber: response.phoneNumber,
-        };
-
-        localStorage.setItem(this.tokenKey, token);
-        localStorage.setItem('userDetails', JSON.stringify(userDetails));
-
-        // Navigate to the account page
-        this.router.navigate(['/account']);
-
-        // Example of making an authenticated request after login
-        this.authService.makeAuthenticatedRequest('/api/protected-endpoint', 'GET').subscribe(
-          (data) => {
-            console.log('Authenticated request success:', data);
-          },
-          (error) => {
-            console.error('Authenticated request failed:', error);
+  onSubmit(): void {
+    console.log("Login form submitted");
+  
+    if (this.email && this.password) {
+      this.authService.login(this.email, this.password).subscribe(
+        (response) => {
+          console.log('Login response:', response);
+  
+          if (response && response.token) {
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('email', this.email);
+  
+            this.router.navigate(['/']).then(() => {
+              console.log('Navigated to home');
+            }).catch((error) => {
+              console.error('Navigation failed:', error);
+            });
+          } else {
+            this.errorMessage = 'Unexpected error occurred';
           }
-        );
-      },
-      (error) => {
-        console.error('Login failed', error);
-      }
-    );
-  }
+        },
+        (error) => {
+          console.error('Login failed:', error);
+          this.errorMessage = 'Invalid email or password';
+        }
+      );
+    } else {
+      this.errorMessage = 'Please fill in all fields';
+    }
+  }  
 
-  // Other navigation methods...
   navigateHome() {
     this.router.navigate(['/']);
   }
