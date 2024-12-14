@@ -1,43 +1,40 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-    private loginUrl = 'https://abundant-reflection-production.up.railway.app/api/Auth/login';
+  private apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Auth';
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<any> {
-    const body = { email, password };
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    
-    return this.http.post<any>(this.loginUrl, body, { headers }).pipe(
-      tap(response => {
-        console.log('API response:', response);
+  login(data: { email: string; password: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, data, {
+      headers: { 'Content-Type': 'application/json' },
+    }).pipe(
+      catchError((error) => {
+        console.error('Login failed:', error);
+        return throwError(() => new Error('Login failed. Please try again.'));
       })
     );
   }
-    
 
   getAuthToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('authToken');
   }
-  
 
   makeAuthenticatedRequest(endpoint: string, method: string = 'GET', body: any = null): Observable<Object> {
     const token = this.getAuthToken();
 
     if (!token) {
-      console.error('No token available');
-      return throwError(() => new Error('No authentication token found'));
+      throw new Error('No authentication token found');
     }
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,  
+      'Authorization': `Bearer ${token}`, 
       'Content-Type': 'application/json',
     });
 

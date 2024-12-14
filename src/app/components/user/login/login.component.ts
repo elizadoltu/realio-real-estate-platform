@@ -1,54 +1,43 @@
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service'; 
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css'], 
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
-  errorMessage: string = '';
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  onSubmit(): void {
-    console.log("Login form submitted");
-  
-    if (this.email && this.password) {
-      this.authService.login(this.email, this.password).subscribe(
-        (response) => {
-          console.log('Login response:', response);
-  
-          if (response && response.token) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('email', this.email);
-  
-            this.router.navigate(['/']).then(() => {
-              console.log('Navigated to home');
-            }).catch((error) => {
-              console.error('Navigation failed:', error);
-            });
-          } else {
-            this.errorMessage = 'Unexpected error occurred';
-          }
+  email: string = '';
+  password: string = '';
+  tokenKey: string = 'authToken'; 
+
+  onSubmit(data: { email: string; password: string }) {
+    console.log('Entered Email:', data.email);
+    console.log('Entered Password:', data.password);
+
+    if (data.email && data.password) {
+      this.authService.login(data).subscribe(
+        (response: any) => {
+          console.log('Login successful', response);
+          const token = response.token;
+          localStorage.setItem(this.tokenKey, token);
+          this.router.navigate(['/account']);
         },
         (error) => {
-          console.error('Login failed:', error);
-          this.errorMessage = 'Invalid email or password';
+          console.error('Login failed', error);
         }
       );
-    } else {
-      this.errorMessage = 'Please fill in all fields';
     }
-  }  
-
+  }
+  
   navigateHome() {
     this.router.navigate(['/']);
   }

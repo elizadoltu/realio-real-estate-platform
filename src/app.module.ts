@@ -10,6 +10,7 @@ import { PropertyService } from './app/services/property.service';
 import { GetByIdComponent } from './app/components/property-listings/get-by-id/get-by-id.component';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app/app.component';
+import { LoginComponent } from './app/components/user/login/login.component';
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import { AppComponent } from './app/app.component';
         BrowserAnimationsModule,
         HttpClientModule,
         FormsModule,
+        LoginComponent,
     ],
     providers: [
         provideHttpClient(),
