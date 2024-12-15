@@ -23,7 +23,9 @@
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.10",
     "express": "^4.18.2",
+    "gsap": "^3.12.5",
     "jwt-decode": "^4.0.0",
+    "lenis": "^1.1.18",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
