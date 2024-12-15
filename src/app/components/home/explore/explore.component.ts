@@ -27,6 +27,7 @@ export class ExploreComponent implements OnInit {
     status: '',
     squareFootage: 0,
   };
+  isFilterOpen: boolean = false; 
 
   testImages = [
     'assets/testimage-1.jpg',
@@ -39,11 +40,18 @@ export class ExploreComponent implements OnInit {
   ];
 
   randomImage: string = '';
-  isLoading: boolean = true; // To track preloading status
-
-  private apiUrl = 'https://abundant-reflection-production.up.railway.app/api/PropertyListings';
+  isLoading: boolean = true; 
 
   constructor(private router: Router, private propertyService: PropertyService) {}
+
+  toggleFilters() {
+    this.isFilterOpen = !this.isFilterOpen;
+  }
+
+  applyFilters() {
+    this.currentPage = 1; 
+    this.fetchProperties();
+  }
 
   navigateToSearch() {
     this.router.navigate(['/search']);
@@ -87,7 +95,7 @@ export class ExploreComponent implements OnInit {
       })
       .catch((error) => {
         console.error('Error preloading images:', error);
-        this.fetchProperties(); // Continue even if some images fail to preload
+        this.fetchProperties(); 
       })
       .finally(() => {
         this.isLoading = false;
@@ -118,6 +126,20 @@ export class ExploreComponent implements OnInit {
 
   goToPage(page: number) {
     this.currentPage = page;
+    this.fetchProperties();
+  }
+
+  clearFilters() {
+    this.filters = {
+      Type: '',
+      price: 0,
+      nrOfBathrooms: 0,
+      nrOfBedrooms: 0,
+      status: '',
+      squareFootage: 0,
+    };
+
+    this.currentPage = 1;
     this.fetchProperties();
   }
 }

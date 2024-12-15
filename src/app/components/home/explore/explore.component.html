@@ -20,14 +20,12 @@
   </div>
 </div>
 
-<div
-  class="flex justify-between font-general-medium text-lg ml-4 mr-4 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2"
->
+<div class="flex justify-between font-general-medium text-lg ml-4 mr-4 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2">
   <div class="flex">
     <p>All properties</p>
     <div class="flex items-center ml-20">
       <p>Filter</p>
-      <img src="assets/filter-png.png" alt="filter icon" />
+      <img src="assets/filter-png.png" alt="filter icon" (click)="toggleFilters()" class="hover:cursor-pointer"/>
     </div>
   </div>
   <div class="flex">
@@ -35,6 +33,81 @@
     <img src="assets/list-png.png" alt="list icon" class="ml-4" />
   </div>
 </div>
+
+<div *ngIf="isFilterOpen" class="font-switzer-medium p-4 text-primary-black border border-gray-300 bg-primary-white rounded-lg mt-4 mx-4">
+  <h2 class="text-lg font-bold mb-4">Filter Properties</h2>
+  <form (ngSubmit)="applyFilters()" class="grid grid-cols-2 gap-4">
+    <div>
+      <label for="type" class="block text-sm font-medium">Type</label>
+      <select id="type" [(ngModel)]="filters.Type" name="type" class="mt-1 block w-full border rounded-md">
+        <option value="">All</option>
+        <option value="House">House</option>
+        <option value="Apartment">Apartment</option>
+      </select>
+    </div>
+    <div>
+      <label for="price" class="block text-sm font-medium">Max Price</label>
+      <input
+        type="number"
+        id="price"
+        [(ngModel)]="filters.price"
+        name="price"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter max price"
+      />
+    </div>
+    <div>
+      <label for="bedrooms" class="block text-sm font-medium">Bedrooms</label>
+      <input
+        type="number"
+        id="bedrooms"
+        [(ngModel)]="filters.nrOfBedrooms"
+        name="bedrooms"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter min bedrooms"
+      />
+    </div>
+    <div>
+      <label for="bathrooms" class="block text-sm font-medium">Bathrooms</label>
+      <input
+        type="number"
+        id="bathrooms"
+        [(ngModel)]="filters.nrOfBathrooms"
+        name="bathrooms"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter min bathrooms"
+      />
+    </div>
+    <div>
+      <label for="squareFootage" class="block text-sm font-medium">Min Square Footage</label>
+      <input
+        type="number"
+        id="squareFootage"
+        [(ngModel)]="filters.squareFootage"
+        name="squareFootage"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter min square footage"
+      />
+    </div>
+    <div>
+      <label for="status" class="block text-sm font-medium">Status</label>
+      <select id="status" [(ngModel)]="filters.status" name="status" class="mt-1 block w-full border rounded-md">
+        <option value="">All</option>
+        <option value="For Sale">For Sale</option>
+        <option value="For Rent">For Rent</option>
+        <option value="Sold">Sold</option>
+      </select>
+    </div>
+    <div class="col-span-2">
+      <button type="submit" class="bg-primary-black text-primary-white px-4 py-2 rounded-md transition ease-in delay-100 hover:bg-slate-700">Apply Filters</button>
+      <button
+      (click)="clearFilters()"
+      class="text-primary-black border border-primary-black transition ease-in delay-100 hover:bg-primary-black hover:text-primary-white px-4 py-2 rounded-md  ml-5"> Clear Filters</button>
+     
+    </div>
+  </form>
+</div>
+
 
 <div class="grid grid-cols-4 gap-3 mt-4 ml-4 mr-4">
   <div
