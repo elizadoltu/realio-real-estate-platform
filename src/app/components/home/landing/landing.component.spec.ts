@@ -1,78 +1,100 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { LandingComponent } from './landing.component';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { By } from '@angular/platform-browser';
+import Lenis from 'lenis';
+import gsap from 'gsap';
 import { of } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
-  let authService: AuthService;
-  let router: Router;
+  let mockRouter: jasmine.SpyObj<Router>;
+  let mockAuthService: jasmine.SpyObj<AuthService>;
 
-  beforeEach(() => {
-    const mockRouter = {
-      navigate: jasmine.createSpy('navigate'),
-    };
+  beforeEach(async () => {
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    mockAuthService = jasmine.createSpyObj('AuthService', ['isAuthenticated']); 
 
-    TestBed.configureTestingModule({
-      imports: [CommonModule, LandingComponent, AuthService, HttpClientModule],
+    await TestBed.configureTestingModule({
+      imports: [CommonModule, LandingComponent], 
       providers: [
         { provide: Router, useValue: mockRouter },
-        AuthService, 
+        { provide: AuthService, useValue: mockAuthService }, 
       ],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(LandingComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthService);
-    router = TestBed.inject(Router);
+    fixture.detectChanges(); 
   });
 
-  afterEach(() => {
-    localStorage.clear(); 
-  });
-
-  it('should create the component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Navigation methods', () => {
-    it('should navigate to account when navigateToAccount is called', () => {
-      component.navigateToAccount();
-      expect(router.navigate).toHaveBeenCalledWith(['/account']);
-    });
+  it('should call gsap animations after view init', () => {
+    spyOn(gsap, 'from');
+    spyOn(gsap, 'to');
 
-    it('should navigate to home when navigateToHome is called', () => {
-      component.navigateToHome();
-      expect(router.navigate).toHaveBeenCalledWith(['/']);
-    });
+    component.ngAfterViewInit();
+    expect(gsap.from).toHaveBeenCalled();
+    expect(gsap.to).toHaveBeenCalled();
+  });
 
-    it('should navigate to explore when navigateToExplore is called', () => {
-      component.navigateToExplore();
-      expect(router.navigate).toHaveBeenCalledWith(['/explore']);
-    });
+  it('should initialize Lenis on ngAfterViewInit', () => {
+    spyOn(window, 'requestAnimationFrame');
+    spyOn(Lenis.prototype, 'on');
+    spyOn(Lenis.prototype, 'raf');
 
-    it('should navigate to login when navigateToLogin is called', () => {
-      component.navigateToLogin();
-      expect(router.navigate).toHaveBeenCalledWith(['/login']);
-    });
+    component.ngAfterViewInit();
 
-    it('should navigate to register when navigateToRegister is called', () => {
-      component.navigateToRegister();
-      expect(router.navigate).toHaveBeenCalledWith(['/register']);
-    });
+    expect(Lenis.prototype.on).toHaveBeenCalled();
+    expect(window.requestAnimationFrame).toHaveBeenCalled();
+  });
 
-    it('should navigate to search when navigateToSearch is called', () => {
-      component.navigateToSearch();
-      expect(router.navigate).toHaveBeenCalledWith(['/search']);
-    });
+  it('should clean up Lenis on ngOnDestroy', () => {
+    component.ngOnDestroy();
+    expect(component['lenis']?.destroy).toHaveBeenCalled();
+    expect(gsap.ticker.remove).toHaveBeenCalled();
+  });
 
-    it('should navigate to post-property when navigateToPostProperty is called', () => {
-      component.navigateToPostProperty();
-      expect(router.navigate).toHaveBeenCalledWith(['/post-property']);
-    });
+  it('should navigate to the account page', () => {
+    component.navigateToAccount();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/account']);
+  });
+
+  it('should navigate to the home page', () => {
+    component.navigateToHome();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+  });
+
+  it('should navigate to the explore page', () => {
+    component.navigateToExplore();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/explore']);
+  });
+
+  it('should navigate to the login page', () => {
+    component.navigateToLogin();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('should navigate to the register page', () => {
+    component.navigateToRegister();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/register']);
+  });
+
+  it('should navigate to the search page', () => {
+    component.navigateToSearch();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/search']);
+  });
+
+  it('should navigate to the post-property page', () => {
+    component.navigateToPostProperty();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/post-property']);
   });
 });

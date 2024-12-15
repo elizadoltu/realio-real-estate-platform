@@ -6,31 +6,31 @@ import { isPlatformBrowser } from '@angular/common';
 describe('PlatformDetectorService', () => {
   let service: PlatformDetectorService;
 
-  beforeEach(() => {
+ 
+  const configureTestBed = (platformId: string) => {
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [
         PlatformDetectorService,
-        { provide: PLATFORM_ID, useValue: 'browser' } 
+        { provide: PLATFORM_ID, useValue: platformId },
       ],
     });
-
     service = TestBed.inject(PlatformDetectorService);
-  });
+  };
 
   it('should be created', () => {
+    configureTestBed('browser'); 
     expect(service).toBeTruthy();
   });
 
   describe('isBrowser', () => {
     it('should return true when platform is browser', () => {
-      TestBed.overrideProvider(PLATFORM_ID, { useValue: 'browser' }); 
-      service = TestBed.inject(PlatformDetectorService);
+      configureTestBed('browser');
       expect(service.isBrowser()).toBeTrue();
     });
 
     it('should return false when platform is server', () => {
-      TestBed.overrideProvider(PLATFORM_ID, { useValue: 'server' }); 
-      service = TestBed.inject(PlatformDetectorService);
+      configureTestBed('server'); 
       expect(service.isBrowser()).toBeFalse();
     });
   });
