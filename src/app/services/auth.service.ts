@@ -38,6 +38,30 @@ export class AuthService {
       );
   }  
 
+  updateUser(id: string, userData: any): Observable<any> {
+    const token = this.getAuthToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+  
+    console.log('Request URL:', `https://abundant-reflection-production.up.railway.app/api/Users/${id}`);
+    console.log('Request Headers:', headers);
+    console.log('Request Body:', userData);
+  
+    return this.http.put<any>(
+      `https://abundant-reflection-production.up.railway.app/api/Users/${id}`,
+      userData,
+      { headers }
+    ).pipe(
+      catchError((error) => {
+        console.error('Update failed:', error);
+        console.log('Error details:', error.error);
+        return throwError(() => new Error('Failed to update user.'));
+      })
+    );
+  }  
+
   getAuthToken(): string | null {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('authToken');

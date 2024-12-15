@@ -1,10 +1,78 @@
-<div class="account-container">
-  <h2>User Details</h2>
-  <div *ngIf="userDetails">
-    <p><strong>Name:</strong> {{ userDetails.name }}</p>
-    <p><strong>Email:</strong> {{ userDetails.email }}</p>
-    <p><strong>Phone Number:</strong> {{ userDetails.phoneNumber }}</p>
+<div class="h-screen w-screen bg-[#1A1A1A] text-white flex flex-col">
+  <div class="p-6 pl-12">
+    <button (click)="router.navigate(['/'])" class="flex items-center text-lg font-semibold">
+      &larr; Back
+    </button>
   </div>
 
-  <button (click)="logout()">Logout</button>
+  <div class="border-t border-white"></div>
+
+  <div class="flex-1 flex">
+    <div class="w-1/4 border-r border-white flex flex-col justify-between pl-12">
+      <div class="mt-10">
+        <span class="flex items-center px-4 space-x-4 font-semibold text-white cursor-default">
+          <img src="assets/profile.png" alt="Profile" class="w-6 h-6" />
+          <span>Profile</span>
+        </span>
+        <div class="border-t border-white mx-6 my-6"></div>
+        <span class="flex items-center px-4 space-x-4 text-gray-400 hover:text-white cursor-pointer">
+          <img src="assets/profile-properties.png" alt="Properties" class="w-6 h-6" />
+          <span>Properties</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col items-center p-10">
+      <div class="mb-8">
+        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="w-32 h-32 rounded-lg" />
+      </div>
+      
+        <div class="w-full max-w-3xl space-y-6 pr-12">
+          <div class="flex justify-end border-b border-white pb-2">
+            <label class="text-gray-400 w-1/2" for="name">Full name</label>
+            <div class="flex items-center space-x-4 w-1/2 justify-end">
+              <input
+                id="name"
+                type="text"
+                [(ngModel)]="userDetails.name"
+                class="bg-transparent border-b border-gray-600 focus:outline-none text-white w-full text-right"
+              />
+              <img src="assets/arrow-login-svg.png" alt="Arrow" class="w-4 h-4" />
+            </div>
+          </div>
+      
+          <div class="flex justify-end border-b border-white pb-2">
+            <label class="text-gray-400 w-1/2" for="email">Email</label>
+            <div class="flex items-center space-x-4 w-1/2 justify-end">
+              <input
+                id="email"
+                type="email"
+                [(ngModel)]="userDetails.email"
+                class="bg-transparent border-b border-gray-600 focus:outline-none text-white w-full text-right"
+              />
+              <img src="assets/arrow-login-svg.png" alt="Arrow" class="w-4 h-4" />
+            </div>
+          </div>
+      
+          <div class="flex justify-end border-b border-white pb-2">
+            <label class="text-gray-400 w-1/2" for="phone">Phone number</label>
+            <div class="flex items-center space-x-4 w-1/2 justify-end">
+              <input
+                id="phone"
+                type="text"
+                [(ngModel)]="userDetails.phoneNumber"
+                class="bg-transparent border-b border-gray-600 focus:outline-none text-white w-full text-right"
+              />
+              <img src="assets/arrow-login-svg.png" alt="Arrow" class="w-4 h-4" />
+            </div>
+          </div>
+        </div>
+
+      <div class="mt-8">
+        <button (click)="onSave()" class="bg-white text-black font-semibold px-6 py-2 rounded-lg hover:bg-gray-300">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
