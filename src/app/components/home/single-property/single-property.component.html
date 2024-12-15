@@ -1,0 +1,13 @@
+<div *ngIf="property; else loading">
+    <h1>{{ property.title }}</h1>
+    <p>{{ property.address }}</p>
+    <p>Price: ${{ property.price | number }}</p>
+    <p>Status: {{ property.status }}</p>
+    <p>Square Footage: {{ property.squareFootage }} sq ft</p>
+    <img [src]="property.imageUrls" alt="property image" />
+  </div>
+  
+  <ng-template #loading>
+    <p>Loading...</p>
+  </ng-template>
+  

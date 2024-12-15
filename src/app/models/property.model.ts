@@ -1,5 +1,5 @@
 export interface PropertyListing {
-    id?: string;
+    propertyId?: string;
     title: string;
     address: string;
     type: string;

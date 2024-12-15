@@ -109,10 +109,13 @@ export class ExploreComponent implements OnInit {
         (response) => {
           console.log('API Response:', response);
           if (response.isSuccess) {
-            this.properties = response.data.data.map((property: PropertyListing) => ({
-              ...property,
-              imageUrls: this.getRandomImage(),
-            }));
+            this.properties = response.data.data.map((property: PropertyListing) => {
+              console.log('Property ID:', property.propertyId);  
+              return {
+                ...property,
+                imageUrls: this.getRandomImage(),
+              };
+            });
             this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
           } else {
             console.error('Error fetching properties:', response.errorMessage);
@@ -123,6 +126,7 @@ export class ExploreComponent implements OnInit {
         }
       );
   }
+  
 
   goToPage(page: number) {
     this.currentPage = page;
@@ -142,4 +146,13 @@ export class ExploreComponent implements OnInit {
     this.currentPage = 1;
     this.fetchProperties();
   }
+
+  navigateToPropertyDetail(propertyId: string | undefined) {
+    if (propertyId) {
+      this.router.navigate([`/property/${propertyId}`]);
+    } else {
+      console.error('Property ID is undefined');
+    }
+  }
+  
 }

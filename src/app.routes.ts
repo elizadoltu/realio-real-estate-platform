@@ -13,6 +13,7 @@ import { ExploreComponent } from './app/components/home/explore/explore.componen
 import { AccountComponent } from './app/components/user/account/account.component';
 import { PostPropertyComponent } from './app/components/home/post-property/post-property.component';
 import { AuthGuard } from './app/auth.guard';
+import { SinglePropertyComponent } from './app/components/home/single-property/single-property.component';
 
 export const appRoutes: Routes = [
     { path: '', pathMatch: 'full', component: LandingComponent },
@@ -23,6 +24,7 @@ export const appRoutes: Routes = [
     // { path: 'property-listings/get-by-id', component: GetByIdComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'property/:id', component: SinglePropertyComponent },
     { path: 'search', component: SearchComponent },
     { path: 'explore', component: ExploreComponent },
     { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
