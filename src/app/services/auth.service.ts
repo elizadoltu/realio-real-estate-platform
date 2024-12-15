@@ -25,6 +25,19 @@ export class AuthService {
       );
   }
 
+  register(data: { name: string; phoneNumber: string; email: string; password: string }): Observable<any> {
+    return this.http
+      .post<any>(`${this.apiUrl}/register`, data, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Registration failed:', error);
+          return throwError(() => new Error('Registration failed. Please try again.'));
+        })
+      );
+  }  
+
   getAuthToken(): string | null {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('authToken');

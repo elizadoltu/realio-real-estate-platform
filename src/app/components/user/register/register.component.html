@@ -8,6 +8,7 @@
   <div class="flex justify-center mr-40 -ml-4 font-switzer-regular w-screen">
     <div class="mt-10 desktop:w-96 mobile:w-80 flex justify-center flex-col">
       <h1 class="font-general-semibold desktop:text-2xl mobile:text-lg">Create an account</h1>
+      <div *ngIf="errorMessage" class="text-red-500 text-sm mb-4">{{ errorMessage }}</div>
       <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="mt-10 text-lg" autocomplete="off">
         <!-- Full Name -->
         <div class="form-group border-b border-zinc-800 desktop:w-96 mobile:w-80">
