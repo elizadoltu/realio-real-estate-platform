@@ -12,40 +12,40 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AppComponent {
   title = 'real-estate-management-frontend';
   private lenis: Lenis | undefined;
 
   constructor(private router: Router, private elementRef: ElementRef) {}
 
-  ngOnInit() : void {
-    gsap.registerPlugin(ScrollTrigger);
-  }
+  // ngOnInit() : void {
+  //   gsap.registerPlugin(ScrollTrigger);
+  // }
 
-  ngAfterViewInit(): void {
-    if (typeof window !== 'undefined') {
-      this.lenis = new Lenis({
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        orientation: 'vertical',
-      });
+  // ngAfterViewInit(): void {
+  //   if (typeof window !== 'undefined') {
+  //     this.lenis = new Lenis({
+  //       duration: 1.2,
+  //       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  //       smoothWheel: true,
+  //       orientation: 'vertical',
+  //     });
   
-      this.lenis.on('scroll', () => {
-        ScrollTrigger.update(); 
-      });
+  //     this.lenis.on('scroll', () => {
+  //       ScrollTrigger.update(); 
+  //     });
   
-      const raf = (time: number) => {
-        this.lenis?.raf(time);
-        requestAnimationFrame(raf);
-      };
-      requestAnimationFrame(raf);
-    }
-  }
+  //     const raf = (time: number) => {
+  //       this.lenis?.raf(time);
+  //       requestAnimationFrame(raf);
+  //     };
+  //     requestAnimationFrame(raf);
+  //   }
+  // }
   
 
-  ngOnDestroy(): void {
-    this.lenis?.destroy();
-    gsap.ticker.remove((time) => this.lenis?.raf(time * 1000));
-  }
+  // ngOnDestroy(): void {
+  //   this.lenis?.destroy();
+  //   gsap.ticker.remove((time) => this.lenis?.raf(time * 1000));
+  // }
 }
