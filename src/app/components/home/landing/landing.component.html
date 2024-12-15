@@ -1,4 +1,4 @@
-<div class="flex justify-between items-center p-4 m-4">
+<div class="scroll-container flex justify-between items-center p-4 m-4">
   <div class="flex space-x-10">
     <button (click)="navigateToHome()" class="font-medium text-lg">Home</button>
     <button (click)="navigateToExplore()" class="font-medium text-lg">Explore</button>
@@ -25,11 +25,12 @@
 </div>
 
 
-<div class="font-general-bold flex justify-center items-center -z-10 relative">
+<div class="font-general-bold flex justify-center items-center -z-10 relative overlay">
   <h1
-    class="desktop:text-30xl mb-0 p-0 leading-none block mobile:text-8xl tablet:text-20xl"
+    class="headline desktop:text-30xl mb-0 p-0 leading-none block mobile:text-8xl tablet:text-20xl"
   >
-    REALIO
+  <div class="headline-text">REALIO</div>
+    
   </h1>
 </div>
 

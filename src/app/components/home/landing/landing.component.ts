@@ -12,9 +12,9 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './landing.component.html',
-  styleUrl: './landing.component.css',
+  styleUrls: ['./landing.component.css', './lenis.css']
 })
-export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
+export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private router: Router, public authService: AuthService) {}
   private lenis: Lenis | undefined;
@@ -23,8 +23,32 @@ export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    gsap.from('.headline-text', {
+      yPercent: 100,
+      ease: 'power4.inOut',
+      stagger: {
+        amount: 0.5,
+      },
+      duration: 1.5,
+      // onComplete: () => this.showElements(),
+    });
+
+    gsap.to(
+      '.headline',
+      {
+        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        ease: 'power4.inOut',
+        stagger: {
+          amount: 0.5,
+        },
+        duration: 1.5,
+        // onComplete: () => this.showElements(),
+      },
+    );
+
     if (typeof window !== 'undefined') {
       this.lenis = new Lenis({
+        autoRaf: true,
         duration: 1.0,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         // smoothWheel: true,
@@ -43,6 +67,31 @@ export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
       requestAnimationFrame(raf);
     }
   }
+  // showElements(): void {
+  //   gsap.to('.flex', {
+  //     opacity: 1,
+  //     y: 0,
+  //     duration: 1,
+  //     ease: 'power4.out',
+  //   });
+
+  //   gsap.to('.grid', {
+  //     opacity: 1,
+  //     y: 0,
+  //     duration: 1.5,
+  //     delay: 0.5, 
+  //     ease: 'power4.out',
+  //   });
+
+  //   gsap.to('.bg-primary-white', {
+  //     opacity: 1,
+  //     y: 0,
+  //     duration: 1.5,
+  //     delay: 1, 
+  //     ease: 'power4.out',
+  //   });
+  // }
+  
   
 
   ngOnDestroy(): void {
