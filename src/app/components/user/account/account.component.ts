@@ -63,6 +63,11 @@ export class AccountComponent implements OnInit {
       }
     );
   }  
+
+  onLogout() {
+    this.userService.logout();
+    this.router.navigate(['/']);
+  }
   
   sanitizeInput(value: string): string {
     return value.trim();

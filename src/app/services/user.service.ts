@@ -46,6 +46,5 @@ export class UserService {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
         localStorage.removeItem('userDetails');
-        alert('You have been logged out');
     }
 }
