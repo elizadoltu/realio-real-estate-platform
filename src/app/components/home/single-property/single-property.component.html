@@ -1,13 +1,94 @@
-<div *ngIf="property; else loading">
-    <h1>{{ property.title }}</h1>
-    <p>{{ property.address }}</p>
-    <p>Price: ${{ property.price | number }}</p>
-    <p>Status: {{ property.status }}</p>
-    <p>Square Footage: {{ property.squareFootage }} sq ft</p>
-    <img [src]="property.imageUrls" alt="property image" />
+<div *ngIf="property; else loading" class="mb-20">
+  <div class="p-3">
+    <div class="border-b border-slate-600 pb-4 mt-2">
+      <button
+        (click)="goBack()"
+        class="font-general-semibold desktop:text-2xl mobile:text-lg"
+      >
+        ← Back
+      </button>
+    </div>
+  </div>
+
+  <div class="p-3">
+    <h1 class="font-general-semibold uppercase text-8xl">
+      {{ property.title }}
+    </h1>
+  </div>
+
+  <div class="grid grid-cols-2 p-3 border-b border-slate-600 ml-2 mr-2">
+    <div class="flex flex-col justify-between">
+      <div class="flex justify-between border-t border-slate-600 mr-2">
+        <h1 class="font-general-semibold text-2xl mt-4">Details</h1>
+        <div class="mt-2 text-right text-lg font-switzer-regular">
+          <p class="flex items-center justify-end">
+            <img src="assets/location.png" alt="location icon"/>{{
+              property.address
+            }}
+          </p>
+          <p class="flex justify-end items-center mt-2">
+            <img src="assets/square-meters.png" alt="area icon" />{{
+              property.squareFootage
+            }}sq ft
+            <img src="assets/price.png" alt="price tag icon" class="ml-4" /> ${{
+              property.price
+            }}
+          </p>
+          <p class="flex items-center justify-end mt-2">
+            <img src="assets/bedroom.png" alt="bed icon" />{{
+              property.numberOfBedrooms
+            }}
+            bedrooms
+            <img src="assets/bathroom.png" alt="bathroom icon" class="ml-4" />{{
+              property.numberOfBathrooms
+            }}
+            bathrooms
+          </p>
+        </div>
+      </div>
+      <div class="flex flex-col items-end mr-2 text-lg font-switzer-regular">
+        <p>
+          <span class="font-switzer-medium">Status:</span> {{ property.status }}
+        </p>
+        <p>
+          <span class="font-switzer-medium">Listing Date:</span>
+          {{ property?.listingDate | date : "longDate" }}
+        </p>
+      </div>
+    </div>
+    <div>
+      <img src="assets/testimage-1.jpg" alt="image of a property" class="rounded-md"/>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 p-3 pb-5 mt-10">
+    <h1 class="font-general-semibold text-2xl">Description</h1>
+    <p class="text-lg font-switzer-regular">{{ property.description }}</p>
+  </div>
+
+  <div class="grid grid-cols-2 p-3 gap-2 mt-10">
+    <img src="assets/testimage-2.jpg" alt="image of a property" class="rounded-md">
+    <img src="assets/testimage-3.jpg" alt="image of a property" class="rounded-md">
   </div>
   
-  <ng-template #loading>
-    <p>Loading...</p>
-  </ng-template>
-  
+  <div class="grid grid-cols-2 p-3 border-t border-slate-600 mt-5 mx-3">
+    <p class="font-general-semibold text-2xl">
+      Interested? Contact the owner today to learn more or buy it!
+    </p>
+    <div class="font-switzer-regular text-lg">
+      <p class="border-b border-slate-600 pb-3"><span class="font-switzer-medium">Name:</span> {{ userDetails.name }}</p>
+      <p class="border-b border-slate-600 py-3"><span class="font-switzer-medium">Phone number:</span> {{ userDetails.phoneNumber }}</p>
+      <p class="flex items-center pt-3 font-switzer-medium"><img src="assets/buy.png" alt="cart icon">Buy</p>
+    </div>
+  </div>
+  <div class="grid grid-cols-2  border-b border-t border-slate-600 p-3 mx-3 text-lg">
+    <p class="font-general-semibold text-2xl">Not ready yet? Save this listing for later</p>
+    <p class="flex items-center font-switzer-medium"><img src="assets/save.png" alt="save icon">Save</p>
+  </div>
+</div>
+
+<app-contact></app-contact>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

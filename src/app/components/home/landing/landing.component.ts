@@ -6,11 +6,12 @@ import { OnInit, OnDestroy, ElementRef } from '@angular/core';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ContactComponent } from "../contact/contact.component";
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ContactComponent],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css', './lenis.css']
 })
@@ -46,26 +47,26 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     );
 
-    if (typeof window !== 'undefined') {
-      this.lenis = new Lenis({
-        autoRaf: true,
-        duration: 1.0,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        // smoothWheel: true,
-        orientation: 'vertical',
-        syncTouch: true,
-      });
+    // if (typeof window !== 'undefined') {
+    //   this.lenis = new Lenis({
+    //     autoRaf: true,
+    //     duration: 1.0,
+    //     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    //     // smoothWheel: true,
+    //     orientation: 'vertical',
+    //     syncTouch: true,
+    //   });
   
-      this.lenis.on('scroll', () => {
-        ScrollTrigger.update(); 
-      });
+    //   this.lenis.on('scroll', () => {
+    //     ScrollTrigger.update(); 
+    //   });
   
-      const raf = (time: number) => {
-        this.lenis?.raf(time);
-        requestAnimationFrame(raf);
-      };
-      requestAnimationFrame(raf);
-    }
+    //   const raf = (time: number) => {
+    //     this.lenis?.raf(time);
+    //     requestAnimationFrame(raf);
+    //   };
+    //   requestAnimationFrame(raf);
+    // }
   }
   // showElements(): void {
   //   gsap.to('.flex', {

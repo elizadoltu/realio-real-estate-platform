@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact',
@@ -9,4 +10,33 @@ import { Component } from '@angular/core';
 })
 export class ContactComponent {
 
+  constructor(private router: Router) {}
+
+  navigateToAccount() {
+    this.router.navigate(['/account']);
+  }
+
+  navigateToHome() {
+    this.router.navigate(['/']);
+  }
+
+  navigateToExplore() {
+    this.router.navigate(['/explore']);
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
+
+  navigateToSearch() {
+    this.router.navigate(['/search']);
+  }
+
+  navigateToPostProperty() {
+    this.router.navigate(['/post-property']);
+  }
 }

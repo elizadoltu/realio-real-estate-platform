@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 export class PropertyService {
 
   private apiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListings";
+  private predictionApiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListingPricePrediction"
   constructor( private http: HttpClient ) { }
 
   // public getProperties() : Observable<PropertyListing[]> {
@@ -33,5 +34,9 @@ export class PropertyService {
   }
   public getPropertyById(id: string) : Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  public generatePricePrediction(price: number, squareFootage: number, numberOfBedrooms: number): Observable<any> {
+    return this.http.post(`${this.predictionApiUrl}/predict`, { price, squareFootage, numberOfBedrooms });
   }
 }

@@ -12,6 +12,10 @@ export class UserService {
 
     constructor(private http: HttpClient) {}
 
+    getUserDetailsById(id: string): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/${id}`)
+    }
+
     getUserDetails(): Observable<any> {
         const token = localStorage.getItem('authToken');
         console.log('Token:', token);  
