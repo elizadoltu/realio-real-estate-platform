@@ -1,23 +1,23 @@
 <div class="scroll-container flex justify-between items-center p-4 m-4">
-  <div class="flex space-x-10">
-    <button (click)="navigateToHome()" class="font-medium text-lg">Home</button>
-    <button (click)="navigateToExplore()" class="font-medium text-lg">Explore</button>
-    <button (click)="navigateToSearch()" class="font-medium text-lg">Search</button>
-    <button (click)="navigateToPostProperty()" class="font-medium text-lg">Post</button>
+  <div class="flex desktop:space-x-10 mobile:space-x-5">
+    <button (click)="navigateToHome()" class="font-medium desktop:text-lg">Home</button>
+    <button (click)="navigateToExplore()" class="font-medium desktop:text-lg">Explore</button>
+    <button (click)="navigateToSearch()" class="font-medium desktop:text-lg">Search</button>
+    <button (click)="navigateToPostProperty()" class="font-medium desktop:text-lg">Post</button>
   </div>
   
   <div class="flex space-x-6">
     <ng-container *ngIf="!authService.getAuthToken(); else accountLink">
-      <button (click)="navigateToRegister()" class="font-semibold text-lg">
+      <button (click)="navigateToRegister()" class="font-semibold desktop:text-lg">
         Create an account
       </button>
-      <button (click)="navigateToLogin()" class="font-semibold text-lg">
+      <button (click)="navigateToLogin()" class="font-semibold desktop:text-lg">
         Log In
       </button>
     </ng-container>
 
     <ng-template #accountLink>
-      <button (click)="navigateToAccount()" class="font-semibold text-lg">
+      <button (click)="navigateToAccount()" class="font-semibold desktop:text-lg">
         Account
       </button>
     </ng-template>
@@ -36,7 +36,7 @@
 
 <div class="grid grid-cols-2 items-start px-6 my-10">
   <div>
-    <p class="text-left text-xl font-medium">
+    <p class="text-left desktop:text-xl font-medium">
       Effortless property management, where real estate meets innovation.
     </p>
   </div>
@@ -52,15 +52,15 @@
 <hr class="border-primary-black my-10" />
 
 <div class="bg-primary-white px-16 py-10 font-switzer-regular">
-  <div class="grid grid-cols-3 gap-16 items-start">
-    <h2 class="text-6xl font-general-bold uppercase">ABOUT US</h2>
-    <p class="text-2xl leading-relaxed">
+  <div class="grid desktop:grid-cols-3 mobile:grid-cols-1 gap-16 items-start">
+    <h2 class="desktop:text-6xl mobile:text-5xl font-general-bold uppercase">ABOUT US</h2>
+    <p class="desktop:text-2xl mobile:text-lg leading-relaxed">
       At Realio, we believe in transforming the way people manage, buy, and sell
       properties. Our platform is designed to provide a seamless experience for
       both buyers and sellers, empowering users to take full control of their
       real estate journey.
     </p>
-    <p class="text-2xl leading-relaxed">
+    <p class="desktop:text-2xl mobile:text-lg leading-relaxed">
       Whether you're looking to sell your house, apartment, or land, or
       searching for your dream property, Realio makes it easy to connect with
       the right opportunities. Every user can create and manage their own
@@ -72,9 +72,9 @@
 
 <hr class="border-primary-black my-10" />
 
-<div class="grid grid-rows-2 gap-10 px-16">
+<div class="grid grid-rows-2 gap-10 desktop:px-16 mobile:px-5">
   <!-- Grila cu imagini -->
-  <div class="grid grid-cols-2 gap-1 mb-10 px-16">
+  <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 gap-1 mb-10 desktop:px-16">
     <!-- Prima imagine mare -->
     <div class="h-[20rem] md:h-[25rem] lg:h-[30rem] xl:h-[35rem]">
       <img src="assets/testimage-1.jpg" alt="Image 1" class="w-full h-full max-h-[35rem] rounded-lg shadow-md object-cover" />
@@ -86,15 +86,15 @@
     </div>
   </div>
 
-  <div class="mt-20 px-16 font-switzer-regular grid grid-cols-2">
+  <div class="mt-20 desktop:px-16 font-switzer-regular grid desktop:grid-cols-2 mobile:grid-cols-1">
     <div>
-      <p class="text-2xl leading-relaxed mb-10">
+      <p class="desktop:text-2xl mobile:text-lg leading-relaxed mb-10">
         Our system provides sellers with property price estimates based on
         real-time market trends, powered by machine learning. Buyers can search
         properties using various criteria and initiate transactions, which are
         verified by the seller for a smooth process.
       </p>
-      <p class="text-2xl leading-relaxed">
+      <p class="desktop:text-2xl mobile:text-lg leading-relaxed">
         Realio is more than just a platform—it’s a smart, reliable tool for
         managing real estate. We help you make informed decisions and
         confidently navigate your real estate journey. Join us today and

@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyListing } from '../../../models/property.model';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 @Component({
   selector: 'app-explore',
@@ -14,7 +17,7 @@ import { PropertyListing } from '../../../models/property.model';
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.css',
 })
-export class ExploreComponent implements OnInit {
+export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
   properties: PropertyListing[] = [];
   totalPages: number = 0;
   currentPage: number = 1;
@@ -28,6 +31,7 @@ export class ExploreComponent implements OnInit {
     squareFootage: 0,
   };
   isFilterOpen: boolean = false; 
+  private lenis: Lenis | undefined;
 
   testImages = [
     'assets/testimage-1.jpg',
@@ -87,6 +91,7 @@ export class ExploreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    gsap.registerPlugin(ScrollTrigger);
     this.preloadImages(this.testImages)
       .then(() => {
         console.log('Images preloaded successfully');
@@ -100,6 +105,33 @@ export class ExploreComponent implements OnInit {
       .finally(() => {
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      gsap.from('.headline-text', {
+        yPercent: 100,
+        ease: 'power4.inOut',
+        stagger: {
+          amount: 0.5,
+        },
+        duration: 1.5,
+      });
+  
+      gsap.to('.headline', {
+        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        ease: 'power4.inOut',
+        stagger: {
+          amount: 0.5,
+        },
+        duration: 1.5,
+      });
+    }, 0);
+  }
+
+  ngOnDestroy(): void {
+    this.lenis?.destroy();
+    gsap.ticker.remove((time) => this.lenis?.raf(time * 1000));
   }
 
   fetchProperties() {
