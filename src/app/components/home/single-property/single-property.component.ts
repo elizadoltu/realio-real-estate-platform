@@ -6,6 +6,7 @@ import { CommonModule, Location, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { ContactComponent } from "../contact/contact.component";
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-single-property',
@@ -28,46 +29,64 @@ export class SinglePropertyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const propertyId = this.route.snapshot.paramMap.get('id');  
+    const propertyId = this.route.snapshot.paramMap.get('id');
     if (propertyId) {
-      this.fetchPropertyDetails(propertyId);
-      this.fetchUserDetails();
+      this.propertyService.getPropertyById(propertyId).pipe(
+        switchMap((response) => {
+          if (response) {
+            this.property = response;
+            this.userID = this.property.userID;
+            return this.userService.getUserDetailsById(this.userID);
+          } else {
+            throw new Error('Property not found');
+          }
+        })
+      ).subscribe(
+        (userDetails) => {
+          this.userDetails = userDetails;
+          console.log('User details:', userDetails);
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
     }
   }
+  
 
   goBack(): void {
     this.location.back();
   }
 
-  fetchPropertyDetails(id: string): void {
-    this.propertyService.getPropertyById(id).subscribe(
-      (response) => {
-        if (response) {
-          console.log(response);
-          this.property = response;
-          this.userID = this.property.userID;
-        } else {
-          this.property = null;
-        }
-      },
-      (error) => {
-        console.error('Error fetching property', error);
-        this.property = null;
-      }
-    );
-  }
+  // fetchPropertyDetails(id: string): void {
+  //   this.propertyService.getPropertyById(id).subscribe(
+  //     (response) => {
+  //       if (response) {
+  //         console.log(response);
+  //         this.property = response;
+  //         this.userID = this.property.userID;
+  //       } else {
+  //         this.property = null;
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching property', error);
+  //       this.property = null;
+  //     }
+  //   );
+  // }
 
-  fetchUserDetails(): void {
-    if (this.userID){
-      this.userService.getUserDetailsById(this.userID).subscribe(
-        (response) => {
-          this.userDetails = response;
-          console.log('User details:', response);
-        },
-        (error) => {
-          console.error('Error fetching user details:', error);
-        }
-      )
-    }
-  }
+  // fetchUserDetails(): void {
+  //   if (this.userID){
+  //     this.userService.getUserDetailsById(this.userID).subscribe(
+  //       (response) => {
+  //         this.userDetails = response;
+  //         console.log('User details:', response);
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching user details:', error);
+  //       }
+  //     )
+  //   }
+  // }
 }
