@@ -9,11 +9,12 @@ import { PropertyListing } from '../../../models/property.model';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ContactComponent } from "../contact/contact.component";
 
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ContactComponent],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.css',
 })
