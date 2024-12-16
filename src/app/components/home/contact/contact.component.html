@@ -1,4 +1,5 @@
-<div class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden">
+<ng-container *ngIf="!authService.getAuthToken(); else loggedInView">
+  <div class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden">
     <div class="desktop:px-16 mb-10">
       <div class="desktop:flex justify-between items-start">
         <div class="desktop:w-1/2 mobile:mx-4 desktop:mx-0">
@@ -62,3 +63,49 @@
       </p>
     </div>
   </div>
+</ng-container>
+
+<ng-template #loggedInView>
+  <!-- Afișare dacă utilizatorul este autentificat -->
+  <div class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden">
+    <div class="font-general-bold flex justify-center items-center relative">
+      <h1
+        class="desktop:text-30xl mb-0 p-0 font-bold text-primary-white opacity-30 leading-none block mobile:text-8xl tablet:text-20xl"
+      >
+        REALIO
+      </h1>
+    </div>
+
+    <div class="flex justify-between items-center mt-6 px-16 relative z-20 mobile:px-4 mobile:flex-col mobile:items-start">
+      <div class="flex space-x-10 mobile:space-x-4 mobile:mb-4 mobile:justify-start mobile:w-full mobile:pl-12">
+        <button
+          (click)="navigateToHome()"
+          class="font-medium text-lg hover:underline"
+        >
+          About
+        </button>
+        <button
+          (click)="navigateToExplore()"
+          class="font-medium text-lg hover:underline"
+        >
+          Explore
+        </button>
+        <button
+          (click)="navigateToSearch()"
+          class="font-medium text-lg hover:underline"
+        >
+          Search
+        </button>
+        <button
+          (click)="navigateToAccount()"
+          class="font-semibold desktop:text-lg hover:underline"
+        >
+          Account
+        </button>
+      </div>
+      <p class="text-sm text-primary-white font-switzer-medium mobile: pl-12">
+        &copy;2024. All rights reserved
+      </p>
+    </div>
+  </div>
+</ng-template>

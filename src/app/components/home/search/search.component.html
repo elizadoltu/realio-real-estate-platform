@@ -1,1 +1,228 @@
-<p>search works!</p>
+<div
+  class="flex justify-between text-lg ml-4 mr-4 mt-2 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2"
+>
+  <div class="font-general-medium">
+    <button (click)="navigateToHome()" class="mr-10">Home</button>
+    <button (click)="navigateToExplore()" class="mr-10">Explore</button>
+    <button (click)="navigateToPostProperty()" class="mr-10">Post</button>
+  </div>
+</div>
+
+<div class="flex mobile:flex-col desktop:flex-row items-center relative -z-10">
+  <h1 class="desktop:text-20xl mobile:text-7xl font-general-semibold headline">
+    <div class="headline-text">SEARCH</div>
+  </h1>
+  <div class="desktop:mt-52 mobile:mt-20 mobile:mx-5 desktop:mx-0">
+    <p class="font-switzer-medium">
+        Find Your Dream Property
+    </p>
+    <p class="font-switzer-medium"> 
+        Search and filter listings to discover the perfect match for your needs.
+    </p>
+  </div>
+</div>
+
+<div
+  class="flex justify-between font-general-medium text-lg ml-4 mr-4 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2 mobile:mt-20 desktop:mt-10"
+>
+  <div class="flex items-center space-x-6">
+    <div class="flex items-center space-x-2">
+      <p>Filter</p>
+      <img
+        src="assets/filter-png.png"
+        alt="filter icon"
+        (click)="toggleFilters()"
+        class="hover:cursor-pointer w-5 h-5"
+      />
+    </div>
+    <!-- Bara de căutare mai mică și mai rotundă -->
+    <div class="flex items-center border border-gray-400 rounded-full px-1 py-1 bg-white text-black">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="performSearch()"
+        class="outline-none bg-transparent w-64 text-sm"
+        placeholder="Search..."
+      />
+      <img
+        src="assets/search-icon.png"
+        alt="search icon"
+        class="ml-2 hover:cursor-pointer w-5 h-5"
+        (click)="performSearch()"
+      />
+    </div>
+  </div>
+
+  <div class="flex items-center">
+    <img src="assets/grid-png.png" alt="grid icon" class="w-5 h-5" />
+    <img src="assets/list-png.png" alt="list icon" class="ml-2 w-5 h-5" />
+  </div>
+</div>
+
+<div
+  *ngIf="isFilterOpen"
+  class="font-switzer-medium p-4 text-primary-black border border-gray-300 bg-primary-white rounded-lg mt-4 mx-4"
+>
+  <h2 class="text-lg font-bold mb-4">Filter Properties</h2>
+  <form (ngSubmit)="applyFilters()" class="grid grid-cols-2 gap-4">
+    <div>
+      <label for="type" class="block text-sm font-medium">Type</label>
+      <select
+        id="type"
+        [(ngModel)]="filters.Type"
+        name="type"
+        class="mt-1 block w-full border rounded-md"
+      >
+        <option value="">All</option>
+        <option value="House">House</option>
+        <option value="Apartment">Apartment</option>
+      </select>
+    </div>
+    <div>
+      <label for="price" class="block text-sm font-medium">Max Price</label>
+      <input
+        type="number"
+        id="price"
+        [(ngModel)]="filters.price"
+        name="price"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter max price"
+      />
+    </div>
+    <div>
+      <label for="bedrooms" class="block text-sm font-medium">Bedrooms</label>
+      <input
+        type="number"
+        id="bedrooms"
+        [(ngModel)]="filters.nrOfBedrooms"
+        name="bedrooms"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter min bedrooms"
+      />
+    </div>
+    <div>
+      <label for="bathrooms" class="block text-sm font-medium">Bathrooms</label>
+      <input
+        type="number"
+        id="bathrooms"
+        [(ngModel)]="filters.nrOfBathrooms"
+        name="bathrooms"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter min bathrooms"
+      />
+    </div>
+    <div>
+      <label for="squareFootage" class="block text-sm font-medium"
+        >Min Square Footage</label
+      >
+      <input
+        type="number"
+        id="squareFootage"
+        [(ngModel)]="filters.squareFootage"
+        name="squareFootage"
+        class="mt-1 block w-full border rounded-md"
+        placeholder="Enter min square footage"
+      />
+    </div>
+    <div>
+      <label for="status" class="block text-sm font-medium">Status</label>
+      <select
+        id="status"
+        [(ngModel)]="filters.status"
+        name="status"
+        class="mt-1 block w-full border rounded-md"
+      >
+        <option value="">All</option>
+        <option value="For Sale">For Sale</option>
+        <option value="For Rent">For Rent</option>
+        <option value="Sold">Sold</option>
+      </select>
+    </div>
+    <div class="col-span-2">
+      <button
+        type="submit"
+        class="bg-primary-black text-primary-white px-4 py-2 rounded-md transition ease-in delay-100 hover:bg-slate-700"
+      >
+        Apply Filters
+      </button>
+      <button
+        (click)="clearFilters()"
+        class="text-primary-black border border-primary-black transition ease-in delay-100 hover:bg-primary-black hover:text-primary-white px-4 py-2 rounded-md ml-5"
+      >
+        Clear Filters
+      </button>
+    </div>
+  </form>
+</div>
+
+<div
+  class="grid grid-cols-4 gap-3 mt-4 ml-4 mr-4"
+>
+  <div
+    class="border border-slate-400 pb-2 desktop:w-250 mobile:w-200 rounded-md transition ease-in delay-100 bg-primary-white text-primary-black hover:bg-primary-black hover:text-primary-white hover:cursor-pointer duration-100"
+    *ngFor="let property of properties"
+    (click)="navigateToPropertyDetail(property.propertyId)"
+  >
+    <img [src]="property.imageUrls" alt="property image" />
+    <div
+      class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular text-lg"
+    >
+      <div>
+        <h2 class="font-switzer-bold text-2xl">
+          {{ property.title }}
+        </h2>
+        <div class="flex items-center mt-4">
+          <h2 class="flex items-center">
+            <img src="assets/location.png" alt="location icon" class="mr-1" />{{
+              property.address
+            }}
+          </h2>
+          <p class="flex ml-4 items-center">
+            <img
+              src="assets/square-meters.png"
+              alt="square meters icon"
+              class="mr-1"
+            />
+            {{ property.squareFootage | number }} sq ft
+          </p>
+        </div>
+
+        <p class="flex items-center mt-2">
+          <img src="assets/price.png" alt="price icon" class="mr-1" /> ${{
+            property.price | number
+          }}
+        </p>
+      </div>
+      <div class="mt-10">
+        <p><span class="font-bold">Status:</span> {{ property.status }}</p>
+        <p>
+          <span class="font-bold">Listing Date:</span>
+          {{ property.listingDate | date }}
+        </p>
+      </div>
+    </div>
+    
+  </div>
+
+  <ng-template #noProperties>
+    <p>No properties available.</p>
+  </ng-template>
+</div>
+
+<div class="pagination-controls flex justify-center items-center mt-4 font-general-semibold text-xl p-10 mb-20">
+  <button
+    (click)="goToPage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+  >
+  ← Previous
+  </button>
+  <span class="mx-5">Page {{ currentPage }} of {{ totalPages }}</span>
+  <button
+    (click)="goToPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+  >
+    Next →
+  </button>
+</div>
+
+<app-contact></app-contact>

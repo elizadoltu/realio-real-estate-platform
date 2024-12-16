@@ -1,16 +1,21 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css'
 })
+
+
+
 export class ContactComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public authService: AuthService) {}
 
   navigateToAccount() {
     this.router.navigate(['/account']);
