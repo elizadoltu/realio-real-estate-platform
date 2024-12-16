@@ -64,15 +64,15 @@ export class PostPropertyComponent implements OnInit{
   fetchPredictedPrice(): void {
     const squareFootage = this.propertyForm.controls['squareFootage'].value;
     const numberOfBedrooms = this.propertyForm.controls['numberOfBedrooms'].value;
-    const price = this.propertyForm.controls['price'].value;
 
-    if (!squareFootage || !numberOfBedrooms || !price) {
+
+    if (!squareFootage || !numberOfBedrooms) {
       console.error('Square footage, number of bedrooms, and price are required');
       return;
     }
 
     this.isLoadingPrediction = true;
-    this.propertyService.generatePricePrediction(price, squareFootage, numberOfBedrooms).subscribe({
+    this.propertyService.generatePricePrediction(squareFootage, numberOfBedrooms).subscribe({
       next: (response) => {
         this.predictedPrice = response;
         this.isLoadingPrediction = false;

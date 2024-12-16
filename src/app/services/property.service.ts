@@ -41,12 +41,11 @@ export class PropertyService {
   }
 
   public generatePricePrediction(
-    price: number,
     squareFootage: number,
     numberOfBedrooms: number
   ): Observable<any> {
     const endpoint = `${this.predictionApiUrl}/predict`;
-    const body = { price, squareFootage, numberOfBedrooms };
+    const body = { squareFootage, numberOfBedrooms };
   
     return this.authService.makeAuthenticatedRequest(endpoint, 'POST', body);
   }
