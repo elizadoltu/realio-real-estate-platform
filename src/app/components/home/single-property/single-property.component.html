@@ -1,4 +1,4 @@
-<div *ngIf="property; else loading" class="mb-20">
+<div *ngIf="property; else loading" class="mb-20 overflow-hidden">
   <div class="p-3">
     <div class="border-b border-slate-600 pb-4 mt-2">
       <button
@@ -11,7 +11,7 @@
   </div>
 
   <div class="p-3">
-    <h1 class="font-general-semibold uppercase text-8xl">
+    <h1 class="font-general-semibold uppercase desktop:text-8xl mobile:text-3xl">
       {{ property.title }}
     </h1>
   </div>
@@ -46,7 +46,7 @@
           </p>
         </div>
       </div>
-      <div class="flex flex-col items-end mr-2 text-lg font-switzer-regular">
+      <div class="flex flex-col items-end mr-2 text-lg font-switzer-regular mobile:mt-10 desktop:mt-0">
         <p>
           <span class="font-switzer-medium">Status:</span> {{ property.status }}
         </p>
@@ -61,29 +61,29 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-2 p-3 pb-5 mt-10">
+  <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 pb-5 mt-10">
     <h1 class="font-general-semibold text-2xl">Description</h1>
-    <p class="text-lg font-switzer-regular">{{ property.description }}</p>
+    <p class="text-lg font-switzer-regular mobile:mt-5 desktop:mt-0">{{ property.description }}</p>
   </div>
 
-  <div class="grid grid-cols-2 p-3 gap-2 mt-10">
+  <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 gap-2 mt-10">
     <img src="assets/testimage-2.jpg" alt="image of a property" class="rounded-md">
     <img src="assets/testimage-3.jpg" alt="image of a property" class="rounded-md">
   </div>
   
-  <div class="grid grid-cols-2 p-3 border-t border-slate-600 mt-5 mx-3">
+  <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 border-t border-slate-600 mt-5 mx-3">
     <p class="font-general-semibold text-2xl">
       Interested? Contact the owner today to learn more or buy it!
     </p>
-    <div class="font-switzer-regular text-lg">
+    <div class="font-switzer-regular text-lg mobile:mt-5 desktop:mt-0">
       <p class="border-b border-slate-600 pb-3"><span class="font-switzer-medium">Name:</span> {{ userDetails?.name }}</p>
       <p class="border-b border-slate-600 py-3"><span class="font-switzer-medium">Phone number:</span> {{ userDetails?.phoneNumber }}</p>
       <p class="flex items-center pt-3 font-switzer-medium"><img src="assets/buy.png" alt="cart icon">Buy</p>
     </div>
   </div>
-  <div class="grid grid-cols-2  border-b border-t border-slate-600 p-3 mx-3 text-lg">
+  <div class="grid desktop:grid-cols-2 mobile:grid-cols-1  border-b border-t border-slate-600 p-3 mx-3 text-lg">
     <p class="font-general-semibold text-2xl">Not ready yet? Save this listing for later</p>
-    <p class="flex items-center font-switzer-medium"><img src="assets/save.png" alt="save icon">Save</p>
+    <p class="flex items-center font-switzer-medium mobile:mt-5 desktop:mt-0"><img src="assets/save.png" alt="save icon">Save</p>
   </div>
 </div>
 
