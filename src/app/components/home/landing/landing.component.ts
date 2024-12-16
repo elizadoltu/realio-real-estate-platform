@@ -24,28 +24,27 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    gsap.from('.headline-text', {
-      yPercent: 100,
-      ease: 'power4.inOut',
-      stagger: {
-        amount: 0.5,
-      },
-      duration: 1.5,
-      // onComplete: () => this.showElements(),
-    });
-
-    gsap.to(
-      '.headline',
-      {
+    setTimeout(() => {
+      gsap.from('.headline-text', {
+        yPercent: 100,
+        ease: 'power4.inOut',
+        stagger: {
+          amount: 0.5,
+        },
+        duration: 1.5,
+      });
+  
+      gsap.to('.headline', {
         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
         ease: 'power4.inOut',
         stagger: {
           amount: 0.5,
         },
         duration: 1.5,
-        // onComplete: () => this.showElements(),
-      },
-    );
+      });
+    }, 0);
+  }
+  
 
     // if (typeof window !== 'undefined') {
     //   this.lenis = new Lenis({
@@ -67,7 +66,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     //   };
     //   requestAnimationFrame(raf);
     // }
-  }
+  
   // showElements(): void {
   //   gsap.to('.flex', {
   //     opacity: 1,
