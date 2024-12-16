@@ -1,1 +1,119 @@
-<p>post-property works!</p>
+<div class="bg-primary-black text-primary-white w-full h-screen">
+  <div class="p-3 flex justify-between items-center border-b border-slate-600 pb-4 mx-2">
+    <div class="mt-2">
+      <button (click)="goBack()" class="font-general-semibold desktop:text-2xl mobile:text-lg">
+        ← Back
+      </button>
+    </div>
+    <p class="font-general-semibold text-2xl">Add new property</p>
+  </div>
+
+  <div class="create-property-container">
+    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+      <div class="p-4 bg-primary-white bg-opacity-10 mx-2 mt-3 rounded-lg text-lg">
+        <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+          <div class="w-full flex flex-col">
+            <label for="title">Title:</label>
+            <input id="title" type="text" formControlName="title" class="w-full bg-transparent mt-3" />
+          </div>
+
+          <img src="assets/white-arrow.png" />
+        </div>
+        <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+          <div class="w-full"><label for="address">Address:</label>
+            <input id="address" type="text" formControlName="address" class="w-full bg-transparent mt-3" />
+          </div>
+
+          <img src="assets/white-arrow.png" />
+        </div>
+        <div>
+          <div class="grid grid-cols-2 gap-10">
+            <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+              <div class="w-full"><label for="type">Type:</label>
+                <input id="type" type="text" formControlName="type" class="w-full bg-transparent mt-3" />
+              </div>
+
+              <img src="assets/white-arrow.png" />
+            </div>
+            <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+              <div class="w-full">
+                <label for="price">Price:</label>
+                <input id="price" type="number" formControlName="price" class="w-full bg-transparent mt-3" />
+              </div>
+
+              <img src="assets/white-arrow.png" />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-x-10">
+            <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+              <div class="w-full"><label for="numberOfBedrooms">Number of Bedrooms:</label>
+                <input id="numberOfBedrooms" type="number" formControlName="numberOfBedrooms"
+                  class="w-full bg-transparent mt-3" />
+              </div>
+
+              <img src="assets/white-arrow.png" />
+            </div>
+            <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+              <div class="w-full"><label for="numberOfBathrooms">Number of Bathrooms:</label>
+                <input id="numberOfBathrooms" type="number" formControlName="numberOfBathrooms"
+                  class="w-full bg-transparent mt-3" />
+              </div>
+
+              <img src="assets/white-arrow.png" />
+            </div>
+            <div class="form-group flex items-end border-b border-zinc-200 pt-4">
+              <div class="w-full"><label for="squareFootage">Square Footage:</label>
+                <input id="squareFootage" type="number" formControlName="squareFootage" class="w-full bg-transparent mt-3" />
+              </div>
+
+              <img src="assets/white-arrow.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 mx-2">
+        <div>
+          <p class="font-switzer-medium text-2xl">Get an instant price estimate for your property, with a range based on
+            current market trends.</p>
+        </div>
+        <div class="flex"><button (click)="fetchPredictedPrice()" [disabled]="isLoadingPrediction"
+            class="bg-primary-white text-primary-black font-switzer-medium text-lg py-3 px-10 rounded-sm mt-4 flex items-center bg-opacity-90">
+            <img src="assets/click.png" alt="">
+            Generate
+          </button>
+          <div *ngIf="predictedPrice !== null" class=" text-primary-white font-switzer-medium text-lg py-3 px-10 rounded-sm mt-4 flex items-center bg-opacity-90">
+            <p>Generated Price: {{ predictedPrice | currency }}</p>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" formControlName="description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select id="status" formControlName="status">
+          <option value="available">Available</option>
+          <option value="sold">Sold</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="listingDate">Listing Date:</label>
+        <input id="listingDate" type="date" formControlName="listingDate" />
+      </div>
+      <div class="form-group">
+        <label for="imageUrls">Image URL:</label>
+        <input id="imageUrls" type="url" formControlName="imageUrls" />
+      </div>
+
+      <button type="submit" [disabled]="propertyForm.invalid">
+        Create Property
+      </button>
+    </form>
+  </div>
+</div>

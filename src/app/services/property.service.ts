@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PropertyListing } from '../models/property.model';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class PropertyService {
 
   private apiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListings";
   private predictionApiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListingPricePrediction"
-  constructor( private http: HttpClient ) { }
+  constructor( private http: HttpClient, private authService: AuthService ) { }
 
   // public getProperties() : Observable<PropertyListing[]> {
   //   return this.http.get<PropertyListing[]>(this.apiUrl);
@@ -21,9 +22,12 @@ export class PropertyService {
     return this.http.get<any>(`${this.apiUrl}/paginated`, { params });
   }
 
-  public createProperty(property: PropertyListing) : Observable<any> {
-    return this.http.post<PropertyListing>(this.apiUrl, property);
+  public createProperty(property: PropertyListing): Observable<any> {
+    const endpoint = this.apiUrl; 
+    const method = 'POST'; 
+    return this.authService.makeAuthenticatedRequest(endpoint, method, property); 
   }
+  
 
   public deleteProperty(id: string) : Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
@@ -36,7 +40,14 @@ export class PropertyService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  public generatePricePrediction(price: number, squareFootage: number, numberOfBedrooms: number): Observable<any> {
-    return this.http.post(`${this.predictionApiUrl}/predict`, { price, squareFootage, numberOfBedrooms });
+  public generatePricePrediction(
+    price: number,
+    squareFootage: number,
+    numberOfBedrooms: number
+  ): Observable<any> {
+    const endpoint = `${this.predictionApiUrl}/predict`;
+    const body = { price, squareFootage, numberOfBedrooms };
+  
+    return this.authService.makeAuthenticatedRequest(endpoint, 'POST', body);
   }
 }
