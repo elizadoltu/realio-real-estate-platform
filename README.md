@@ -1,27 +1,117 @@
-# RealEstateManagementFrontend
+# 🏡 Realio - Real Estate Platform
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.10.
+Realio is a smart real estate management system that allows you to manage property listings, handle client inquiries, and predict property market trends using machine learning. This README covers the frontend part of the application, built with Angular and styled with Tailwind CSS.
 
-## Development server
+## 🌐 Live Demo
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+* The frontend is live and accessible at: [Realio Live App](https://realio-five.vercel.app/)
+* Backend repository: [Link to backend Repository](https://github.com/edwardedi/RealEstateManagement)
+* Backend and database are deployed on **`Railway`**.
 
-## Code scaffolding
+## 🚀 Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* **`Responsive UI`**: Built with Angular and Angular Material to ensure a sleek and user-friendly design.
+* **`Property Management`**: List, view, and manage property details with ease.
+* **`Client Inquiries`**: Streamlined management of client queries.
+* **`Market Insights`**: Machine learning module provides property trend predictions.
+* **`Animations`**: Smooth animations using GSAP for a modern look.
+* **`Authentication`**: JWT-secured login and authorization.
+* **`Clean Design`**: Styled with Tailwind CSS for a minimal and responsive interface.
 
-## Build
+## 🛠️ Tech Stack
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Frontend
 
-## Running unit tests
+* **`Framework`**: Angular
+* **`UI/UX`**: Angular Material, Tailwind CSS
+* **`Animations`**: GSAP
+* **`Deployment`**: Vercel
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Backend
 
-## Running end-to-end tests
+* **`Clean Architecture`** with CQRS
+* **`MediatR`** for handling commands and queries
+* **`PostgreSQL`** as the database
+* **`JWT`** for secure authentication
+* **`Machine learning`** insights via ML.NET
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 🗂️ Project Structure
 
-## Further help
+The frontend follows a modular and scalable structure:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+src/
+├── app/
+│   ├── components/      # Reusable UI components
+│   ├── services/        # API calls and business logic
+│   ├── models/          # TypeScript models for data
+|   └── auth.guard       # Guards routes by checking for authentication tokens and platform type
+├── styles.css           # Tailwind global styles
+├── assets/              # Static files like images and icons
+├── environments/        # Environment configurations (dev/production)
+├── fonts/               # Static files for custom fonts
+└── main.ts              # Application entry point
+```
+
+## 🧑‍💻 Getting Started
+
+Follow these steps to run the project locally:
+
+### 1. Prerequisites 
+
+* **`Node.js`** (v14 or higher)
+* **`Angular CLI`** (v15 or higher): Install it using ``` npm install -g @angular/cli ```
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/realio-frontend.git
+cd realio-frontend
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Run the project
+```bash
+ng serge
+```
+
+The application will run locally on ``` http://localhost:4200/ ```
+
+## ✅ Testing
+
+Run unit tests ising Angular's testing suite:
+```bash
+ng test --no-watch --code-coverage
+```
+
+* **`Code Coverage`**: Achieved 80% coverage for all frontend components
+
+## 🔗 Deployment
+
+* **`Frontend`**: Deployed on Vercel at (https://realio-five.vercel.app)[https://realio-five.vercel.app]
+* **`Backend`**: Deployed on Railway.
+
+## 💻 Contributing
+
+Contributions are welcome!
+1. Fork the repository
+2. Create a new branch
+3. Submit a pull request
+
+## 📜 License 
+
+This project is under MIT License and developed within the **`UAIC Faculty`** and is for educational purpose.
+
+## 📧 Contact
+
+For any questions or suggestions, feel free to reach out:
+
+[Eliza - Teodora Doltu] | Email: elizadoltuofficial@gmail.com
+
+
+## ***🚀 "Realio: Smart, simple, and predictive real estate management." 🏡✨***
