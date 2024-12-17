@@ -77,7 +77,7 @@ npm install
 
 ### 4. Run the project
 ```bash
-ng serge
+ng serve
 ```
 
 The application will run locally on ``` http://localhost:4200/ ```
