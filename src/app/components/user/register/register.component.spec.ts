@@ -23,8 +23,7 @@ describe('RegisterComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [RegisterComponent],
-      imports: [FormsModule],
+      imports: [FormsModule, RegisterComponent],
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock }

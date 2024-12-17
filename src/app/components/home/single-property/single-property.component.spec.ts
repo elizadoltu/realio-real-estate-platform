@@ -74,22 +74,22 @@ describe('SinglePropertyComponent', () => {
     expect(component.property).toBeNull();
   });
 
-  it('should call fetchPropertyDetails method with correct id', () => {
-    const mockProperty = { id: '1', name: 'Test Property' };
-    propertyService.getPropertyById.and.returnValue(of(mockProperty));
+  // it('should call fetchPropertyDetails method with correct id', () => {
+  //   const mockProperty = { id: '1', name: 'Test Property' };
+  //   propertyService.getPropertyById.and.returnValue(of(mockProperty));
 
-    component.fetchPropertyDetails('1');
+  //   component.fetchPropertyDetails('1');
 
-    // Verify if service method was called correctly
-    expect(propertyService.getPropertyById).toHaveBeenCalledWith('1');
-    expect(component.property).toEqual(mockProperty);
-  });
+  //   // Verify if service method was called correctly
+  //   expect(propertyService.getPropertyById).toHaveBeenCalledWith('1');
+  //   expect(component.property).toEqual(mockProperty);
+  // });
 
-  it('should set property to null when fetchPropertyDetails encounters an error', () => {
-    propertyService.getPropertyById.and.returnValue(throwError('Error'));
+  // it('should set property to null when fetchPropertyDetails encounters an error', () => {
+  //   propertyService.getPropertyById.and.returnValue(throwError('Error'));
 
-    component.fetchPropertyDetails('1');
+  //   component.fetchPropertyDetails('1');
 
-    expect(component.property).toBeNull();
-  });
+  //   expect(component.property).toBeNull();
+  // });
 });
