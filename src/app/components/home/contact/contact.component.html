@@ -1,15 +1,19 @@
 <ng-container *ngIf="!authService.getAuthToken(); else loggedInView">
-  <div class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden">
+  <div
+    class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden"
+  >
     <div class="desktop:px-16 mb-10">
       <div class="desktop:flex justify-between items-start">
         <div class="desktop:w-1/2 mobile:mx-4 desktop:mx-0">
           <h2 class="text-3xl font-bold">Is Realio right for you?</h2>
         </div>
         <div class="desktop:w-1/2 mobile:mx-4 desktop:mx-0">
-          <p class="desktop:text-2xl mobile:text-lg leading-relaxed mb-4 mobile:mt-10 desktop:mt-0">
-            Join our community of buyers and sellers who are shaping the future of
-            real estate. Create an account today and start managing your property
-            journey with convenience and control.
+          <p
+            class="desktop:text-2xl mobile:text-lg leading-relaxed mb-4 mobile:mt-10 desktop:mt-0"
+          >
+            Join our community of buyers and sellers who are shaping the future
+            of real estate. Create an account today and start managing your
+            property journey with convenience and control.
           </p>
           <div class="flex space-x-4 mobile:mt-10 desktop:mt-0">
             <button
@@ -28,7 +32,7 @@
         </div>
       </div>
     </div>
-  
+
     <div class="font-general-bold flex justify-center items-center relative">
       <h1
         class="desktop:text-30xl mb-0 p-0 font-bold text-primary-white opacity-30 leading-none block mobile:text-8xl tablet:text-20xl"
@@ -36,14 +40,14 @@
         REALIO
       </h1>
     </div>
-  
+
     <div class="flex justify-between items-center mt-6 px-16 relative z-20">
       <div class="flex space-x-10">
         <button
           (click)="navigateToHome()"
           class="font-medium text-lg hover:underline"
         >
-          About
+          Home
         </button>
         <button
           (click)="navigateToExplore()"
@@ -67,22 +71,21 @@
 
 <ng-template #loggedInView>
   <!-- Afișare dacă utilizatorul este autentificat -->
-  <div class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden">
-    <div class="font-general-bold flex justify-center items-center relative">
-      <h1
-        class="desktop:text-30xl mb-0 p-0 font-bold text-primary-white opacity-30 leading-none block mobile:text-8xl tablet:text-20xl"
+  <div
+    class="bg-gray-950 rounded-t-3xl text-primary-white py-16 overflow-hidden"
+  >
+    <div
+      class="grid desktop:grid-cols-2 mobile:grid-cols-1 mt-6 px-16 relative z-20 mobile:px-4 mobile:flex-col mobile:items-start"
+    >
+      <div
+        class="space-x-10 mobile:space-x-4 mobile:mb-4 mobile:justify-start mobile:w-full mobile:pl-12"
       >
-        REALIO
-      </h1>
-    </div>
-
-    <div class="flex justify-between items-center mt-6 px-16 relative z-20 mobile:px-4 mobile:flex-col mobile:items-start">
-      <div class="flex space-x-10 mobile:space-x-4 mobile:mb-4 mobile:justify-start mobile:w-full mobile:pl-12">
+        <h1 class="font-general-bold text-lg desktop:ml-4">Navigation</h1>
         <button
           (click)="navigateToHome()"
           class="font-medium text-lg hover:underline"
         >
-          About
+          Home
         </button>
         <button
           (click)="navigateToExplore()"
@@ -103,9 +106,20 @@
           Account
         </button>
       </div>
-      <p class="text-sm text-primary-white font-switzer-medium mobile: pl-12">
-        &copy;2024. All rights reserved
-      </p>
+      <div class="text-primary-white font-switzer-semibold mobile:mt-10 desktop:mt-0 mobile:mb-4 mobile:justify-start mobile:w-full mobile:pl-12">
+        <p>Powered by advanced machine learning to predict real estate trends.</p>
+        <p>Developed at UAIC Faculty</p>
+      </div>
     </div>
+    <div class="font-general-bold flex justify-center items-center relative">
+      <h1
+        class="desktop:text-30xl mb-0 p-0 font-bold text-primary-white opacity-30 leading-none block mobile:text-8xl tablet:text-20xl mobile:mt-10 desktop:mt-0"
+      >
+        REALIO
+      </h1>
+    </div>
+    <p class="text-sm text-primary-white font-switzer-medium mobile: pl-12">
+      &copy;2024. All rights reserved
+    </p>
   </div>
 </ng-template>

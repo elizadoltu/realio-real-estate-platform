@@ -32,9 +32,9 @@ export class PostPropertyComponent implements OnInit{
       numberOfBedrooms: [null, [Validators.required, Validators.min(0)]],
       numberOfBathrooms: [null, [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
-      status: ['', Validators.required],
-      listingDate: ['', Validators.required],
-      imageUrls: ['', [Validators.required, Validators.pattern(/^https?:\/\/[^\s]+$/)]],
+      status: ['Available', Validators.required],
+      listingDate: [new Date().toISOString(), Validators.required], 
+      imageUrls: ['https://image.png', [Validators.required, Validators.pattern(/^https?:\/\/[^\s]+$/)]],
       userId: ['', Validators.required],})
   }
 
