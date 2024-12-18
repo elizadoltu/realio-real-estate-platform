@@ -93,7 +93,7 @@ ng test --no-watch --code-coverage
 
 ## 🔗 Deployment
 
-* **`Frontend`**: Deployed on Vercel at (https://realio-five.vercel.app)[https://realio-five.vercel.app]
+* **`Frontend`**: Deployed on Vercel at [https://realio-five.vercel.app](https://realio-five.vercel.app)
 * **`Backend`**: Deployed on Railway.
 
 ## 💻 Contributing
