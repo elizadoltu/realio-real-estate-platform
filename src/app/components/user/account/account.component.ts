@@ -99,44 +99,9 @@ export class AccountComponent implements OnInit {
       console.error('User ID is missing!');
     }
   }
-  
-  onDeleteProperty(propertyId: string): void {
-    console.log('Deleting property with ID:', propertyId);
-  
-    this.propertyService.deleteProperty(propertyId).subscribe(
-      () => {
-        console.log('Property deleted:', propertyId);
-        this.properties = this.properties.filter((p) => p.propertyId !== propertyId);
-        alert('Property deleted successfully.');
-      },
-      (error) => {
-        console.error('Error deleting property:', error);
-        alert('Failed to delete the property.');
-      }
-    );
-  }  
 
-  onSaveProperty(propertyId: string): void {
-    const propertyToUpdate = this.properties.find((p) => p.propertyId === propertyId);
-  
-    if (!propertyToUpdate) {
-      console.error('Property not found:', propertyId);
-      alert('Property not found!');
-      return;
-    }
-  
-    console.log('Saving property:', propertyToUpdate);
-  
-    this.propertyService.updateProperty(propertyId, propertyToUpdate).subscribe(
-      (response) => {
-        console.log('Property updated successfully:', response);
-        alert('Property updated successfully!');
-      },
-      (error) => {
-        console.error('Error updating property:', error);
-        alert('Failed to update property. Please try again.');
-      }
-    );
+  onEditProperty(propertyId: string): void {
+    this.router.navigate([`/edit-property/${propertyId}`]);
   }  
 
   sanitizeInput(value: string): string {

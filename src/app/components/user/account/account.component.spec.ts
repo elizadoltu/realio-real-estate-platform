@@ -79,7 +79,7 @@ describe('AccountComponent', () => {
 
       spyOn(window, 'alert'); 
 
-      component.logout();
+      component.onLogout();
 
       expect(localStorage.getItem('authToken')).toBeNull();
       expect(localStorage.getItem('email')).toBeNull();

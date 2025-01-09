@@ -14,6 +14,7 @@ import { AccountComponent } from './app/components/user/account/account.componen
 import { PostPropertyComponent } from './app/components/home/post-property/post-property.component';
 import { AuthGuard } from './app/auth.guard';
 import { SinglePropertyComponent } from './app/components/home/single-property/single-property.component';
+import { EditPropertyComponent } from './app/components/user/edit-property/edit-property.component';
 
 export const appRoutes: Routes = [
     { path: '', pathMatch: 'full', component: LandingComponent },
@@ -29,4 +30,5 @@ export const appRoutes: Routes = [
     { path: 'explore', component: ExploreComponent },
     { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
     { path: 'post-property', component: PostPropertyComponent, canActivate: [AuthGuard] },
+    { path: 'edit-property/:id', component: EditPropertyComponent },
 ]

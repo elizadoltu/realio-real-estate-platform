@@ -14,8 +14,10 @@ import { LoginComponent } from './app/components/user/login/login.component';
 import { AuthService } from './app/services/auth.service';
 import { LandingComponent } from './app/components/home/landing/landing.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { EditPropertyComponent } from './app/components/user/edit-property/edit-property.component';
 
 @NgModule({
+
     imports: [
         BrowserModule,
         CommonModule,
@@ -26,6 +28,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
         FormsModule,
         LoginComponent,
         LandingComponent,
+        
     ],
     providers: [
         provideHttpClient(),

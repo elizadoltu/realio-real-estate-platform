@@ -1,19 +1,25 @@
-<div class="h-screen w-screen bg-[#1A1A1A] text-primary-white flex flex-col font-general-semibold">
-  <div class="p-6 pl-12">
-    <button (click)="router.navigate(['/'])" class="flex items-center text-lg font-general-semibold">
+<div class="min-h-screen bg-[#1A1A1A] text-primary-white flex flex-col font-general-semibold">
+  <!-- Header -->
+  <div class="p-6 pl-12 bg-[#1A1A1A]">
+    <button
+      (click)="router.navigate(['/'])"
+      class="flex items-center text-lg font-general-semibold text-white hover:underline"
+    >
       &larr; Back
     </button>
   </div>
 
+  <!-- Divider -->
   <div class="border-t border-primary-white"></div>
 
-  <div class="flex-1 flex">
+  <!-- Main Content -->
+  <div class="flex-1 flex bg-[#1A1A1A]">
     <!-- Sidebar -->
-    <div class="w-1/4 border-r border-primary-white flex flex-col justify-between pl-12">
+    <div class="w-1/4 border-r border-primary-white flex flex-col justify-between pl-12 bg-[#1A1A1A]">
       <div class="mt-10">
-        <!-- Profile Section Button -->
+        <!-- Profile Section -->
         <span
-          class="flex items-center px-4 space-x-4 font-general-semibold text-primary-white cursor-pointer"
+          class="flex items-center px-4 space-x-4 font-general-semibold text-white cursor-pointer"
           [class.text-gray-400]="activeSection !== 'profile'"
           [class.text-white]="activeSection === 'profile'"
           (click)="activeSection = 'profile'"
@@ -24,7 +30,7 @@
 
         <div class="border-t border-primary-white mx-6 my-6"></div>
 
-        <!-- Properties Section Button -->
+        <!-- Properties Section -->
         <span
           class="flex items-center px-4 space-x-4 text-gray-400 hover:text-white cursor-pointer font-general-semibold"
           [class.text-gray-400]="activeSection !== 'properties'"
@@ -36,6 +42,7 @@
         </span>
       </div>
 
+      <!-- Logout Button -->
       <div class="border border-t-primary-white p-4 bg-primary-white text-primary-black font-general-semibold" (click)="onLogout()">
         <span class="flex items-center px-4 space-x-4 hover:text-gray-600 cursor-pointer">
           <img src="assets/logout-png.png" alt="Logout" class="w-6 h-6" />
@@ -44,12 +51,13 @@
       </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col items-center p-10">
+    <!-- Content Area -->
+    <div class="flex-1 flex flex-col items-center p-10 bg-[#1A1A1A]">
       <!-- Profile Section -->
       <div *ngIf="activeSection === 'profile'" class="w-full max-w-3xl space-y-6 pr-12">
+        <h2 class="text-xl font-general-semibold text-white mb-4">Your Profile</h2>
         <div class="flex justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold" for="name">Full name</label>
+          <label class="text-gray-400 w-1/2 font-general-semibold" for="name">Full Name</label>
           <div class="flex items-center space-x-4 w-1/2 justify-end">
             <input
               id="name"
@@ -57,7 +65,6 @@
               [(ngModel)]="userDetails.name"
               class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full text-right"
             />
-            <img src="assets/arrow-login-svg.png" alt="Arrow" class="w-4 h-4" />
           </div>
         </div>
 
@@ -70,12 +77,11 @@
               [(ngModel)]="userDetails.email"
               class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full text-right"
             />
-            <img src="assets/arrow-login-svg.png" alt="Arrow" class="w-4 h-4" />
           </div>
         </div>
 
         <div class="flex justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold" for="phone">Phone number</label>
+          <label class="text-gray-400 w-1/2 font-general-semibold" for="phone">Phone Number</label>
           <div class="flex items-center space-x-4 w-1/2 justify-end">
             <input
               id="phone"
@@ -83,59 +89,47 @@
               [(ngModel)]="userDetails.phoneNumber"
               class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full text-right"
             />
-            <img src="assets/arrow-login-svg.png" alt="Arrow" class="w-4 h-4" />
           </div>
         </div>
-
         <div class="mt-8">
-          <button (click)="onSave()" class="bg-primary-white text-primary-black font-general-semibold px-6 py-2 rounded-lg hover:bg-gray-300">
+          <button (click)="onSave()" class="bg-primary-white text-primary-black font-semibold px-6 py-2 rounded-lg hover:bg-gray-300">
             Save
           </button>
         </div>
       </div>
 
       <!-- Properties Section -->
-      <div *ngIf="activeSection === 'properties'" class="w-full max-w-4xl mt-12">
-        <h2 class="text-xl font-general-semibold mb-4">Your Properties</h2>
-        <div *ngIf="properties.length > 0; else noProperties">
-          <div *ngFor="let property of properties" class="property-item border-b border-gray-600 py-4">
-            <h3 class="text-lg font-general-semibold">{{ property.title }}</h3>
-            <p><strong>Address:</strong> {{ property.address }}</p>
-            <p>
-              <label class="font-general-semibold">Price:</label>
-              <input
-                type="number"
-                [(ngModel)]="property.price"
-                class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full"
-              />
-            </p>
-            <p>
-              <label class="font-general-semibold">Square Footage:</label>
-              <input
-                type="number"
-                [(ngModel)]="property.squareFootage"
-                class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full"
-              />
-            </p>
-            <p><strong>Status:</strong> {{ property.status }}</p>
-            <p><strong>Type:</strong> {{ property.type }}</p>
-            <p><strong>Number of Bedrooms:</strong> {{ property.numberOfBedrooms }}</p>
-            <p><strong>Number of Bathrooms:</strong> {{ property.numberOfBathrooms }}</p>
-            <p><strong>Description:</strong> {{ property.description }}</p>
-            <div class="flex space-x-4 mt-2">
-              <button (click)="onSaveProperty(property.propertyId)" class="bg-green-500 text-white px-4 py-2 rounded font-general-semibold">
-                Save
-              </button>
-              <button (click)="onDeleteProperty(property.propertyId)" class="bg-red-500 text-white px-4 py-2 rounded font-general-semibold">
-                Delete
-              </button>
+      <div *ngIf="activeSection === 'properties'" class="w-full max-w-6xl mt-8">
+        <h2 class="text-xl font-general-semibold text-white mb-6">Your Properties</h2>
+        <div *ngIf="properties.length > 0; else noProperties" class="grid grid-cols-1 gap-6">
+          <div
+            *ngFor="let property of properties"
+            class="flex bg-[#1A1A1A] border border-gray-600 rounded-lg overflow-hidden shadow-md cursor-pointer"
+            (click)="onEditProperty(property.propertyId)"
+            style="display: flex; background-color: #1A1A1A; border: 1px solid #4B5563; border-radius: 0.5rem; overflow: hidden;"
+          >
+            <img
+              [src]="property.imageURLs || 'https://via.placeholder.com/150'"
+              alt="Property Image"
+              class="w-1/3 object-cover"
+              style="width: 33%; object-fit: cover;"
+            />
+            <div class="flex flex-col p-6 w-2/3">
+              <h3 class="text-lg font-general-semibold text-white mb-2">{{ property.title }}</h3>
+              <p class="text-sm text-gray-400 mb-1"><i class="fas fa-map-marker-alt"></i> {{ property.address }}</p>
+              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-home"></i> {{ property.type }}</p>
+              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-ruler-combined"></i> {{ property.squareFootage }} sqft</p>
+              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-dollar-sign"></i> {{ property.price | currency }}</p>
+              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-check-circle"></i> Status: {{ property.status }}</p>
             </div>
           </div>
         </div>
+      
         <ng-template #noProperties>
-          <p class="text-gray-400 font-general-semibold">No properties found or failed to load.</p>
+          <p class="text-gray-400 text-center">No properties found. Start by posting a new property!</p>
         </ng-template>
       </div>      
     </div>
   </div>
 </div>
+
