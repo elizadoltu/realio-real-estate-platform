@@ -5,6 +5,12 @@ import { PropertyListing } from '../models/property.model';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
+export interface PropertyResponse {
+  data: PropertyListing[];
+  isSuccess: boolean;
+  errorMessage: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +44,11 @@ export class PropertyService {
   }
   public getPropertyById(id: string) : Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  public getPropertiesByUserId(userId: string): Observable<PropertyResponse> {
+    const endpoint = `${this.apiUrl}/user/${userId}`;
+    return this.http.get<PropertyResponse>(endpoint);
   }
 
   public generatePricePrediction(
