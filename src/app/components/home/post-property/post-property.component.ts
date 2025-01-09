@@ -32,7 +32,7 @@ export class PostPropertyComponent implements OnInit{
       numberOfBedrooms: [null, [Validators.required, Validators.min(0)]],
       numberOfBathrooms: [null, [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
-      status: ['Available', Validators.required],
+      status: ['available', Validators.required],
       listingDate: [new Date().toISOString(), Validators.required], 
       imageUrls: ['https://image.png', [Validators.required, Validators.pattern(/^https?:\/\/[^\s]+$/)]],
       userId: ['', Validators.required],})
@@ -46,7 +46,7 @@ export class PostPropertyComponent implements OnInit{
         console.log('Decoded token:', decodedToken); 
         const userId = decodedToken.nameid; 
         this.userId = userId;
-        this.propertyForm.controls['userId'].setValue(this.userId);
+        this.propertyForm.controls['userID'].setValue(this.userId);
         console.log(this.propertyForm);
       } catch (error) {
         console.error('Error decoding token:', error);

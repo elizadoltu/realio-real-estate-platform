@@ -10,6 +10,6 @@ export interface PropertyListing {
     description: string;
     status: string;
     listingDate: string;
-    imageUrls: string;
-    userId?: string;
+    imageURLs: string;
+    userID?: string;
 }
