@@ -159,7 +159,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
               console.log('Property ID:', property.propertyId);  
               return {
                 ...property,
-                imageUrls: this.getRandomImage(),
+                imageURLs: this.getRandomImage(),
               };
             });
             this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);

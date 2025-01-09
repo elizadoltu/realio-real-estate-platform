@@ -149,7 +149,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
                 imageURLs: this.getRandomImage(),
               };
             });
-            this.totalPages = Math.ceil(response.totalCount / this.pageSize);
+            this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
           } else {
             console.error('Error fetching properties:', response.errorMessage);
           }
