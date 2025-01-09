@@ -46,7 +46,7 @@ export class PostPropertyComponent implements OnInit{
         console.log('Decoded token:', decodedToken); 
         const userId = decodedToken.nameid; 
         this.userId = userId;
-        this.propertyForm.controls['userID'].setValue(this.userId);
+        this.propertyForm.controls['userId'].setValue(this.userId);
         console.log(this.propertyForm);
       } catch (error) {
         console.error('Error decoding token:', error);
