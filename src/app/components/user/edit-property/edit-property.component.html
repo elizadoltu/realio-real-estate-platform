@@ -1,69 +1,166 @@
+<html class="h-full bg-black text-primary-white" style="margin:0; padding:0;">
+  <body class="h-full w-full m-0 p-0 overflow-x-hidden">
+    <div class="bg-black text-primary-white w-full h-screen flex flex-col p-4 overflow-x-hidden font-switzer-regular">
 
-<!-- Edit Property Section -->
-<div *ngIf="editingProperty" class="w-full max-w-6xl mt-8">
-  <h2 class="text-xl font-general-semibold text-white mb-6">Edit Property</h2>
-  <form [formGroup]="editPropertyForm" (ngSubmit)="onSaveProperty(property.propertyId)">
-    <!-- Title -->
-    <div class="flex justify-between border-b border-gray-600 pb-2 mb-4">
-      <label class="text-gray-400 w-1/3 font-general-semibold" for="title">Title</label>
-      <input
-        id="title"
-        type="text"
-        formControlName="title"
-        class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-2/3"
-      />
-    </div>
-
-    <!-- Address -->
-    <div class="flex justify-between border-b border-gray-600 pb-2 mb-4">
-      <label class="text-gray-400 w-1/3 font-general-semibold" for="address">Address</label>
-      <input
-        id="address"
-        type="text"
-        formControlName="address"
-        class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-2/3"
-      />
-    </div>
-
-    <!-- Type -->
-    <div class="flex justify-between border-b border-gray-600 pb-2 mb-4">
-      <label class="text-gray-400 w-1/3 font-general-semibold" for="type">Type</label>
-      <input
-        id="type"
-        type="text"
-        formControlName="type"
-        class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-2/3"
-      />
-    </div>
-
-    <!-- Other Fields -->
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <div>
-        <label class="text-gray-400 font-general-semibold" for="price">Price</label>
-        <input
-          id="price"
-          type="number"
-          formControlName="price"
-          class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full"
-        />
+      <!-- Bara de sus: Back și Add new property -->
+      <div class="flex items-center justify-between mb-6">
+        <button (click)="goBack()" class="text-primary-white text-lg font-general-semibold">← Back</button>
+        <p class="text-primary-white text-lg font-general-semibold">Edit property</p>
       </div>
-      <div>
-        <label class="text-gray-400 font-general-semibold" for="squareFootage">Square Footage</label>
-        <input
-          id="squareFootage"
-          type="number"
-          formControlName="squareFootage"
-          class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full"
-        />
+
+      <!-- Formularul principal -->
+      <div class="bg-black border border-gray-700 p-4 create-property-container">
+        <form [formGroup]="editPropertyForm" (ngSubmit)="onSaveProperty(propertyId)">
+
+          <!-- Grupul de câmpuri (Title, Address, Type, Price, Bedrooms, Bathrooms, Area) -->
+          <div class="bg-[#1a1a1a] p-4 rounded text-base space-y-6">
+            <!-- Title -->
+            <div class="flex items-end border-b border-gray-600 pb-2">
+              <div class="flex-1 flex flex-col">
+                <label class="text-gray-300 text-lg font-switzer-semibold">Title</label>
+                <input 
+                  id="title"
+                  type="text"
+                  formControlName="title"
+                  placeholder="Ex: Modern Loft Apartment"
+                  class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                />
+              </div>
+              <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+            </div>
+
+            <div class="flex items-end border-b border-gray-600 pb-2">
+              <div class="flex-1 flex flex-col">
+                <label class="text-gray-300 text-lg font-switzer-semibold">Address</label>
+                <input 
+                  id="address"
+                  type="text"
+                  formControlName="address"
+                  placeholder="Ex: Historic District, New York, US"
+                  class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                />
+              </div>
+              <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-10">
+              <div class="flex items-end border-b border-gray-600 pb-2">
+                <div class="flex-1 flex flex-col">
+                  <label class="text-gray-300 text-lg font-switzer-semibold">Type</label>
+                  <input 
+                    id="type"
+                    type="text"
+                    formControlName="type"
+                    placeholder="Ex: House"
+                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  />
+                </div>
+                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+              </div>
+
+              <div class="flex items-end border-b border-gray-600 pb-2">
+                <div class="flex-1 flex flex-col">
+                  <label class="text-gray-300 text-lg font-switzer-semibold">Price (dollars)</label>
+                  <input 
+                    id="price"
+                    type="number"
+                    formControlName="price"
+                    placeholder="400,000"
+                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  />
+                </div>
+                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-10">
+              <div class="flex items-end border-b border-gray-600 pb-2">
+                <div class="flex-1 flex flex-col">
+                  <label class="text-gray-300 text-lg font-switzer-semibold">Number of Bedrooms</label>
+                  <input 
+                    id="numberOfBedrooms"
+                    type="number"
+                    formControlName="numberOfBedrooms"
+                    placeholder="Ex: 3"
+                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  />
+                </div>
+                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+              </div>
+
+              <div class="flex items-end border-b border-gray-600 pb-2">
+                <div class="flex-1 flex flex-col">
+                  <label class="text-gray-300 text-lg font-switzer-semibold">Number of Bathrooms</label>
+                  <input 
+                    id="numberOfBathrooms"
+                    type="number"
+                    formControlName="numberOfBathrooms"
+                    placeholder="Ex: 3"
+                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  />
+                </div>
+                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+              </div>
+
+              <div class="flex items-end border-b border-gray-600 pb-2 col-span-2">
+                <div class="flex-1 flex flex-col">
+                  <label class="text-gray-300 text-lg font-switzer-semibold">Area (sq ft)</label>
+                  <input 
+                    id="squareFootage"
+                    type="number"
+                    formControlName="squareFootage"
+                    placeholder="Ex: 1100"
+                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  />
+                </div>
+                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
+
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-10 text-sm">
+            <label for="description" class="block text-gray-300 mb-2 text-lg font-switzer-semibold">Description</label>
+            <textarea
+              id="description"
+              formControlName="description"
+              placeholder="Ex: Modern Loft Apartment"
+              class="w-full h-32 bg-[#1a1a1a] text-primary-white p-3 rounded-sm outline-none placeholder-gray-500 border border-gray-600"
+            ></textarea>
+          </div>
+
+          <div class="mt-10 text-sm">
+            <label class="block text-gray-300 mb-1 text-lg font-switzer-semibold">Add photos</label>
+            <p class="text-gray-500 text-xs mb-2">Min 3 photos</p>
+            <div class="bg-[#1a1a1a] border border-gray-600 rounded-sm p-4 flex space-x-4 items-center">
+              <div class="w-20 h-20 bg-primary-black border border-gray-600 flex items-center justify-center text-4xl text-gray-500 hover:bg-gray-700 cursor-pointer">
+                +
+              </div>
+              <div class="w-20 h-20">
+                <img src="assets/testimage-1.jpg" alt="Property" class="object-cover w-full h-full rounded-sm" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between mt-10">
+            <button 
+              type="button"
+              (click)="onDeleteProperty(propertyId)"
+              class="bg-red-600 text-white py-3 px-8 rounded-sm hover:bg-red-500 hover:cursor-pointer transition text-sm font-semibold"
+            >
+              Delete Property
+            </button>
+            <button 
+              type="submit" 
+              class="bg-primary-white text-black py-3 px-8 rounded-sm hover:bg-gray-200 hover:cursor-pointer transition text-sm font-semibold"
+            >
+              Save Property
+            </button>
+          </div>    
+                
+        </form>
       </div>
     </div>
-
-    <!-- Save Button -->
-    <button
-      type="submit"
-      class="bg-primary-white text-primary-black font-semibold px-6 py-2 rounded-lg hover:bg-gray-300"
-    >
-      Save Changes
-    </button>
-  </form>
-</div>
+  </body>
+</html>

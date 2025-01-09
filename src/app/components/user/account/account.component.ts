@@ -31,6 +31,27 @@ export class AccountComponent implements OnInit {
     public router: Router
   ) {}
 
+  testImages = [
+    'assets/testimage-1.jpg',
+    'assets/testimage-2.jpg',
+    'assets/testimage-3.jpg',
+    'assets/testimage-4.jpg',
+    'assets/testimage-5.jpg',
+    'assets/testimage-6.jpg',
+    'assets/testimage-7.jpg',
+  ];
+
+  getRandomImage(): string {
+    return this.testImages[Math.floor(Math.random() * this.testImages.length)];
+  }
+
+  mapRandomImagesToProperties(): void {
+    this.properties = this.properties.map(property => ({
+      ...property,
+      randomImage: this.getRandomImage(),
+    }));
+  }  
+
   ngOnInit(): void {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -83,7 +104,8 @@ export class AccountComponent implements OnInit {
       this.propertyService.getPropertiesByUserId(this.userDetails.userId).subscribe(
         (response) => {
           if (response.isSuccess) {
-            this.properties = response.data; // Accesăm array-ul `data`
+            this.properties = response.data;
+            this.mapRandomImagesToProperties(); // Assign random images
             console.log('Properties loaded:', this.properties);
           } else {
             console.error('Failed to load properties:', response.errorMessage);
@@ -98,11 +120,12 @@ export class AccountComponent implements OnInit {
     } else {
       console.error('User ID is missing!');
     }
-  }
+  }  
 
   onEditProperty(propertyId: string): void {
+    console.log('Property ID received:', propertyId); // Debug
     this.router.navigate([`/edit-property/${propertyId}`]);
-  }  
+  }   
 
   sanitizeInput(value: string): string {
     return value.trim();

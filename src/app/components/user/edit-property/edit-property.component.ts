@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PropertyService } from '../../../services/property.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-edit-property',
@@ -12,38 +13,105 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./edit-property.component.css']
 })
 export class EditPropertyComponent implements OnInit {
-  properties: any[] = [];
-  editPropertyForm: FormGroup;
+properties: any[] = [];
+editPropertyForm: FormGroup;
+propertyId: string | null = null;
 property: any;
 editingProperty: any;
 
-  constructor(private fb: FormBuilder, private propertyService: PropertyService) {
-    this.editPropertyForm = this.fb.group({
-      title: [''],
-      address: [''],
-      type: [''],
-      price: [''],
-      squareFootage: ['']
-    });
-  }
+constructor(private fb: FormBuilder, private propertyService: PropertyService, private route: ActivatedRoute, private location: Location,) {
+  this.editPropertyForm = this.fb.group({
+    title: [''],
+    address: [''],
+    type: [''],
+    price: [''],
+    numberOfBedrooms: [''],
+    numberOfBathrooms: [''],
+    squareFootage: [''],
+    description: [''],
+  });
+}
 
   ngOnInit(): void {
-    this.loadProperties();
+    this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    if (this.propertyId) {
+      this.loadPropertyDetails();
+    }
   }
+  
+  loadPropertyDetails(): void {
+    if (this.propertyId) {
+      this.propertyService.getPropertyById(this.propertyId).subscribe(
+        (response) => {
+          if (response.isSuccess) {
+            this.property = response.data; // Extrage datele din răspuns
+            console.log('Property details:', this.property);
+            this.editPropertyForm.patchValue({
+              title: this.property.title,
+              address: this.property.address,
+              type: this.property.type,
+              price: this.property.price,
+              numberOfBedrooms: this.property.numberOfBedrooms,
+              numberOfBathrooms: this.property.numberOfBathrooms,
+              squareFootage: this.property.squareFootage,
+              description: this.property.description,
+            });
+          } else {
+            console.error('Failed to load property details:', response.errorMessage);
+          }
+        },
+        (error) => {
+          console.error('Error loading property details:', error);
+        }
+      );
+    }
+  }  
 
-  loadProperties(): void {
-    this.propertyService.getPaginatedProperties(1, 10).subscribe((data: any) => {
-      this.properties = data.data; // Adjust based on your API's response structure
-    });
-  }
+  onDeleteProperty(propertyId: string | null): void {
+    if (!propertyId) {
+      console.error('Property ID is null!');
+      alert('Cannot delete property: Property ID is missing.');
+      return;
+    }
+  
+    if (confirm('Are you sure you want to delete this property?')) {
+      this.propertyService.deleteProperty(propertyId).subscribe(
+        () => {
+          console.log('Property deleted successfully');
+          alert('Property deleted successfully!');
+          this.goBack(); 
+        },
+        (error) => {
+          console.error('Error deleting property:', error);
+          alert('Failed to delete property. Please try again.');
+        }
+      );
+    }
+  }  
 
-  onSaveProperty(propertyId: string): void {
+  onSaveProperty(propertyId: string | null): void {
+    if (!propertyId) {
+      console.error('Property ID is null!');
+      alert('Cannot save property: Property ID is missing.');
+      return;
+    }
+  
     if (this.editPropertyForm.valid) {
       const updatedProperty = this.editPropertyForm.value;
-      this.propertyService.updateProperty(propertyId, updatedProperty).subscribe(() => {
-        console.log('Property updated successfully');
-        this.loadProperties();
-      });
+      this.propertyService.updateProperty(propertyId, updatedProperty).subscribe(
+        () => {
+          console.log('Property updated successfully');
+          alert('Property updated successfully!');
+        },
+        (error) => {
+          console.error('Error updating property:', error);
+          alert('Failed to update property.');
+        }
+      );
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

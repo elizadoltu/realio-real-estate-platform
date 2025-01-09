@@ -28,6 +28,7 @@ import { EditPropertyComponent } from './app/components/user/edit-property/edit-
         FormsModule,
         LoginComponent,
         LandingComponent,
+        EditPropertyComponent,
         
     ],
     providers: [

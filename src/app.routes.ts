@@ -30,5 +30,5 @@ export const appRoutes: Routes = [
     { path: 'explore', component: ExploreComponent },
     { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
     { path: 'post-property', component: PostPropertyComponent, canActivate: [AuthGuard] },
-    { path: 'edit-property/:id', component: EditPropertyComponent },
+    { path: 'edit-property/:propertyId', component: EditPropertyComponent },
 ]
