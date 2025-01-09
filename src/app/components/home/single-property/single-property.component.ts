@@ -18,7 +18,7 @@ import { switchMap } from 'rxjs';
 })
 export class SinglePropertyComponent implements OnInit {
   property: any;
-  userID: string = '';
+  userId: string = '';
   userDetails: any;
   constructor(
     private route: ActivatedRoute,
@@ -30,13 +30,16 @@ export class SinglePropertyComponent implements OnInit {
 
   ngOnInit(): void {
     const propertyId = this.route.snapshot.paramMap.get('id');
+    console.log(propertyId);
     if (propertyId) {
       this.propertyService.getPropertyById(propertyId).pipe(
         switchMap((response) => {
           if (response) {
             this.property = response;
-            this.userID = this.property.userID;
-            return this.userService.getUserDetailsById(this.userID);
+            console.log(response);
+            this.userId = this.property.data.userID;
+            console.log(this.userId);
+            return this.userService.getUserDetailsById(this.userId);
           } else {
             throw new Error('Property not found');
           }
