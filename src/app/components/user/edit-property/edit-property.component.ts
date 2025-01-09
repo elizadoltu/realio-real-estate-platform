@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PropertyService } from '../../../services/property.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-edit-property',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './edit-property.component.html',
   styleUrls: ['./edit-property.component.css']
 })
@@ -11,6 +15,7 @@ export class EditPropertyComponent implements OnInit {
   properties: any[] = [];
   editPropertyForm: FormGroup;
 property: any;
+editingProperty: any;
 
   constructor(private fb: FormBuilder, private propertyService: PropertyService) {
     this.editPropertyForm = this.fb.group({
