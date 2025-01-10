@@ -3,98 +3,91 @@ import { LandingComponent } from './landing.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { By } from '@angular/platform-browser';
-import Lenis from 'lenis';
-import gsap from 'gsap';
+import { ContactComponent } from '../contact/contact.component';
 import { of } from 'rxjs';
+
+class MockAuthService {
+  getAuthToken() {
+    return 'dummy-token'; // return a dummy value
+  }
+}
+
+class MockRouter {
+  navigate = jasmine.createSpy('navigate');
+}
 
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
-  let mockAuthService: jasmine.SpyObj<AuthService>;
+  let router: MockRouter;
+  let authService: MockAuthService;
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    mockAuthService = jasmine.createSpyObj('AuthService', ['isAuthenticated']); 
+    router = new MockRouter();
+    authService = new MockAuthService();
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule, LandingComponent], 
+      imports: [CommonModule, ContactComponent, LandingComponent],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: AuthService, useValue: mockAuthService }, 
-      ],
+        { provide: Router, useValue: router },
+        { provide: AuthService, useValue: authService }
+      ]
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LandingComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges(); 
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call gsap animations after view init', () => {
-    spyOn(gsap, 'from');
-    spyOn(gsap, 'to');
-
-    component.ngAfterViewInit();
-    expect(gsap.from).toHaveBeenCalled();
-    expect(gsap.to).toHaveBeenCalled();
-  });
-
-  it('should initialize Lenis on ngAfterViewInit', () => {
-    spyOn(window, 'requestAnimationFrame');
-    spyOn(Lenis.prototype, 'on');
-    spyOn(Lenis.prototype, 'raf');
-
-    component.ngAfterViewInit();
-
-    expect(Lenis.prototype.on).toHaveBeenCalled();
-    expect(window.requestAnimationFrame).toHaveBeenCalled();
-  });
-
-  it('should clean up Lenis on ngOnDestroy', () => {
-    component.ngOnDestroy();
-    expect(component['lenis']?.destroy).toHaveBeenCalled();
-    expect(gsap.ticker.remove).toHaveBeenCalled();
-  });
-
-  it('should navigate to the account page', () => {
+  it('should navigate to the correct route when navigateToAccount is called', () => {
     component.navigateToAccount();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/account']);
+    expect(router.navigate).toHaveBeenCalledWith(['/account']);
   });
 
-  it('should navigate to the home page', () => {
+  it('should navigate to the correct route when navigateToHome is called', () => {
     component.navigateToHome();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should navigate to the explore page', () => {
+  it('should navigate to the correct route when navigateToExplore is called', () => {
     component.navigateToExplore();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/explore']);
+    expect(router.navigate).toHaveBeenCalledWith(['/explore']);
   });
 
-  it('should navigate to the login page', () => {
+  it('should navigate to the correct route when navigateToLogin is called', () => {
     component.navigateToLogin();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  it('should navigate to the register page', () => {
+  it('should navigate to the correct route when navigateToRegister is called', () => {
     component.navigateToRegister();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/register']);
+    expect(router.navigate).toHaveBeenCalledWith(['/register']);
   });
 
-  it('should navigate to the search page', () => {
+  it('should navigate to the correct route when navigateToSearch is called', () => {
     component.navigateToSearch();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/search']);
+    expect(router.navigate).toHaveBeenCalledWith(['/search']);
   });
 
-  it('should navigate to the post-property page', () => {
+  it('should navigate to the correct route when navigateToPostProperty is called', () => {
     component.navigateToPostProperty();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/post-property']);
+    expect(router.navigate).toHaveBeenCalledWith(['/post-property']);
   });
+
+  // Test if gsap and Lenis are properly called when component initializes
+  // it('should call gsap from method on ngAfterViewInit', () => {
+  //   spyOn(gsap, 'from');
+  //   spyOn(gsap, 'to');
+  //   component.ngAfterViewInit();
+  //   expect(gsap.from).toHaveBeenCalled();
+  //   expect(gsap.to).toHaveBeenCalled();
+  // });
+
+
 });

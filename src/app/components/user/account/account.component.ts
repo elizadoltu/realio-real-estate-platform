@@ -58,6 +58,7 @@ export class AccountComponent implements OnInit {
       this.userService.getUserDetails().subscribe(
         (data) => {
           this.userDetails = data;
+          console.log(data);
         },
         (error) => {
           console.error('Error fetching user details:', error);
@@ -71,10 +72,12 @@ export class AccountComponent implements OnInit {
 
   onSave(): void {
     const updatedData = {
+      userId: this.userDetails.userId,
       name: this.userDetails.name,
       email: this.userDetails.email,
       phoneNumber: this.userDetails.phoneNumber,
     };
+    console.log(updatedData);
   
     this.authService.updateUser(this.userDetails.userId, updatedData).subscribe(
       (response) => {

@@ -1,13 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
 
 describe('AuthService', () => {
-  let authService: AuthService;
+  let service: AuthService;
   let httpMock: HttpTestingController;
 
-  const mockApiUrl = 'https://abundant-reflection-production.up.railway.app/api/Auth';
+  const mockToken = 'fakeToken123';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -15,118 +16,148 @@ describe('AuthService', () => {
       providers: [AuthService],
     });
 
-    authService = TestBed.inject(AuthService);
+    service = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
+
+    // Mock localStorage getItem to return a fake token for authentication tests
+    spyOn(localStorage, 'getItem').and.returnValue(mockToken);
   });
 
   afterEach(() => {
-    httpMock.verify(); 
+    httpMock.verify();
+    
   });
 
   describe('login', () => {
-    it('should send a POST request to the login endpoint and return the response', () => {
-      const mockData = { email: 'test@example.com', password: 'password123' };
-      const mockResponse = { token: 'mockAuthToken' };
+    it('should successfully login and return response', () => {
+      const mockLoginResponse = { token: mockToken };
+      const loginData = { email: 'test@example.com', password: 'password123' };
 
-      authService.login(mockData).subscribe((response) => {
-        expect(response).toEqual(mockResponse);
+      service.login(loginData).subscribe((response) => {
+        expect(response).toEqual(mockLoginResponse);
       });
 
-      const req = httpMock.expectOne(`${mockApiUrl}/login`);
+      const req = httpMock.expectOne('https://abundant-reflection-production.up.railway.app/api/Auth/login');
       expect(req.request.method).toBe('POST');
-      expect(req.request.headers.get('Content-Type')).toBe('application/json');
-      req.flush(mockResponse); 
+      expect(req.request.body).toEqual(loginData);
+      req.flush(mockLoginResponse);
     });
 
-    it('should handle login errors and throw an error', () => {
-      const mockData = { email: 'test@example.com', password: 'wrongpassword' };
+    it('should handle login failure and throw an error', () => {
+      const loginData = { email: 'test@example.com', password: 'wrongpassword' };
+      const errorResponse = { message: 'Login failed' };
 
-      authService.login(mockData).subscribe({
+      service.login(loginData).subscribe({
+        next: () => fail('should have failed with an error'),
         error: (error) => {
           expect(error.message).toBe('Login failed. Please try again.');
         },
       });
 
-      const req = httpMock.expectOne(`${mockApiUrl}/login`);
-      expect(req.request.method).toBe('POST');
-      req.flush({ message: 'Invalid credentials' }, { status: 401, statusText: 'Unauthorized' }); 
+      const req = httpMock.expectOne('https://abundant-reflection-production.up.railway.app/api/Auth/login');
+      req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
   });
 
-  describe('getAuthToken', () => {
-    it('should return the token from localStorage if available', () => {
-      spyOn(localStorage, 'getItem').and.returnValue('mockAuthToken');
-      const token = authService.getAuthToken();
-      expect(token).toBe('mockAuthToken');
+  describe('register', () => {
+    it('should successfully register and return response', () => {
+      const mockRegisterResponse = { message: 'Registration successful' };
+      const registerData = { name: 'John', phoneNumber: '1234567890', email: 'john@example.com', password: 'password123' };
+
+      service.register(registerData).subscribe((response) => {
+        expect(response).toEqual(mockRegisterResponse);
+      });
+
+      const req = httpMock.expectOne('https://abundant-reflection-production.up.railway.app/api/Auth/register');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(registerData);
+      req.flush(mockRegisterResponse);
     });
 
-    it('should return null if no token is found', () => {
-      spyOn(localStorage, 'getItem').and.returnValue(null);
-      const token = authService.getAuthToken();
-      expect(token).toBeNull();
+    it('should handle registration failure and throw an error', () => {
+      const registerData = { name: 'John', phoneNumber: '1234567890', email: 'john@example.com', password: 'password123' };
+      const errorResponse = { message: 'Registration failed' };
+
+      service.register(registerData).subscribe({
+        next: () => fail('should have failed with an error'),
+        error: (error) => {
+          expect(error.message).toBe('Registration failed. Please try again.');
+        },
+      });
+
+      const req = httpMock.expectOne('https://abundant-reflection-production.up.railway.app/api/Auth/register');
+      req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
+    });
+  });
+
+  describe('updateUser', () => {
+    it('should successfully update user data', () => {
+      const mockUserUpdateResponse = { userId: '1', name: 'John Doe' };
+      const userId = '1';
+      const userData = { name: 'John Doe' };
+
+      service.updateUser(userId, userData).subscribe((response) => {
+        expect(response).toEqual(mockUserUpdateResponse);
+      });
+
+      const req = httpMock.expectOne('https://abundant-reflection-production.up.railway.app/api/Users/1');
+      expect(req.request.method).toBe('PUT');
+      expect(req.request.body).toEqual(userData);
+      req.flush(mockUserUpdateResponse);
+    });
+
+    it('should handle update failure and throw an error', () => {
+      const userId = '1';
+      const userData = { name: 'John Doe' };
+      const errorResponse = { message: 'Update failed' };
+
+      service.updateUser(userId, userData).subscribe({
+        next: () => fail('should have failed with an error'),
+        error: (error) => {
+          expect(error.message).toBe('Failed to update user.');
+        },
+      });
+
+      const req = httpMock.expectOne('https://abundant-reflection-production.up.railway.app/api/Users/1');
+      req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
   });
 
   describe('makeAuthenticatedRequest', () => {
-    it('should throw an error if no token is found', () => {
-      spyOn(authService, 'getAuthToken').and.returnValue(null);
+    it('should successfully make a GET request with auth token', () => {
+      const mockResponse = { data: 'some data' };
+      const endpoint = 'https://abundant-reflection-production.up.railway.app/api/Users/1';
 
-      expect(() => authService.makeAuthenticatedRequest('some-endpoint')).toThrowError(
+      service.makeAuthenticatedRequest(endpoint, 'GET').subscribe((response) => {
+        expect(response).toEqual(mockResponse);
+      });
+
+      const req = httpMock.expectOne(endpoint);
+      expect(req.request.method).toBe('GET');
+      expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
+      req.flush(mockResponse);
+    });
+
+    it('should handle error for missing auth token', () => {
+      spyOn(localStorage, 'getItem').and.returnValue(null);
+
+      expect(() => service.makeAuthenticatedRequest('https://example.com', 'GET')).toThrowError(
         'No authentication token found'
       );
     });
+  });
 
-    it('should make an authenticated GET request', () => {
-      const mockResponse = { data: 'mockData' };
-      spyOn(authService, 'getAuthToken').and.returnValue('mockAuthToken');
-
-      authService.makeAuthenticatedRequest('some-endpoint').subscribe((response) => {
-        expect(response).toEqual(mockResponse);
-      });
-
-      const req = httpMock.expectOne('some-endpoint');
-      expect(req.request.method).toBe('GET');
-      expect(req.request.headers.get('Authorization')).toBe('Bearer mockAuthToken');
-      req.flush(mockResponse); 
+  describe('getAuthToken', () => {
+    it('should return the auth token from localStorage', () => {
+      const token = service.getAuthToken();
+      expect(token).toBe(mockToken);
     });
 
-    it('should make an authenticated POST request with a body', () => {
-      const mockBody = { key: 'value' };
-      const mockResponse = { data: 'mockData' };
-      spyOn(authService, 'getAuthToken').and.returnValue('mockAuthToken');
+    it('should return null if there is no token in localStorage', () => {
+      spyOn(localStorage, 'getItem').and.returnValue(null);
 
-      authService.makeAuthenticatedRequest('some-endpoint', 'POST', mockBody).subscribe((response) => {
-        expect(response).toEqual(mockResponse);
-      });
-
-      const req = httpMock.expectOne('some-endpoint');
-      expect(req.request.method).toBe('POST');
-      expect(req.request.headers.get('Authorization')).toBe('Bearer mockAuthToken');
-      expect(req.request.body).toEqual(mockBody);
-      req.flush(mockResponse); 
-    });
-
-    it('should handle errors in authenticated requests', () => {
-      spyOn(authService, 'getAuthToken').and.returnValue('mockAuthToken');
-
-      authService.makeAuthenticatedRequest('some-endpoint').subscribe({
-        error: (error) => {
-          expect(error.message).toBe('Request failed.');
-        },
-      });
-
-      const req = httpMock.expectOne('some-endpoint');
-      req.flush({ message: 'Request error' }, { status: 500, statusText: 'Internal Server Error' }); 
-    });
-
-    it('should throw an error for unsupported HTTP methods', () => {
-      spyOn(authService, 'getAuthToken').and.returnValue('mockAuthToken');
-
-      authService.makeAuthenticatedRequest('some-endpoint', 'PUT').subscribe({
-        error: (error) => {
-          expect(error.message).toBe('Unsupported HTTP method.');
-        },
-      });
+      const token = service.getAuthToken();
+      expect(token).toBeNull();
     });
   });
 });

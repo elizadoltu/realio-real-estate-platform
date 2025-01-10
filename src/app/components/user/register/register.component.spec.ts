@@ -1,109 +1,146 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
-import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { of, throwError } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { of } from 'rxjs';
-import { NavigationStart, RouterEvent } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NavigationStart } from '@angular/router';
+
+// Mock AuthService
+class MockAuthService {
+  register = jasmine.createSpy('register').and.returnValue(of({}));
+}
+
+// Mock Router
+class MockRouter {
+  navigate = jasmine.createSpy('navigate');
+  events = of(new NavigationStart(0, ''));
+}
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let authServiceMock: any;
-  let routerMock: any;
+  let mockAuthService: MockAuthService;
+  let mockRouter: MockRouter;
 
   beforeEach(async () => {
-    authServiceMock = {
-      register: jasmine.createSpy('register').and.returnValue(of(true))
-    };
-
-    routerMock = {
-      navigate: jasmine.createSpy('navigate'),
-      events: of(new NavigationStart(0, '/register'))
-    };
+    mockAuthService = new MockAuthService();
+    mockRouter = new MockRouter();
 
     await TestBed.configureTestingModule({
-      imports: [FormsModule, RegisterComponent],
+      imports: [FormsModule, CommonModule, RegisterComponent],
       providers: [
-        { provide: AuthService, useValue: authServiceMock },
-        { provide: Router, useValue: routerMock }
-      ]
+        { provide: AuthService, useValue: mockAuthService },
+        { provide: Router, useValue: mockRouter },
+      ],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display an error message if all fields are not filled', () => {
+  it('should sanitize input correctly', () => {
+    const sanitizedValue = component.sanitizeInput('  test value  ');
+    expect(sanitizedValue).toBe('test value');
+  });
+
+  it('should validate email format', () => {
+    expect(component.isEmailValid('test@example.com')).toBeTrue();
+    expect(component.isEmailValid('invalid-email')).toBeFalse();
+  });
+
+  it('should validate phone number format', () => {
+    expect(component.isPhoneNumberValid('1234567890')).toBeTrue();
+    expect(component.isPhoneNumberValid('12345')).toBeFalse();
+  });
+
+  it('should validate password length', () => {
+    expect(component.isPasswordValid('password123')).toBeTrue();
+    expect(component.isPasswordValid('short')).toBeFalse();
+  });
+
+  it('should show error message if form is incomplete', () => {
     component.fullName = '';
-    component.email = '';
     component.phoneNumber = '';
+    component.email = '';
     component.password = '';
     component.onSubmit();
     expect(component.errorMessage).toBe('All fields are required.');
   });
 
-  it('should display an error message for an invalid phone number', () => {
+  it('should show error message for invalid email', () => {
     component.fullName = 'John Doe';
-    component.email = 'test@example.com';
-    component.password = 'password123';
-    component.phoneNumber = '12345'; // Invalid phone number
-    component.onSubmit();
-    expect(component.errorMessage).toBe('Phone number must contain 10 to 15 digits.');
-  });
-
-  it('should display an error message for an invalid email', () => {
-    component.fullName = 'John Doe';
-    component.email = 'invalid-email';
     component.phoneNumber = '1234567890';
+    component.email = 'invalid-email';
     component.password = 'password123';
     component.onSubmit();
     expect(component.errorMessage).toBe('Invalid email address.');
   });
 
-  it('should display an error message for an invalid password', () => {
+  it('should show error message for invalid phone number', () => {
     component.fullName = 'John Doe';
+    component.phoneNumber = '12345';
     component.email = 'test@example.com';
+    component.password = 'password123';
+    component.onSubmit();
+    expect(component.errorMessage).toBe('Phone number must contain 10 to 15 digits.');
+  });
+
+  it('should show error message for short password', () => {
+    component.fullName = 'John Doe';
     component.phoneNumber = '1234567890';
-    component.password = 'short'; // Invalid password
+    component.email = 'test@example.com';
+    component.password = 'short';
     component.onSubmit();
     expect(component.errorMessage).toBe('Password must be at least 8 characters long.');
   });
 
-  it('should successfully submit the form and navigate to login on successful registration', fakeAsync(() => {
+  it('should call register service and navigate on successful registration', () => {
     component.fullName = 'John Doe';
     component.phoneNumber = '1234567890';
-    component.email = 'john.doe@example.com';
+    component.email = 'test@example.com';
     component.password = 'password123';
-
     component.onSubmit();
-    tick(); // Simulate async passage of time
-
-    expect(authServiceMock.register).toHaveBeenCalledWith({
-      fullName: 'John Doe',
-      phoneNumber: '1234567890',
-      email: 'john.doe@example.com',
-      password: 'password123',
-    });
-
-    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
-  }));
-
-  it('should call window.scrollTo with correct coordinates', () => {
-    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    expect(mockAuthService.register).toHaveBeenCalled();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
   });
-  
-  it('should not call register if validation fails', () => {
-    component.fullName = '';
-    component.email = 'invalid-email';
-    component.phoneNumber = '123'; 
-    component.password = '';
+
+  it('should show error message on registration failure', () => {
+    mockAuthService.register = jasmine.createSpy('register').and.returnValue(throwError('Registration failed'));
+    component.fullName = 'John Doe';
+    component.phoneNumber = '1234567890';
+    component.email = 'test@example.com';
+    component.password = 'password123';
     component.onSubmit();
-    expect(authServiceMock.register).not.toHaveBeenCalled();
+    expect(component.errorMessage).toBe('Registration failed. Please try again.');
   });
+
+  it('should navigate to home on navigateHome', () => {
+    component.navigateHome();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+  });
+
+  it('should navigate to login on navigateToLogin', () => {
+    component.navigateToLogin();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('should navigate to explore on navigateToExplore', () => {
+    component.navigateToExplore();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/explore']);
+  });
+
+  it('should navigate to search on navigateToSearch', () => {
+    component.navigateToSearch();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/search']);
+  });
+
 });

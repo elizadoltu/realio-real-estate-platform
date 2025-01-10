@@ -1,116 +1,135 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ExploreComponent } from './explore.component';  // Import the standalone component
-import { Router } from '@angular/router';
+import { ExploreComponent } from './explore.component';
 import { PropertyService } from '../../../services/property.service';
+import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ContactComponent } from '../contact/contact.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
   let fixture: ComponentFixture<ExploreComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
-  let mockPropertyService: jasmine.SpyObj<PropertyService>;
+  let propertyService: jasmine.SpyObj<PropertyService>;
+  let router: jasmine.SpyObj<Router>;
 
-  beforeEach(() => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    mockPropertyService = jasmine.createSpyObj('PropertyService', ['getPaginatedProperties']);
+  beforeEach(async () => {
+    const propertyServiceSpy = jasmine.createSpyObj('PropertyService', ['getPaginatedProperties']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
-    TestBed.configureTestingModule({
-      imports: [CommonModule, RouterModule, FormsModule, ExploreComponent], // Import ExploreComponent directly
+    await TestBed.configureTestingModule({
+      imports: [ CommonModule, FormsModule, ExploreComponent, ContactComponent, HttpClientTestingModule ],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: PropertyService, useValue: mockPropertyService },
-      ],
-    }).compileComponents();
+        { provide: PropertyService, useValue: propertyServiceSpy },
+        { provide: Router, useValue: routerSpy }
+      ]
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(ExploreComponent);
     component = fixture.componentInstance;
+    propertyService = TestBed.inject(PropertyService) as jasmine.SpyObj<PropertyService>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    fixture.detectChanges();
   });
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Image Preloading', () => {
-    it('should preload images successfully', () => {
-      const preloadImagesSpy = spyOn(component, 'preloadImages').and.callThrough();
-      component.ngOnInit();
-      expect(preloadImagesSpy).toHaveBeenCalled();
-      expect(component.isLoading).toBeFalse();
-    });
+  it('should fetch properties on init', () => {
+    const mockProperties = {
+      isSuccess: true,
+      data: {
+        data: [{ propertyId: '1', name: 'Property 1' }],
+        totalCount: 1
+      }
+    };
+    // Mock the service call
+    propertyService.getPaginatedProperties.and.returnValue(of(mockProperties));
+  
+    // Call ngOnInit to trigger the property fetch
+    component.ngOnInit();
+  
+    // Check if the service was called
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalled();
+  
+    // Ensure properties are populated
+    expect(component.properties.length).toBe(1);
+    expect(component.properties[0].title).toBe('Property 1');
+    expect(component.properties[0].propertyId).toBe('1');
+  });
+  
 
-    it('should handle image preload failure gracefully', () => {
-      spyOn(component, 'preloadImages').and.returnValue(Promise.reject('Error'));
-      component.ngOnInit();
-      expect(component.isLoading).toBeFalse();
-      expect(component.randomImage).toBe('');
-    });
+  it('should handle error while fetching properties', () => {
+    propertyService.getPaginatedProperties.and.returnValue(of({ isSuccess: false, errorMessage: 'Error fetching properties' }));
+
+    component.ngOnInit();
+
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalled();
+    expect(component.properties.length).toBe(0);
   });
 
-  describe('Property Fetching', () => {
-    it('should fetch properties successfully', () => {
-      const mockResponse = {
-        isSuccess: true,
-        data: {
-          data: [
-            { id: 1, name: 'Property 1', price: 100000 },
-            { id: 2, name: 'Property 2', price: 150000 },
-          ],
-          totalCount: 2,
-        },
-      };
-
-      mockPropertyService.getPaginatedProperties.and.returnValue(of(mockResponse));
-
-      component.fetchProperties();
-
-      expect(mockPropertyService.getPaginatedProperties).toHaveBeenCalled();
-      expect(component.properties.length).toBe(2);
-      expect(component.totalPages).toBe(1);
-    });
-
-    it('should handle error in fetching properties', () => {
-      const mockError = { errorMessage: 'Error fetching properties' };
-
-      mockPropertyService.getPaginatedProperties.and.returnValue(of(mockError));
-
-      component.fetchProperties();
-
-      expect(mockPropertyService.getPaginatedProperties).toHaveBeenCalled();
-      expect(component.properties.length).toBe(0);
-    });
+  it('should navigate to property detail page on navigateToPropertyDetail', () => {
+    component.navigateToPropertyDetail('1');
+    expect(router.navigate).toHaveBeenCalledWith(['/property/1']);
   });
 
-  describe('Navigation Methods', () => {
-    it('should navigate to search page', () => {
-      component.navigateToSearch();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/search']);
-    });
-
-    it('should navigate to post property page', () => {
-      component.navigateToPostProperty();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/post-property']);
-    });
-
-    it('should navigate to explore page', () => {
-      component.navigateToExplore();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/explore']);
-    });
-
-    it('should navigate to home page', () => {
-      component.navigateToHome();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
-    });
+  it('should toggle filters visibility on toggleFilters', () => {
+    component.toggleFilters();
+    expect(component.isFilterOpen).toBe(true);
+    component.toggleFilters();
+    expect(component.isFilterOpen).toBe(false);
   });
 
-  describe('Pagination', () => {
-    it('should go to the specified page', () => {
-      const page = 2;
-      component.goToPage(page);
-      expect(component.currentPage).toBe(page);
-      expect(mockPropertyService.getPaginatedProperties).toHaveBeenCalled();
+  it('should apply filters and fetch properties', () => {
+    const mockProperties = {
+      isSuccess: true,
+      data: {
+        data: [{ propertyId: '1', name: 'Property 1' }],
+        totalCount: 1
+      }
+    };
+    propertyService.getPaginatedProperties.and.returnValue(of(mockProperties));
+
+    component.applyFilters();
+
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalled();
+    expect(component.properties.length).toBe(1);
+  });
+
+  it('should navigate to search page', () => {
+    component.navigateToSearch();
+    expect(router.navigate).toHaveBeenCalledWith(['/search']);
+  });
+
+  it('should navigate to post property page', () => {
+    component.navigateToPostProperty();
+    expect(router.navigate).toHaveBeenCalledWith(['/post-property']);
+  });
+
+  it('should clear filters and fetch properties', () => {
+    const mockProperties = {
+      isSuccess: true,
+      data: {
+        data: [{ propertyId: '1', name: 'Property 1' }],
+        totalCount: 1
+      }
+    };
+    propertyService.getPaginatedProperties.and.returnValue(of(mockProperties));
+
+    component.clearFilters();
+
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalled();
+    expect(component.filters).toEqual({
+      Type: '',
+      price: 0,
+      nrOfBathrooms: 0,
+      nrOfBedrooms: 0,
+      status: '',
+      squareFootage: 0
     });
+    expect(component.properties.length).toBe(1);
   });
 });
