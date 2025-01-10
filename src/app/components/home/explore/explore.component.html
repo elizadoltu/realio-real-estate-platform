@@ -141,9 +141,10 @@
 <div
   class="grid desktop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-3 gap-3 mt-4 ml-4 mr-4"
 >
+<ng-container *ngFor="let property of properties">
   <div
     class="border border-slate-400 pb-2 desktop:w-250 mobile:w-200 rounded-md transition ease-in delay-100 bg-primary-white text-primary-black hover:bg-primary-black hover:text-primary-white hover:cursor-pointer duration-100"
-    *ngFor="let property of properties"
+    *ngIf="property.status === 'available'"
     (click)="navigateToPropertyDetail(property.propertyId)"
   >
     <img [src]="property.imageURLs" alt="property image" />
@@ -156,9 +157,11 @@
         </h2>
         <div class="flex items-center mt-4">
           <h2 class="flex items-center">
-            <img src="assets/location.png" alt="location icon" class="mr-1" />{{
-              property.address
-            }}
+            <img
+              src="assets/location.png"
+              alt="location icon"
+              class="mr-1"
+            />{{ property.address }}
           </h2>
           <p class="flex ml-4 items-center">
             <img
@@ -184,8 +187,8 @@
         </p>
       </div>
     </div>
-    
   </div>
+</ng-container>
 
   <ng-template #noProperties>
     <p>No properties available.</p>

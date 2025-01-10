@@ -56,6 +56,9 @@ constructor(private fb: FormBuilder, private propertyService: PropertyService, p
               numberOfBathrooms: this.property.numberOfBathrooms,
               squareFootage: this.property.squareFootage,
               description: this.property.description,
+              status: this.property.status,
+              imageURLs: this.property.imageURLs,
+              userID: this.property.userID
             });
           } else {
             console.error('Failed to load property details:', response.errorMessage);
