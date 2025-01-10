@@ -32,10 +32,8 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     squareFootage: 0,
   };
   isFilterOpen: boolean = false; 
-  private lenis: Lenis | undefined;
-  
-  // Adăugăm searchTerm pentru căutare
   searchTerm: string = '';
+  private lenis: Lenis | undefined;
 
   testImages = [
     'assets/testimage-1.jpg',
@@ -61,15 +59,40 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fetchProperties();
   }
 
-  // Metodă pentru a efectua căutarea
-  performSearch() {
-    // În acest exemplu, vom stoca termenul de căutare în filters
-    // (poți adăuga un câmp dedicat în backend pentru a filtra după nume, titlu, etc.)
-    // Presupunem că backend-ul suportă un parametru "query" sau "search"
-    this.filters.query = this.searchTerm;
-    this.currentPage = 1;
-    this.fetchProperties();
+  clearSearch(): void {
+    this.searchTerm = ''; 
+    this.fetchProperties(); 
   }
+
+  performSearch(): void {
+    const trimmedSearchTerm = this.searchTerm.trim(); 
+    if (trimmedSearchTerm) {
+      this.propertyService.searchClientInquiries(trimmedSearchTerm).subscribe(
+        (response) => {
+          console.log('Search API Response:', response); 
+          if (response.isSuccess) {
+            this.properties = response.data.map((property: PropertyListing) => {
+              console.log('Property ID:', property.propertyId); 
+              return {
+                ...property,
+                imageURLs: this.getRandomImage(), 
+              };
+            });
+          } else {
+            console.error('Error fetching data:', response.errorMessage);
+            this.properties = []; 
+          }
+        },
+        (error) => {
+          console.error('API error:', error);
+          this.clearSearch();
+        }
+      );
+    } else {
+      this.clearSearch();
+    }
+  }
+  
 
   navigateToSearch() {
     this.router.navigate(['/search']);

@@ -50,7 +50,14 @@
         class="ml-2 hover:cursor-pointer w-5 h-5"
         (click)="performSearch()"
       />
+    
     </div>
+    <button
+      class="bg-primary-black text-primary-white px-4 py-1 rounded-md transition ease-in delay-100 hover:bg-slate-700"
+      (click)="clearSearch()"
+    >
+      Clear
+    </button>
   </div>
 
   <div class="flex items-center">

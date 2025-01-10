@@ -33,6 +33,12 @@ export class PropertyService {
     const method = 'POST'; 
     return this.authService.makeAuthenticatedRequest(endpoint, method, property); 
   }
+
+  public searchClientInquiries(searchTerm: string) : Observable<any> {
+    const endpoint = 'https://abundant-reflection-production.up.railway.app/api/ClientInquiries';
+    const url = `${endpoint}/search?searchQuery=${encodeURIComponent(searchTerm)}`;
+    return this.http.get<any>(url);
+  }
   
 
   public deleteProperty(id: string) : Observable<any> {
