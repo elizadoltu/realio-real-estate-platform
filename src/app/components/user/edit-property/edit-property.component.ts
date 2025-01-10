@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule, Location } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-property',
@@ -19,7 +20,7 @@ propertyId: string | null = null;
 property: any;
 editingProperty: any;
 
-constructor(private fb: FormBuilder, private propertyService: PropertyService, private route: ActivatedRoute, private location: Location,) {
+constructor(private fb: FormBuilder, private propertyService: PropertyService, private route: ActivatedRoute, private router: Router, private location: Location,) {
   this.editPropertyForm = this.fb.group({
     title: [''],
     address: [''],
@@ -98,10 +99,13 @@ constructor(private fb: FormBuilder, private propertyService: PropertyService, p
   
     if (this.editPropertyForm.valid) {
       const updatedProperty = this.editPropertyForm.value;
-      this.propertyService.updateProperty(propertyId, updatedProperty).subscribe(
+      const userId = this.property.userID;
+      console.log(userId)
+      this.propertyService.updateProperty(propertyId, updatedProperty, userId).subscribe(
         () => {
           console.log('Property updated successfully');
           alert('Property updated successfully!');
+          this.router.navigate(["/account"]);
         },
         (error) => {
           console.error('Error updating property:', error);

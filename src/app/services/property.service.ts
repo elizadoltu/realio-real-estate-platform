@@ -36,11 +36,27 @@ export class PropertyService {
   
 
   public deleteProperty(id: string) : Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    const endpoint = `${this.apiUrl}/${id}`;
+    const method = 'DELETE';
+    return this.authService.makeAuthenticatedRequest(endpoint, method, id);
   }
 
-  public updateProperty(id: string, property: PropertyListing) : Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, property);
+  public updateProperty(id: string, property: PropertyListing, userID: string) : Observable<any> {
+    const endpoint = `${this.apiUrl}/${id}`;
+    const method = 'PUT';
+    const listingDate = new Date().toISOString();
+    const imageURLs = 'https://image.png';
+    const status = 'available'
+    const updatedProperty = {
+      ...property, 
+      propertyId: id, 
+      listingDate,
+      imageURLs,
+      status,
+      userID, 
+  };
+  console.log(updatedProperty);
+    return this.authService.makeAuthenticatedRequest(endpoint, method, updatedProperty);
   }
   public getPropertyById(id: string) : Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
