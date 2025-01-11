@@ -12,7 +12,7 @@
 
   <div class="p-3">
     <h1 class="font-general-semibold uppercase desktop:text-8xl mobile:text-3xl">
-      {{ property.data.title }}
+      {{ property.title }}
     </h1>
   </div>
 
@@ -23,24 +23,24 @@
         <div class="mt-2 text-right text-lg font-switzer-regular">
           <p class="flex items-center justify-end">
             <img src="assets/location.png" alt="location icon"/>{{
-              property.data.address
+              property.address
             }}
           </p>
           <p class="flex justify-end items-center mt-2">
             <img src="assets/square-meters.png" alt="area icon" />{{
-              property.data.squareFootage
+              property.squareFootage
             }}sq ft
             <img src="assets/price.png" alt="price tag icon" class="ml-4" /> ${{
-              property.data.price
+              property.price
             }}
           </p>
           <p class="flex items-center justify-end mt-2">
             <img src="assets/bedroom.png" alt="bed icon" />{{
-              property.data.numberOfBedrooms
+              property.numberOfBedrooms
             }}
             bedrooms
             <img src="assets/bathroom.png" alt="bathroom icon" class="ml-4" />{{
-              property.data.numberOfBathrooms
+              property.numberOfBathrooms
             }}
             bathrooms
           </p>
@@ -48,11 +48,11 @@
       </div>
       <div class="flex flex-col items-end mr-2 text-lg font-switzer-regular mobile:mt-10 desktop:mt-0">
         <p>
-          <span class="font-switzer-medium">Status:</span> {{ property.data.status }}
+          <span class="font-switzer-medium">Status:</span> {{ property.status }}
         </p>
         <p>
           <span class="font-switzer-medium">Listing Date:</span>
-          {{ property?.data.listingDate | date : "longDate" }}
+          {{ property?.listingDate | date : "longDate" }}
         </p>
       </div>
     </div>
@@ -63,7 +63,7 @@
 
   <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 pb-5 mt-10">
     <h1 class="font-general-semibold text-2xl">Description</h1>
-    <p class="text-lg font-switzer-regular mobile:mt-5 desktop:mt-0">{{ property.data.description }}</p>
+    <p class="text-lg font-switzer-regular mobile:mt-5 desktop:mt-0">{{ property.description }}</p>
   </div>
 
   <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 gap-2 mt-10">

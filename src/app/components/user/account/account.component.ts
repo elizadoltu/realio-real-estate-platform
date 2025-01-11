@@ -92,19 +92,35 @@ export class AccountComponent implements OnInit {
   }
 
   onDelete(): void {
-    this.userService.deleteUser(this.userDetails.userId).subscribe(
-        (response) => {
-            console.log('User deleted successfully:', response);
-            alert('Profile deleted successfully!');
-            localStorage.removeItem('authToken'); // Remove only the authToken
-            this.router.navigate(['/']);
-        },
-        (error) => {
-            console.error('Error deleting user:', error);
-            alert('Failed to delete profile. Please ensure all fields are correct.');
-        }
+    // First, delete all properties associated with the user
+    const deletePropertiesObservables = this.properties.map((property) =>
+        this.propertyService.deleteProperty(property.propertyId).toPromise()
     );
+
+    Promise.all(deletePropertiesObservables)
+        .then(() => {
+            console.log('All properties deleted successfully.');
+
+            // After all properties are deleted, delete the user
+            this.userService.deleteUser(this.userDetails.userId).subscribe(
+                (response) => {
+                    console.log('User deleted successfully:', response);
+                    alert('Profile deleted successfully!');
+                    localStorage.removeItem('authToken'); // Remove only the authToken
+                    this.router.navigate(['/']);
+                },
+                (error) => {
+                    console.error('Error deleting user:', error);
+                    alert('Failed to delete profile. Please ensure all fields are correct.');
+                }
+            );
+        })
+        .catch((error) => {
+            console.error('Error deleting properties:', error);
+            alert('Failed to delete properties. Please try again.');
+        });
 }
+
   
 
   onLogout(): void {
@@ -119,16 +135,17 @@ export class AccountComponent implements OnInit {
 
   loadProperties(): void {
     console.log('Loading properties for user ID:', this.userDetails.userId);
+    
     if (this.userDetails.userId) {
       this.propertyService.getPropertiesByUserId(this.userDetails.userId).subscribe(
         (response) => {
-          if (response.isSuccess) {
-            this.properties = response.data;
+          if (response && Array.isArray(response) && response.length > 0) {
+            this.properties = response;
             this.mapRandomImagesToProperties(); // Assign random images
             console.log('Properties loaded:', this.properties);
           } else {
-            console.error('Failed to load properties:', response.errorMessage);
-            alert('Failed to load properties: ' + response.errorMessage);
+            console.error('No properties found or invalid response:', response);
+            alert('No properties found.');
           }
         },
         (error) => {
@@ -139,7 +156,8 @@ export class AccountComponent implements OnInit {
     } else {
       console.error('User ID is missing!');
     }
-  }  
+  }
+  
 
   onEditProperty(propertyId: string): void {
     console.log('Property ID received:', propertyId); // Debug

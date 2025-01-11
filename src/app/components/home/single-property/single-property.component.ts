@@ -34,14 +34,19 @@ export class SinglePropertyComponent implements OnInit {
   ngOnInit(): void {
     const propertyId = this.route.snapshot.paramMap.get('id');
     console.log(propertyId);
+    
     if (propertyId) {
       this.propertyService.getPropertyById(propertyId).pipe(
         switchMap((response) => {
-          if (response) {
+          console.log(response); 
+  
+          if (response && response.propertyId) {
             this.property = response;
-            console.log(response);
-            this.userId = this.property.data.userID;
-            console.log(this.userId);
+            console.log('Property:', this.property);
+  
+            this.userId = this.property.userID;
+            console.log('User ID:', this.userId);
+  
             return this.userService.getUserDetailsById(this.userId);
           } else {
             throw new Error('Property not found');
@@ -57,8 +62,7 @@ export class SinglePropertyComponent implements OnInit {
         }
       );
     }
-  }
-  
+  }  
 
   goBack(): void {
     this.location.back();
