@@ -22,13 +22,12 @@
                   id="title"
                   type="text"
                   formControlName="title"
-                  placeholder="Ex: Modern Loft Apartment"
-                  class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  class="bg-transparent mt-2 outline-none text-primary-white text-sm"
                 />
               </div>
-              <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
             </div>
 
+            <!-- Address -->
             <div class="flex items-end border-b border-gray-600 pb-2">
               <div class="flex-1 flex flex-col">
                 <label class="text-gray-300 text-lg font-switzer-semibold">Address</label>
@@ -36,14 +35,13 @@
                   id="address"
                   type="text"
                   formControlName="address"
-                  placeholder="Ex: Historic District, New York, US"
-                  class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                  class="bg-transparent mt-2 outline-none text-primary-white text-sm"
                 />
               </div>
-              <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
             </div>
 
             <div class="grid grid-cols-2 gap-10">
+              <!-- Type -->
               <div class="flex items-end border-b border-gray-600 pb-2">
                 <div class="flex-1 flex flex-col">
                   <label class="text-gray-300 text-lg font-switzer-semibold">Type</label>
@@ -51,13 +49,12 @@
                     id="type"
                     type="text"
                     formControlName="type"
-                    placeholder="Ex: House"
-                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                    class="bg-transparent mt-2 outline-none text-primary-white text-sm"
                   />
                 </div>
-                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
               </div>
 
+              <!-- Price -->
               <div class="flex items-end border-b border-gray-600 pb-2">
                 <div class="flex-1 flex flex-col">
                   <label class="text-gray-300 text-lg font-switzer-semibold">Price (dollars)</label>
@@ -65,16 +62,14 @@
                     id="price"
                     type="number"
                     formControlName="price"
-                    placeholder="400,000"
-                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                    class="bg-transparent mt-2 outline-none text-primary-white text-sm"
                   />
                 </div>
-                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
-
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-10">
+              <!-- Number of Bedrooms -->
               <div class="flex items-end border-b border-gray-600 pb-2">
                 <div class="flex-1 flex flex-col">
                   <label class="text-gray-300 text-lg font-switzer-semibold">Number of Bedrooms</label>
@@ -82,13 +77,12 @@
                     id="numberOfBedrooms"
                     type="number"
                     formControlName="numberOfBedrooms"
-                    placeholder="Ex: 3"
-                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                    class="bg-transparent mt-2 outline-none text-primary-white text-sm"
                   />
                 </div>
-                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
               </div>
 
+              <!-- Number of Bathrooms -->
               <div class="flex items-end border-b border-gray-600 pb-2">
                 <div class="flex-1 flex flex-col">
                   <label class="text-gray-300 text-lg font-switzer-semibold">Number of Bathrooms</label>
@@ -96,53 +90,69 @@
                     id="numberOfBathrooms"
                     type="number"
                     formControlName="numberOfBathrooms"
-                    placeholder="Ex: 3"
-                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
+                    class="bg-transparent mt-2 outline-none text-primary-white text-sm"
                   />
                 </div>
-                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
               </div>
+            </div>
 
-              <div class="flex items-end border-b border-gray-600 pb-2 col-span-2">
-                <div class="flex-1 flex flex-col">
-                  <label class="text-gray-300 text-lg font-switzer-semibold">Area (sq ft)</label>
-                  <input 
-                    id="squareFootage"
-                    type="number"
-                    formControlName="squareFootage"
-                    placeholder="Ex: 1100"
-                    class="bg-transparent mt-2 outline-none placeholder-gray-500 text-primary-white text-sm"
-                  />
-                </div>
-                <img src="assets/white-arrow.png" alt="arrow" class="ml-2 w-3 h-3 max-[500px]:hidden" />
-
+            <!-- Square Footage -->
+            <div class="flex items-end border-b border-gray-600 pb-2">
+              <div class="flex-1 flex flex-col">
+                <label class="text-gray-300 text-lg font-switzer-semibold">Area (sq ft)</label>
+                <input 
+                  id="squareFootage"
+                  type="number"
+                  formControlName="squareFootage"
+                  class="bg-transparent mt-2 outline-none text-primary-white text-sm"
+                />
               </div>
             </div>
           </div>
 
+          <!-- Description -->
           <div class="mt-10 text-sm">
             <label for="description" class="block text-gray-300 mb-2 text-lg font-switzer-semibold">Description</label>
             <textarea
               id="description"
               formControlName="description"
-              placeholder="Ex: Modern Loft Apartment"
-              class="w-full h-32 bg-[#1a1a1a] text-primary-white p-3 rounded-sm outline-none placeholder-gray-500 border border-gray-600"
+              class="w-full h-32 bg-[#1a1a1a] text-primary-white p-3 rounded-sm outline-none text-sm border border-gray-600"
             ></textarea>
           </div>
 
+          <!-- Add Photos -->
           <div class="mt-10 text-sm">
-            <label class="block text-gray-300 mb-1 text-lg font-switzer-semibold">Add photos</label>
+            <label class="block text-gray-300 mb-1 text-lg font-switzer-semibold">Add Photos</label>
             <p class="text-gray-500 text-xs mb-2">Min 3 photos</p>
+
             <div class="bg-[#1a1a1a] border border-gray-600 rounded-sm p-4 flex space-x-4 items-center">
-              <div class="w-20 h-20 bg-primary-black border border-gray-600 flex items-center justify-center text-4xl text-gray-500 hover:bg-gray-700 cursor-pointer">
+              <!-- Previzualizare imagini -->
+              <div *ngFor="let photo of uploadedPhotos" class="relative w-20 h-20">
+                <img [src]="photo" alt="Property" class="object-cover w-full h-full rounded-sm" />
+                <button 
+                  type="button" 
+                  (click)="onDeletePhoto(photo)" 
+                  class="absolute top-0 right-0 bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-500"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Buton pentru adăugarea pozelor -->
+              <label class="w-20 h-20 bg-primary-black border border-gray-600 flex items-center justify-center text-4xl text-gray-500 hover:bg-gray-700 cursor-pointer">
                 +
-              </div>
-              <div class="w-20 h-20">
-                <img src="assets/testimage-1.jpg" alt="Property" class="object-cover w-full h-full rounded-sm" />
-              </div>
+                <input 
+                  type="file" 
+                  (change)="onFileSelected($event)" 
+                  multiple 
+                  accept="image/*"
+                  class="hidden"
+                />
+              </label>
             </div>
           </div>
 
+          <!-- Buttons -->
           <div class="flex justify-between mt-10">
             <button 
               type="button"
@@ -157,8 +167,7 @@
             >
               Save Property
             </button>
-          </div>    
-                
+          </div>
         </form>
       </div>
     </div>

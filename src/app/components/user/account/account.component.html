@@ -35,7 +35,7 @@
           class="flex items-center px-4 space-x-4 text-gray-400 hover:text-white cursor-pointer font-general-semibold"
           [class.text-gray-400]="activeSection !== 'properties'"
           [class.text-white]="activeSection === 'properties'"
-          (click)="activeSection = 'properties'; loadProperties()"
+          (click)="showProperties()"
         >
           <img src="assets/profile-properties.png" alt="Properties" class="w-6 h-6" />
           <span>Properties</span>
@@ -56,6 +56,7 @@
       <!-- Profile Section -->
       <div *ngIf="activeSection === 'profile'" class="w-full max-w-3xl space-y-6 pr-12">
         <h2 class="text-xl font-general-semibold text-white mb-4">Your Profile</h2>
+        <!-- Profile Details -->
         <div class="flex justify-end border-b border-primary-white pb-2">
           <label class="text-gray-400 w-1/2 font-general-semibold" for="name">Full Name</label>
           <div class="flex items-center space-x-4 w-1/2 justify-end">
@@ -67,7 +68,7 @@
             />
           </div>
         </div>
-
+        <!-- Email -->
         <div class="flex justify-end border-b border-primary-white pb-2">
           <label class="text-gray-400 w-1/2 font-general-semibold" for="email">Email</label>
           <div class="flex items-center space-x-4 w-1/2 justify-end">
@@ -79,7 +80,7 @@
             />
           </div>
         </div>
-
+        <!-- Phone -->
         <div class="flex justify-end border-b border-primary-white pb-2">
           <label class="text-gray-400 w-1/2 font-general-semibold" for="phone">Phone Number</label>
           <div class="flex items-center space-x-4 w-1/2 justify-end">
@@ -91,50 +92,43 @@
             />
           </div>
         </div>
-        <div class="mt-8">
-          <button (click)="onSave()" class="bg-primary-white text-primary-black font-semibold px-6 py-2 rounded-lg hover:bg-gray-300">
-            Save
-          </button>
-        </div>
-        <div class="mt-8">
-          <button (click)="onDelete()" class="bg-red-600 text-primary-white font-semibold px-6 py-2 rounded-lg hover:bg-red-900">
-            Delete
-          </button>
-        </div>
       </div>
 
       <!-- Properties Section -->
       <div *ngIf="activeSection === 'properties'" class="w-full max-w-6xl mt-8">
         <h2 class="text-xl font-general-semibold text-white mb-6">Your Properties</h2>
-        <div *ngIf="properties.length > 0; else noProperties" class="grid grid-cols-1 gap-6">
-          <div
-            *ngFor="let property of properties"
-            class="flex bg-[#1A1A1A] border border-gray-600 rounded-lg overflow-hidden shadow-md cursor-pointer"
-            (click)="onEditProperty(property.propertyId)"
-            style="display: flex; background-color: #1A1A1A; border: 1px solid #4B5563; border-radius: 0.5rem; overflow: hidden;"
-          >
-            <img
-            [src]="property.randomImage" 
-              alt="Property Image"
-              class="w-1/3 object-cover"
-              style="width: 33%; object-fit: cover;"
-            />
-            <div class="flex flex-col p-6 w-2/3">
-              <h3 class="text-lg font-general-semibold text-white mb-2">{{ property.title }}</h3>
-              <p class="text-sm text-gray-400 mb-1"><i class="fas fa-map-marker-alt"></i> {{ property.address }}</p>
-              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-home"></i> {{ property.type }}</p>
-              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-ruler-combined"></i> {{ property.squareFootage }} sqft</p>
-              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-dollar-sign"></i> {{ property.price | currency }}</p>
-              <p class="text-sm text-gray-400 mb-4"><i class="fas fa-check-circle"></i> Status: {{ property.status }}</p>
+        <!-- Loading Indicator -->
+        <div *ngIf="isLoadingProperties" class="flex items-center justify-center h-full w-full">
+          <p class="text-white text-xl font-general-semibold">Loading properties...</p>
+        </div>
+        <!-- Properties List -->
+        <div *ngIf="!isLoadingProperties">
+          <div *ngIf="properties.length > 0; else noProperties" class="grid grid-cols-1 gap-6">
+            <div
+              *ngFor="let property of properties"
+              class="flex bg-[#1A1A1A] border border-gray-600 rounded-lg overflow-hidden shadow-md cursor-pointer"
+              (click)="onEditProperty(property.propertyId)"
+            >
+              <img
+                [src]="property.images?.[0]"
+                alt="Property Image"
+                class="w-1/3 object-cover"
+              />
+              <div class="flex flex-col p-6 w-2/3">
+                <h3 class="text-lg font-general-semibold text-white mb-2">{{ property.title }}</h3>
+                <p class="text-sm text-gray-400 mb-1"><i class="fas fa-map-marker-alt"></i> {{ property.address }}</p>
+                <p class="text-sm text-gray-400 mb-4"><i class="fas fa-home"></i> {{ property.type }}</p>
+                <p class="text-sm text-gray-400 mb-4"><i class="fas fa-ruler-combined"></i> {{ property.squareFootage }} sqft</p>
+                <p class="text-sm text-gray-400 mb-4"><i class="fas fa-dollar-sign"></i> {{ property.price | currency }}</p>
+                <p class="text-sm text-gray-400 mb-4"><i class="fas fa-check-circle"></i> Status: {{ property.status }}</p>
+              </div>
             </div>
           </div>
+          <ng-template #noProperties>
+            <p class="text-gray-400 text-center">No properties found. Start by posting a new property!</p>
+          </ng-template>
         </div>
-      
-        <ng-template #noProperties>
-          <p class="text-gray-400 text-center">No properties found. Start by posting a new property!</p>
-        </ng-template>
       </div>      
     </div>
   </div>
 </div>
-

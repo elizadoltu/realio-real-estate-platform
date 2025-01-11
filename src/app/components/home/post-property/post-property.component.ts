@@ -13,18 +13,23 @@ import { jwtDecode } from "jwt-decode";
   templateUrl: './post-property.component.html',
   styleUrl: './post-property.component.css'
 })
-export class PostPropertyComponent implements OnInit{
+export class PostPropertyComponent implements OnInit {
   propertyForm: FormGroup;
   userId: string = '';
-  predictedPrice: number | null = null; 
+  predictedPrice: number | null = null;
   isLoadingPrediction: boolean = false;
+  uploadedPhotos: string[] = []; // Previzualizările imaginilor (Base64)
+  base64Images: string[] = []; // Imaginile codificate pentru backend
 
-  constructor(private readonly formBuilder: FormBuilder, 
+  constructor(
+    private readonly formBuilder: FormBuilder,
     private readonly propertyService: PropertyService,
     private readonly router: Router,
     private readonly location: Location,
-    private readonly authService: AuthService) {
-      this.propertyForm = this.formBuilder.group({title: ['', Validators.required],
+    private readonly authService: AuthService
+  ) {
+    this.propertyForm = this.formBuilder.group({
+      title: ['', Validators.required],
       address: ['', Validators.required],
       type: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
@@ -33,9 +38,10 @@ export class PostPropertyComponent implements OnInit{
       numberOfBathrooms: [null, [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       status: ['available', Validators.required],
-      listingDate: [new Date().toISOString(), Validators.required], 
-      imageUrls: ['https://image.png', [Validators.required, Validators.pattern(/^https?:\/\/[^\s]+$/)]],
-      userId: ['', Validators.required],})
+      listingDate: [new Date().toISOString(), Validators.required],
+      imageUrls: [''],
+      userId: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -43,8 +49,8 @@ export class PostPropertyComponent implements OnInit{
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        console.log('Decoded token:', decodedToken); 
-        const userId = decodedToken.nameid; 
+        console.log('Decoded token:', decodedToken);
+        const userId = decodedToken.nameid;
         this.userId = userId;
         this.propertyForm.controls['userId'].setValue(this.userId);
         console.log(this.propertyForm);
@@ -65,7 +71,6 @@ export class PostPropertyComponent implements OnInit{
     const squareFootage = this.propertyForm.controls['squareFootage'].value;
     const numberOfBedrooms = this.propertyForm.controls['numberOfBedrooms'].value;
 
-
     if (!squareFootage || !numberOfBedrooms) {
       console.error('Square footage, number of bedrooms, and price are required');
       return;
@@ -85,22 +90,52 @@ export class PostPropertyComponent implements OnInit{
     });
   }
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      Array.from(input.files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const base64String = e.target.result.split(',')[1]; // Codificare în Base64
+          this.uploadedPhotos.push(e.target.result); // Previzualizare
+          this.base64Images.push(base64String); // Pregătire pentru backend
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  onDeletePhoto(photo: string): void {
+    const index = this.uploadedPhotos.indexOf(photo);
+    if (index > -1) {
+      this.uploadedPhotos.splice(index, 1); // Elimin din previzualizări
+      this.base64Images.splice(index, 1); // Elimin din codificările pentru backend
+    }
+  }
+
   onSubmit(): void {
     if (this.propertyForm.invalid) {
-      console.error('Form is invalid');
+      console.error('Form is invalid:', this.propertyForm);
+  
+      // Afișeaz starea fiecărui câmp
+      Object.keys(this.propertyForm.controls).forEach((key) => {
+        const control = this.propertyForm.get(key);
+        console.log(`Control: ${key}, Valid: ${control?.valid}, Errors: ${control?.errors}`);
+      });
+  
       return;
     }
-
+  
     const formData = this.propertyForm.value;
-    formData.title = this.capitalizeFirstLetter(formData.title);
-    formData.address = this.capitalizeFirstLetter(formData.address);
-    const utcListingDate = new Date(formData.listingDate).toISOString();
-    formData.listingDate = utcListingDate;
-
-    console.log('Form Data Submitted: ', formData);
+  
+    // Codific imaginile într-un format JSON pentru separare mai sigură
+    formData.imageUrls = JSON.stringify(this.base64Images);
+  
+    console.log('Form Data Submitted:', formData);
+  
     this.propertyService.createProperty(formData).subscribe(
       () => {
-        console.log('Property posted successfully!');
+        console.log('Property posted successfully with images!');
         this.router.navigate(['/']);
       },
       (error) => {
@@ -111,8 +146,8 @@ export class PostPropertyComponent implements OnInit{
 
   capitalizeFirstLetter(value: string): string {
     return value
-      .split(' ') 
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
-      .join(' '); 
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   }
 }

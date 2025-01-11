@@ -23,6 +23,7 @@ export class AccountComponent implements OnInit {
 
   properties: any[] = [];
   activeSection: 'profile' | 'properties' = 'profile';
+  isLoadingProperties: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -31,36 +32,18 @@ export class AccountComponent implements OnInit {
     public router: Router
   ) {}
 
-  testImages = [
-    'assets/testimage-1.jpg',
-    'assets/testimage-2.jpg',
-    'assets/testimage-3.jpg',
-    'assets/testimage-4.jpg',
-    'assets/testimage-5.jpg',
-    'assets/testimage-6.jpg',
-    'assets/testimage-7.jpg',
-  ];
-
-  getRandomImage(): string {
-    return this.testImages[Math.floor(Math.random() * this.testImages.length)];
-  }
-
-  mapRandomImagesToProperties(): void {
-    this.properties = this.properties.map(property => ({
-      ...property,
-      randomImage: this.getRandomImage(),
-    }));
-  }  
-
   ngOnInit(): void {
     const token = localStorage.getItem('authToken');
     if (token) {
       this.userService.getUserDetails().subscribe(
-        (data) => {
+        (data: any) => {
           this.userDetails = data;
           console.log(data);
+
+          // Începe încărcarea proprietăților imediat
+          this.loadPropertiesWithImages();
         },
-        (error) => {
+        (error: any) => {
           console.error('Error fetching user details:', error);
         }
       );
@@ -78,13 +61,13 @@ export class AccountComponent implements OnInit {
       phoneNumber: this.userDetails.phoneNumber,
     };
     console.log(updatedData);
-  
+
     this.authService.updateUser(this.userDetails.userId, updatedData).subscribe(
-      (response) => {
+      (response: any) => {
         console.log('User updated successfully:', response);
         alert('Profile updated successfully!');
       },
-      (error) => {
+      (error: any) => {
         console.error('Error updating user:', error);
         alert('Failed to update profile. Please ensure all fields are correct.');
       }
@@ -92,36 +75,19 @@ export class AccountComponent implements OnInit {
   }
 
   onDelete(): void {
-    // First, delete all properties associated with the user
-    const deletePropertiesObservables = this.properties.map((property) =>
-        this.propertyService.deleteProperty(property.propertyId).toPromise()
+    this.userService.deleteUser(this.userDetails.userId).subscribe(
+      (response: any) => {
+        console.log('User deleted successfully:', response);
+        alert('Profile deleted successfully!');
+        localStorage.removeItem('authToken'); // Remove only the authToken
+        this.router.navigate(['/']);
+      },
+      (error: any) => {
+        console.error('Error deleting user:', error);
+        alert('Failed to delete profile. Please ensure all fields are correct.');
+      }
     );
-
-    Promise.all(deletePropertiesObservables)
-        .then(() => {
-            console.log('All properties deleted successfully.');
-
-            // After all properties are deleted, delete the user
-            this.userService.deleteUser(this.userDetails.userId).subscribe(
-                (response) => {
-                    console.log('User deleted successfully:', response);
-                    alert('Profile deleted successfully!');
-                    localStorage.removeItem('authToken'); // Remove only the authToken
-                    this.router.navigate(['/']);
-                },
-                (error) => {
-                    console.error('Error deleting user:', error);
-                    alert('Failed to delete profile. Please ensure all fields are correct.');
-                }
-            );
-        })
-        .catch((error) => {
-            console.error('Error deleting properties:', error);
-            alert('Failed to delete properties. Please try again.');
-        });
-}
-
-  
+  }
 
   onLogout(): void {
     this.userService.logout();
@@ -130,39 +96,62 @@ export class AccountComponent implements OnInit {
 
   showProperties(): void {
     this.activeSection = 'properties';
-    this.loadProperties();
+    if (this.isLoadingProperties) {
+      return; // Loading is already in progress or complete
+    }
+
+    if (this.properties.length === 0) {
+      this.isLoadingProperties = true; // Show loading only when entering properties and they are not loaded yet
+    }
   }
 
-  loadProperties(): void {
-    console.log('Loading properties for user ID:', this.userDetails.userId);
-    
+  loadPropertiesWithImages(): void {
+    this.isLoadingProperties = true;
     if (this.userDetails.userId) {
       this.propertyService.getPropertiesByUserId(this.userDetails.userId).subscribe(
-        (response) => {
-          if (response && Array.isArray(response) && response.length > 0) {
-            this.properties = response;
-            this.mapRandomImagesToProperties(); // Assign random images
-            console.log('Properties loaded:', this.properties);
+        (response: any) => {
+          console.log('Properties response:', response);
+          if (Array.isArray(response)) {
+            this.properties = response.map((property: any) => {
+              const imageKey = property.imageUrls ? 'imageUrls' : 'imageURLs';
+              const images = this.extractAndDecodeImages(property[imageKey]);
+              return { ...property, images };
+            });
           } else {
-            console.error('No properties found or invalid response:', response);
-            alert('No properties found.');
+            alert('Unexpected response format.');
           }
+          this.isLoadingProperties = false;
         },
-        (error) => {
-          console.error('Error fetching properties:', error);
+        (error: any) => {
           alert('An error occurred while fetching properties.');
+          this.isLoadingProperties = false;
         }
       );
     } else {
-      console.error('User ID is missing!');
+      alert('User ID is missing!');
+      this.isLoadingProperties = false;
     }
   }
-  
+
+  extractAndDecodeImages(imageUrls: string): string[] {
+    if (!imageUrls) {
+      console.log('No images found.');
+      return [];
+    }
+
+    try {
+      const imagesArray = JSON.parse(imageUrls); // Parsează șirul JSON într-un array
+      return imagesArray.map((image: string) => `data:image/jpeg;base64,${image.trim()}`);
+    } catch (error: any) {
+      console.error('Error parsing image URLs:', error);
+      return [];
+    }
+  }
 
   onEditProperty(propertyId: string): void {
     console.log('Property ID received:', propertyId); // Debug
     this.router.navigate([`/edit-property/${propertyId}`]);
-  }   
+  }
 
   sanitizeInput(value: string): string {
     return value.trim();
