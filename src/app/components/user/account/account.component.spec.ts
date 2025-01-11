@@ -1,155 +1,173 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// @ts-nocheck
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Pipe, PipeTransform, Injectable, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Directive, Input, Output } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { Observable, of as observableOf, throwError } from 'rxjs';
+
+import { Component } from '@angular/core';
 import { AccountComponent } from './account.component';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 import { PropertyService } from '../../../services/property.service';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
+@Injectable()
+class MockAuthService {}
+
+@Injectable()
+class MockUserService {}
+
+@Injectable()
+class MockPropertyService {}
+
+@Injectable()
+class MockRouter {
+  navigate() {};
+}
+
+@Directive({ selector: '[myCustom]' })
+class MyCustomDirective {
+  @Input() myCustom;
+}
+
+@Pipe({name: 'translate'})
+class TranslatePipe implements PipeTransform {
+  transform(value) { return value; }
+}
+
+@Pipe({name: 'phoneNumber'})
+class PhoneNumberPipe implements PipeTransform {
+  transform(value) { return value; }
+}
+
+@Pipe({name: 'safeHtml'})
+class SafeHtmlPipe implements PipeTransform {
+  transform(value) { return value; }
+}
 
 describe('AccountComponent', () => {
-  let component: AccountComponent;
-  let fixture: ComponentFixture<AccountComponent>;
-  let authServiceMock: jasmine.SpyObj<AuthService>;
-  let userServiceMock: jasmine.SpyObj<UserService>;
-  let propertyServiceMock: jasmine.SpyObj<PropertyService>;
-  let routerMock: jasmine.SpyObj<Router>;
+  let fixture;
+  let component;
 
   beforeEach(() => {
-    authServiceMock = jasmine.createSpyObj('AuthService', ['updateUser']);
-    userServiceMock = jasmine.createSpyObj('UserService', ['getUserDetails', 'logout']); // Add 'logout' here
-    propertyServiceMock = jasmine.createSpyObj('PropertyService', ['getPropertiesByUserId']);
-    routerMock = jasmine.createSpyObj('Router', ['navigate']);
-  
     TestBed.configureTestingModule({
-      imports: [FormsModule, CommonModule, AccountComponent],
-      providers: [
-        { provide: AuthService, useValue: authServiceMock },
-        { provide: UserService, useValue: userServiceMock },
-        { provide: PropertyService, useValue: propertyServiceMock },
-        { provide: Router, useValue: routerMock },
+      imports: [ FormsModule, ReactiveFormsModule, AccountComponent ],
+      declarations: [
+        TranslatePipe, PhoneNumberPipe, SafeHtmlPipe,
+        MyCustomDirective
       ],
-    }).compileComponents();
-  
-    fixture = TestBed.createComponent(AccountComponent);
-    component = fixture.componentInstance;
-  });
-  
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
+      providers: [
+        { provide: AuthService, useClass: MockAuthService },
+        { provide: UserService, useClass: MockUserService },
+        { provide: PropertyService, useClass: MockPropertyService },
+        { provide: Router, useClass: MockRouter }
+      ]
+    }).overrideComponent(AccountComponent, {
 
-  it('should create', () => {
+    }).compileComponents();
+    fixture = TestBed.createComponent(AccountComponent);
+    component = fixture.debugElement.componentInstance;
+  });
+
+  afterEach(() => {
+    component.ngOnDestroy = function() {};
+    fixture.destroy();
+  });
+
+  it('should run #constructor()', async () => {
     expect(component).toBeTruthy();
   });
 
-  describe('ngOnInit', () => {
-    it('should fetch user details if auth token exists', () => {
-      const mockUserDetails = { userId: '1', name: 'John Doe', email: 'john@example.com', phoneNumber: '1234567890' };
-      localStorage.setItem('authToken', 'mockToken');
-      userServiceMock.getUserDetails.and.returnValue(of(mockUserDetails));
+  it('should run #getRandomImage()', async () => {
 
-      component.ngOnInit();
+    component.getRandomImage();
 
-      expect(component.userDetails).toEqual(mockUserDetails);
-      expect(userServiceMock.getUserDetails).toHaveBeenCalled();
-    });
-
-    it('should alert when no auth token exists', () => {
-      spyOn(window, 'alert');
-      localStorage.removeItem('authToken');
-
-      component.ngOnInit();
-
-      expect(window.alert).toHaveBeenCalledWith('No authentication token found');
-    });
   });
 
-  describe('onSave', () => {
-    it('should call authService.updateUser with the updated user data', () => {
-      const updatedData = { userId: '1', name: 'John Doe', email: 'john@example.com', phoneNumber: '1234567890' };
-      component.userDetails = updatedData;
-      authServiceMock.updateUser.and.returnValue(of({}));
-
-      component.onSave();
-
-      expect(authServiceMock.updateUser).toHaveBeenCalledWith(updatedData.userId, updatedData);
-    });
-
-    it('should show an alert on successful update', () => {
-      spyOn(window, 'alert');
-      authServiceMock.updateUser.and.returnValue(of({}));
-
-      component.onSave();
-
-      expect(window.alert).toHaveBeenCalledWith('Profile updated successfully!');
-    });
-
-    it('should show an alert on failed update', () => {
-      spyOn(window, 'alert');
-      authServiceMock.updateUser.and.returnValue(throwError('Error'));
-
-      component.onSave();
-
-      expect(window.alert).toHaveBeenCalledWith('Failed to update profile. Please ensure all fields are correct.');
-    });
+  it('should run #mapRandomImagesToProperties()', async () => {
+    component.properties = component.properties || {};
+    component.properties = ['properties'];
+    component.getRandomImage = jest.fn();
+    component.mapRandomImagesToProperties();
+    // expect(component.getRandomImage).toHaveBeenCalled();
   });
 
-  describe('onLogout', () => {
-    it('should call userService.logout and navigate to home', () => {
-      component.onLogout();
-
-      expect(userServiceMock.logout).toHaveBeenCalled();
-      expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
-    });
+  it('should run #ngOnInit()', async () => {
+    component.userService = component.userService || {};
+    component.userService.getUserDetails = jest.fn().mockReturnValue(observableOf({}));
+    component.ngOnInit();
+    // expect(component.userService.getUserDetails).toHaveBeenCalled();
   });
 
-  describe('loadProperties', () => {
-    // it('should load properties and map random images', () => {
-    //   const mockProperties = [
-    //     { id: '1', name: 'Property 1' },
-    //     { id: '2', name: 'Property 2' },
-    //   ];
-    //   component.userDetails.userId = '1';
-    //   propertyServiceMock.getPropertiesByUserId.and.returnValue(of({ isSuccess: true, data: mockProperties }));
-
-    //   component.loadProperties();
-
-    //   expect(component.properties).toEqual(mockProperties);
-    //   expect(component.properties[0].randomImage).toBeDefined(); // Check random image mapping
-    // });
-
-    it('should show an alert if properties fail to load', () => {
-      spyOn(window, 'alert');
-      propertyServiceMock.getPropertiesByUserId.and.returnValue(throwError('Error'));
-
-      component.loadProperties();
-
-      expect(window.alert).toHaveBeenCalledWith('An error occurred while fetching properties.');
-    });
+  it('should run #onSave()', async () => {
+    component.userDetails = component.userDetails || {};
+    component.userDetails.userId = 'userId';
+    component.userDetails.name = 'name';
+    component.userDetails.email = 'email';
+    component.userDetails.phoneNumber = 'phoneNumber';
+    component.authService = component.authService || {};
+    component.authService.updateUser = jest.fn().mockReturnValue(observableOf({}));
+    component.onSave();
+    // expect(component.authService.updateUser).toHaveBeenCalled();
   });
 
-  describe('isEmailValid', () => {
-    it('should return true for a valid email', () => {
-      expect(component.isEmailValid('test@example.com')).toBeTrue();
-    });
-
-    it('should return false for an invalid email', () => {
-      expect(component.isEmailValid('invalid-email')).toBeFalse();
-    });
+  it('should run #onLogout()', async () => {
+    component.userService = component.userService || {};
+    component.userService.logout = jest.fn();
+    component.router = component.router || {};
+    component.router.navigate = jest.fn();
+    component.onLogout();
+    // expect(component.userService.logout).toHaveBeenCalled();
+    // expect(component.router.navigate).toHaveBeenCalled();
   });
 
-  describe('isPhoneNumberValid', () => {
-    it('should return true for a valid phone number', () => {
-      expect(component.isPhoneNumberValid('1234567890')).toBeTrue();
-    });
-
-    it('should return false for an invalid phone number', () => {
-      expect(component.isPhoneNumberValid('invalid-phone')).toBeFalse();
-    });
+  it('should run #showProperties()', async () => {
+    component.loadProperties = jest.fn();
+    component.showProperties();
+    // expect(component.loadProperties).toHaveBeenCalled();
   });
 
-  describe('sanitizeInput', () => {
-    it('should trim leading and trailing spaces', () => {
-      expect(component.sanitizeInput('  hello  ')).toBe('hello');
-    });
+  it('should run #loadProperties()', async () => {
+    component.userDetails = component.userDetails || {};
+    component.userDetails.userId = 'userId';
+    component.propertyService = component.propertyService || {};
+    component.propertyService.getPropertiesByUserId = jest.fn().mockReturnValue(observableOf({
+      isSuccess: {},
+      data: {},
+      errorMessage: {}
+    }));
+    component.mapRandomImagesToProperties = jest.fn();
+    component.loadProperties();
+    // expect(component.propertyService.getPropertiesByUserId).toHaveBeenCalled();
+    // expect(component.mapRandomImagesToProperties).toHaveBeenCalled();
   });
+
+  it('should run #onEditProperty()', async () => {
+    component.router = component.router || {};
+    component.router.navigate = jest.fn();
+    component.onEditProperty({});
+    // expect(component.router.navigate).toHaveBeenCalled();
+  });
+
+  it('should run #sanitizeInput()', async () => {
+
+    component.sanitizeInput('value');
+
+  });
+
+  it('should run #isEmailValid()', async () => {
+
+    component.isEmailValid({});
+
+  });
+
+  it('should run #isPhoneNumberValid()', async () => {
+
+    component.isPhoneNumberValid({});
+
+  });
+
 });

@@ -5,7 +5,6 @@ import { AuthService } from '../../../services/auth.service';
 import { OnInit, OnDestroy, ElementRef } from '@angular/core';
 import Lenis from 'lenis';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ContactComponent } from "../contact/contact.component";
 
 @Component({
@@ -15,13 +14,13 @@ import { ContactComponent } from "../contact/contact.component";
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css', './lenis.css']
 })
-export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LandingComponent implements AfterViewInit, OnDestroy {
 
   constructor(private router: Router, public authService: AuthService) {}
   private lenis: Lenis | undefined;
-  ngOnInit() : void {
-    gsap.registerPlugin(ScrollTrigger);
-  }
+  // ngOnInit() : void {
+  //   gsap.registerPlugin(ScrollTrigger);
+  // }
 
   ngAfterViewInit(): void {
     setTimeout(() => {

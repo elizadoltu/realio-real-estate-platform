@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { PropertyListing } from '../../../models/property.model';
 import Lenis from 'lenis';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ContactComponent } from "../contact/contact.component";
 
 @Component({
@@ -128,7 +127,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    gsap.registerPlugin(ScrollTrigger);
     this.preloadImages(this.testImages)
       .then(() => {
         console.log('Images preloaded successfully');

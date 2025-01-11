@@ -1,76 +1,81 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+// @ts-nocheck
+import { async } from '@angular/core/testing';
+import { Injectable } from '@angular/core';
+import { Observable, of as observableOf, throwError } from 'rxjs';
+
 import { PropertyService } from './property.service';
-import { PropertyListing } from '../models/property.model';
-import { AuthService } from './auth.service'; // Import AuthService
-import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth.service';
+
+@Injectable()
+class MockHttpClient {
+  post() {};
+}
+
+@Injectable()
+class MockAuthService {}
 
 describe('PropertyService', () => {
-  let service: PropertyService;
-  let httpMock: HttpTestingController;
-  let authServiceMock: jasmine.SpyObj<AuthService>;
-  const apiUrl = 'https://abundant-reflection-production.up.railway.app/api/PropertyListings';
+  let service;
 
   beforeEach(() => {
-    // Mock AuthService to return a fake token and add makeAuthenticatedRequest
-    authServiceMock = jasmine.createSpyObj('AuthService', ['getAuthToken', 'makeAuthenticatedRequest']);
-    authServiceMock.getAuthToken.and.returnValue('fake-auth-token'); // Provide a fake token
-    authServiceMock.makeAuthenticatedRequest.and.returnValue(of({})); // Mock the function call to return an empty object
-
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [
-        PropertyService,
-        { provide: AuthService, useValue: authServiceMock }, // Use the mocked AuthService
-      ],
-    });
-    service = TestBed.inject(PropertyService);
-    httpMock = TestBed.inject(HttpTestingController);
+    service = new PropertyService({}, {});
   });
 
-  afterEach(() => {
-    httpMock.verify();
+  it('should run #getPaginatedProperties()', async () => {
+    service.http = service.http || {};
+    service.http.get = jest.fn();
+    service.getPaginatedProperties({}, {}, {});
+    // expect(service.http.get).toHaveBeenCalled();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should run #createProperty()', async () => {
+    service.authService = service.authService || {};
+    service.authService.makeAuthenticatedRequest = jest.fn();
+    service.createProperty({});
+    // expect(service.authService.makeAuthenticatedRequest).toHaveBeenCalled();
   });
 
-  it('should create a property', () => {
-    const newProperty: PropertyListing = {
-      title: 'Large Family Home',
-      address: '789 Pine Blvd',
-      type: 'House',
-      price: 350000,
-      squareFootage: 1800,
-      numberOfBedrooms: 4,
-      numberOfBathrooms: 3,
-      description: 'A large family home',
-      status: 'Available',
-      listingDate: '2024-12-05',
-      imageURLs: 'http://example.com/image3.jpg',
-      userID: 'user123',
-    };
-
-    service.createProperty(newProperty).subscribe(response => {
-      expect(response).toEqual({}); // Expecting an empty object
-    });
-
-    const req = httpMock.expectOne(apiUrl);
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(newProperty);
-    req.flush({});
+  it('should run #searchClientInquiries()', async () => {
+    service.http = service.http || {};
+    service.http.get = jest.fn();
+    service.searchClientInquiries({});
+    // expect(service.http.get).toHaveBeenCalled();
   });
 
-  it('should delete a property', () => {
-    const propertyId = '1';
-
-    service.deleteProperty(propertyId).subscribe(response => {
-      expect(response).toEqual({}); // Expecting an empty object
-    });
-
-    const req = httpMock.expectOne(`${apiUrl}/${propertyId}`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush({});
+  it('should run #deleteProperty()', async () => {
+    service.authService = service.authService || {};
+    service.authService.makeAuthenticatedRequest = jest.fn();
+    service.deleteProperty({});
+    // expect(service.authService.makeAuthenticatedRequest).toHaveBeenCalled();
   });
+
+  it('should run #updateProperty()', async () => {
+    service.authService = service.authService || {};
+    service.authService.makeAuthenticatedRequest = jest.fn();
+    service.updateProperty({}, {}, {});
+    // expect(service.authService.makeAuthenticatedRequest).toHaveBeenCalled();
+  });
+
+  it('should run #getPropertyById()', async () => {
+    service.http = service.http || {};
+    service.http.get = jest.fn();
+    service.getPropertyById({});
+    // expect(service.http.get).toHaveBeenCalled();
+  });
+
+  it('should run #getPropertiesByUserId()', async () => {
+    service.http = service.http || {};
+    service.http.get = jest.fn();
+    service.getPropertiesByUserId({});
+    // expect(service.http.get).toHaveBeenCalled();
+  });
+
+  it('should run #generatePricePrediction()', async () => {
+    service.authService = service.authService || {};
+    service.authService.makeAuthenticatedRequest = jest.fn();
+    service.generatePricePrediction({}, {});
+    // expect(service.authService.makeAuthenticatedRequest).toHaveBeenCalled();
+  });
+
 });

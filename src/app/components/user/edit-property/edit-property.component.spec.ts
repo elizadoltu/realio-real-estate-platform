@@ -1,136 +1,156 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditPropertyComponent } from './edit-property.component';
 import { PropertyService } from '../../../services/property.service';
 import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
 
 class MockPropertyService {
-  getPropertyById = jasmine.createSpy('getPropertyById').and.returnValue(of({ isSuccess: true, data: { title: 'Test Property' } }));
-  deleteProperty = jasmine.createSpy('deleteProperty').and.returnValue(of(null));
-  updateProperty = jasmine.createSpy('updateProperty').and.returnValue(of(null));
+  getPropertyById() {
+    return of({ isSuccess: true, data: { title: 'Test Property' } });
+  }
+  deleteProperty() {
+    return of({});
+  }
+  updateProperty() {
+    return of({});
+  }
 }
 
 class MockRouter {
-  navigate = jasmine.createSpy('navigate');
+  navigate() {}
 }
 
 class MockLocation {
-  back = jasmine.createSpy('back');
+  back = jest.fn();
+  ngOnDestroy = jest.fn();
+
+  getState() {
+    return {};
+  }
+
+  isCurrentPathEqualTo() {
+    return false;
+  }
+
+  path() {
+    return '/';
+  }
 }
 
 class MockActivatedRoute {
-  snapshot = {
-    paramMap: {
-      get: jasmine.createSpy('get').and.returnValue('123')
-    }
-  };
+  snapshot = { paramMap: { get: () => '1' } };
 }
 
 describe('EditPropertyComponent', () => {
-  let component: EditPropertyComponent;
   let fixture: ComponentFixture<EditPropertyComponent>;
-  let propertyService: MockPropertyService;
-  let router: MockRouter;
-  let location: MockLocation;
-  let activatedRoute: MockActivatedRoute;
-
-  beforeEach(async () => {
-    propertyService = new MockPropertyService();
-    router = new MockRouter();
-    location = new MockLocation();
-    activatedRoute = new MockActivatedRoute();
-
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, EditPropertyComponent],
-      providers: [
-        { provide: PropertyService, useValue: propertyService },
-        { provide: Router, useValue: router },
-        { provide: Location, useValue: location },
-        { provide: ActivatedRoute, useValue: activatedRoute },
-        FormBuilder
-      ]
-    }).compileComponents();
-  });
+  let component: EditPropertyComponent;
+  let mockPropertyService: MockPropertyService;
+  let mockRouter: MockRouter;
+  let mockLocation: MockLocation;  // Update type to the full mock
 
   beforeEach(() => {
+    mockPropertyService = new MockPropertyService();
+    mockRouter = new MockRouter();
+    mockLocation = new MockLocation();  // Initialize the mock with the full mock class
+
+    TestBed.configureTestingModule({
+      imports: [FormsModule, ReactiveFormsModule,EditPropertyComponent],
+      providers: [
+        { provide: PropertyService, useValue: mockPropertyService },
+        { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: Location, useValue: mockLocation }  // Use the full mock
+      ]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(EditPropertyComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load property details on init', () => {
+  it('should call loadPropertyDetails on ngOnInit', () => {
+    jest.spyOn(component, 'loadPropertyDetails');
     component.ngOnInit();
-    expect(propertyService.getPropertyById).toHaveBeenCalledWith('123');
-    expect(component.editPropertyForm.value.title).toBe('Test Property');
+    expect(component.loadPropertyDetails).toHaveBeenCalled();
+  });
+
+  it('should load property details', () => {
+    jest.spyOn(mockPropertyService, 'getPropertyById').mockReturnValue(of({
+      isSuccess: true,
+      data: { title: 'Test Property' }
+    }));
+
+    component.loadPropertyDetails();
+    expect(component.property.title).toBe('Test Property');
   });
 
   it('should handle error when loading property details', () => {
-    // Mocking the property service to return an error
-    propertyService.getPropertyById.and.returnValue(throwError('Error loading property'));
-    
-    // Call ngOnInit() where the service call happens
-    component.ngOnInit();
-    
-    // Verify that the form's title is cleared in case of error
-    fixture.detectChanges(); // Trigger change detection to update the form
-    expect(component.editPropertyForm.value.title).toBe(''); // Expect the title to be an empty string
-  });
-  
-
-  // it('should delete property when onDeleteProperty is called', () => {
-  //   component.onDeleteProperty('123');
-  //   expect(propertyService.deleteProperty).toHaveBeenCalledWith('123');
-  //   expect(location.back).toHaveBeenCalled();
-  // });
-
-  it('should show an error when deleting property fails', () => {
-    // Create a spy on console.error
-    spyOn(console, 'error');
-    
-    propertyService.deleteProperty.and.returnValue(throwError('Error deleting property'));
-    component.onDeleteProperty('123');
-    
-    // Check that console.error was called with the expected error
-    expect(console.error).toHaveBeenCalledWith('Error deleting property:', 'Error deleting property');
+    jest.spyOn(mockPropertyService, 'getPropertyById').mockReturnValue(throwError('Error loading property'));
+    component.loadPropertyDetails();
+    expect(component.property).toBeUndefined();
   });
 
-  it('should save property when onSaveProperty is called', () => {
-    component.editPropertyForm.setValue({
-      title: 'Updated Property',
-      address: '',
-      type: '',
-      price: '',
-      numberOfBedrooms: '',
-      numberOfBathrooms: '',
-      squareFootage: '',
-      description: '',
+  it('should delete property', () => {
+    jest.spyOn(mockPropertyService, 'deleteProperty').mockReturnValue(of({}));
+    jest.spyOn(component, 'goBack');
+    
+    component.onDeleteProperty('1');
+    
+    expect(mockPropertyService.deleteProperty).toHaveBeenCalledWith('1');
+    expect(component.goBack).toHaveBeenCalled();
+  });
+
+  it('should not delete property when no ID is provided', () => {
+    const consoleSpy = jest.spyOn(console, 'error');
+    component.onDeleteProperty(null);
+    expect(consoleSpy).toHaveBeenCalledWith('Property ID is null!');
+  });
+
+  it('should save property when form is valid', () => {
+    component.editPropertyForm.patchValue({
+      title: 'New Title',
+      address: 'New Address',
+      type: 'Apartment',
+      price: 100000,
+      numberOfBedrooms: 2,
+      numberOfBathrooms: 1,
+      squareFootage: 1200,
+      description: 'Nice apartment'
     });
-    component.onSaveProperty('123');
-    expect(propertyService.updateProperty).toHaveBeenCalledWith('123', component.editPropertyForm.value, undefined);
-    expect(router.navigate).toHaveBeenCalledWith(['/account']);
+
+    jest.spyOn(mockPropertyService, 'updateProperty').mockReturnValue(of({}));
+    jest.spyOn(mockRouter, 'navigate');
+    
+    component.onSaveProperty('1');
+    
+    expect(mockPropertyService.updateProperty).toHaveBeenCalledWith(
+      '1',
+      expect.objectContaining({ title: 'New Title' }),
+      component.property.userID
+    );
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/account']);
   });
 
-  it('should show an error when saving property fails', () => {
-    // Create a spy on console.error
-    spyOn(console, 'error');
+  it('should not save property when form is invalid', () => {
+    component.editPropertyForm.setErrors({ invalid: true });
+    const consoleSpy = jest.spyOn(console, 'error');
     
-    propertyService.updateProperty.and.returnValue(throwError('Error updating property'));
-    component.onSaveProperty('123');
-    
-    // Check that console.error was called with the expected error
-    expect(console.error).toHaveBeenCalledWith('Error updating property:', 'Error updating property');
+    component.onSaveProperty('1');
+    expect(consoleSpy).toHaveBeenCalledWith('Property ID is null!');
   });
 
-  it('should go back to the previous location when goBack is called', () => {
+  it('should go back to previous location', () => {
     component.goBack();
-    expect(location.back).toHaveBeenCalled();
+    expect(mockLocation.back).toHaveBeenCalled();
   });
 });
