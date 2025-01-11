@@ -78,7 +78,10 @@ export class PropertyService {
     numberOfBedrooms: number
   ): Observable<any> {
     const endpoint = `${this.predictionApiUrl}/predict`;
-    const body = { squareFootage, numberOfBedrooms };
+    const body = { 
+      label: 0, 
+      features: [numberOfBedrooms, squareFootage] 
+    };
   
     return this.authService.makeAuthenticatedRequest(endpoint, 'POST', body);
   }
