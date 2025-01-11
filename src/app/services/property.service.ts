@@ -51,13 +51,11 @@ export class PropertyService {
     const endpoint = `${this.apiUrl}/${id}`;
     const method = 'PUT';
     const listingDate = new Date().toISOString();
-    const imageURLs = 'https://image.png';
     const status = 'available'
     const updatedProperty = {
       ...property, 
       propertyId: id, 
       listingDate,
-      imageURLs,
       status,
       userID, 
   };

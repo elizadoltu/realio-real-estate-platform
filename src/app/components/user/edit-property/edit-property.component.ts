@@ -48,23 +48,25 @@ export class EditPropertyComponent implements OnInit {
 
   loadPropertyDetailsWithImages(): void {
     if (this.propertyId) {
-      this.propertyService.getPropertyById(this.propertyId).subscribe(
-        (response) => {
-          console.log('Property details response:', response);
-          if (response.isSuccess && response.data) {
-            this.property = response.data;
-            this.populateForm(this.property);
-            this.uploadedPhotos = this.extractAndDecodeImages(this.property.imageURLs || '[]');
-          } else {
-            console.error('Failed to load property details:', response.errorMessage || 'Unknown error');
-          }
-        },
-        (error) => {
-          console.error('Error loading property details:', error);
-        }
-      );
+        this.propertyService.getPropertyById(this.propertyId).subscribe(
+            (response) => {
+                console.log('Property details response:', response);
+                // Elimină verificarea isSuccess/data dacă răspunsul este direct obiectul dorit
+                if (response) {
+                    this.property = response;
+                    this.populateForm(this.property);
+                    this.uploadedPhotos = this.extractAndDecodeImages(this.property.imageURLs || '[]');
+                } else {
+                    console.error('Failed to load property details: Invalid API response');
+                }
+            },
+            (error) => {
+                console.error('Error loading property details:', error);
+            }
+        );
     }
-  }
+}
+
 
   populateForm(property: any): void {
     this.editPropertyForm.patchValue({

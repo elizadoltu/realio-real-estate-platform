@@ -95,11 +95,52 @@ export class PostPropertyComponent implements OnInit {
     if (input.files) {
       Array.from(input.files).forEach((file) => {
         const reader = new FileReader();
+  
         reader.onload = (e: any) => {
-          const base64String = e.target.result.split(',')[1]; // Codificare în Base64
-          this.uploadedPhotos.push(e.target.result); // Previzualizare
-          this.base64Images.push(base64String); // Pregătire pentru backend
+          const img = new Image();
+          img.onload = () => {
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set the desired resolution (e.g., 800x600)
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 600;
+            let width = img.width;
+            let height = img.height;
+  
+            // Maintain the aspect ratio
+            if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+              if (width > height) {
+                height = (MAX_HEIGHT / width) * height;
+                width = MAX_WIDTH;
+              } else {
+                width = (MAX_WIDTH / height) * width;
+                height = MAX_HEIGHT;
+              }
+            }
+  
+            canvas.width = width;
+            canvas.height = height;
+  
+            // Draw the resized image onto the canvas
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+            }
+  
+            // Convert the canvas to a Base64 string
+            const resizedBase64 = canvas.toDataURL('image/jpeg', 0.8); // Adjust quality (0.8 = 80%)
+            
+            // Add the resized image for preview and backend processing
+            this.uploadedPhotos.push(resizedBase64); // Preview
+            const base64String = resizedBase64.split(',')[1];
+            this.base64Images.push(base64String); // Prepare for backend
+          };
+  
+          // Set the image source to the uploaded file
+          img.src = e.target.result;
         };
+  
         reader.readAsDataURL(file);
       });
     }
