@@ -91,6 +91,22 @@ export class AccountComponent implements OnInit {
     );
   }
 
+  onDelete(): void {
+    this.userService.deleteUser(this.userDetails.userId).subscribe(
+        (response) => {
+            console.log('User deleted successfully:', response);
+            alert('Profile deleted successfully!');
+            localStorage.removeItem('authToken'); // Remove only the authToken
+            this.router.navigate(['/']);
+        },
+        (error) => {
+            console.error('Error deleting user:', error);
+            alert('Failed to delete profile. Please ensure all fields are correct.');
+        }
+    );
+}
+  
+
   onLogout(): void {
     this.userService.logout();
     this.router.navigate(['/']);

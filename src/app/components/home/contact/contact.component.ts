@@ -15,7 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 
 export class ContactComponent {
 
-  constructor(private router: Router, public authService: AuthService) {}
+  constructor(private readonly router: Router, public authService: AuthService) {}
 
   navigateToAccount() {
     this.router.navigate(['/account']);

@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +29,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     squareFootage: 0,
   };
   isFilterOpen: boolean = false; 
-  private lenis: Lenis | undefined;
+  private readonly lenis: Lenis | undefined;
 
   testImages = [
     'assets/testimage-1.jpg',
@@ -46,7 +44,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
   randomImage: string = '';
   isLoading: boolean = true; 
 
-  constructor(private router: Router, private propertyService: PropertyService) {}
+  constructor(private readonly router: Router, private readonly propertyService: PropertyService) {}
 
   toggleFilters() {
     this.isFilterOpen = !this.isFilterOpen;

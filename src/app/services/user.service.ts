@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { jwtDecode } from "jwt-decode";
 import { Observable } from "rxjs";
+import { AuthService } from "./auth.service";
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,7 @@ import { Observable } from "rxjs";
 export class UserService {
     private apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Users';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private authService: AuthService) {}
 
     getUserDetailsById(id: string): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/${id}`)
@@ -44,6 +45,11 @@ export class UserService {
         }
     }
     
+    deleteUser(id: string): Observable<any> {
+        const endpoint = `${this.apiUrl}/${id}`;
+        const method = 'DELETE';
+        return this.authService.makeAuthenticatedRequest(endpoint, method, id);
+    }
 
     logout(): void {
         localStorage.removeItem('authToken');

@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
+import { Component , ElementRef } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { OnInit, OnDestroy, ElementRef, AfterViewInit } from '@angular/core';
+
 import Lenis from 'lenis';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +12,9 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 })
 export class AppComponent {
   title = 'real-estate-management-frontend';
-  private lenis: Lenis | undefined;
+  private readonly lenis: Lenis | undefined;
 
-  constructor(private router: Router, private elementRef: ElementRef) {}
+  constructor(private readonly router: Router, private readonly elementRef: ElementRef) {}
 
   // ngOnInit() : void {
   //   gsap.registerPlugin(ScrollTrigger);
@@ -31,17 +29,9 @@ export class AppComponent {
   //       orientation: 'vertical',
   //     });
   
-  //     this.lenis.on('scroll', () => {
-  //       ScrollTrigger.update(); 
-  //     });
   
-  //     const raf = (time: number) => {
-  //       this.lenis?.raf(time);
-  //       requestAnimationFrame(raf);
-  //     };
-  //     requestAnimationFrame(raf);
-  //   }
-  // }
+  
+  
   
 
   // ngOnDestroy(): void {

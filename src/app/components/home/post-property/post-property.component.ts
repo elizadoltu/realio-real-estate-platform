@@ -19,11 +19,11 @@ export class PostPropertyComponent implements OnInit{
   predictedPrice: number | null = null; 
   isLoadingPrediction: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, 
-    private propertyService: PropertyService,
-    private router: Router,
-    private location: Location,
-    private authService: AuthService) {
+  constructor(private readonly formBuilder: FormBuilder, 
+    private readonly propertyService: PropertyService,
+    private readonly router: Router,
+    private readonly location: Location,
+    private readonly authService: AuthService) {
       this.propertyForm = this.formBuilder.group({title: ['', Validators.required],
       address: ['', Validators.required],
       type: ['', Validators.required],

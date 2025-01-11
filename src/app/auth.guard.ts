@@ -6,7 +6,7 @@ import { PlatformDetectorService } from '../app/services/platform-detector.servi
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private platformDetectorService: PlatformDetectorService) {}
+  constructor(private readonly router: Router, private readonly platformDetectorService: PlatformDetectorService) {}
 
   canActivate(): boolean {
     if (this.platformDetectorService.isBrowser()) {
