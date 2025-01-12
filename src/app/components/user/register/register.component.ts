@@ -18,7 +18,7 @@ export class RegisterComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
   ngOnInit(): void {
     this.router.events.subscribe((event) => {

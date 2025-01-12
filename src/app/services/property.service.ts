@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PropertyListing } from '../models/property.model';
-import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 export interface PropertyResponse {
@@ -16,9 +15,9 @@ export interface PropertyResponse {
 })
 export class PropertyService {
 
-  private apiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListings";
-  private predictionApiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListingPricePrediction"
-  constructor( private http: HttpClient, private authService: AuthService ) { }
+  private readonly apiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListings";
+  private readonly predictionApiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListingPricePrediction"
+  constructor( private readonly http: HttpClient, private readonly authService: AuthService ) { }
 
   // public getProperties() : Observable<PropertyListing[]> {
   //   return this.http.get<PropertyListing[]>(this.apiUrl);

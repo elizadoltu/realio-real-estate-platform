@@ -9,9 +9,9 @@ import { AuthService } from "./auth.service";
 })
 
 export class UserService {
-    private apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Users';
+    private readonly apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Users';
 
-    constructor(private http: HttpClient, private authService: AuthService) {}
+    constructor(private readonly http: HttpClient, private readonly authService: AuthService) {}
 
     getUserDetailsById(id: string): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/${id}`)

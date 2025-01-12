@@ -129,10 +129,4 @@ describe('LoginComponent', () => {
     // expect(component.router.navigate).toHaveBeenCalled();
   });
 
-  it('should run #scrollToAboutSection()', async () => {
-
-    component.scrollToAboutSection({});
-
-  });
-
 });

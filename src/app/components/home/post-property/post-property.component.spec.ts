@@ -69,6 +69,16 @@ describe('PostPropertyComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(PostPropertyComponent);
     component = fixture.debugElement.componentInstance;
+    
+    // Mock the propertyForm setup after component is created
+    component.propertyForm = {
+      invalid: false,  // Mocking the invalid property
+      controls: {},
+      get: jest.fn().mockReturnValue({ errors: {}, valid: true }),
+      value: {
+        imageUrls: {}
+      }
+    };
   });
 
   afterEach(() => {
@@ -119,29 +129,56 @@ describe('PostPropertyComponent', () => {
     // expect(component.propertyService.generatePricePrediction).toHaveBeenCalled();
   });
 
+  it('should run #onFileSelected()', async () => {
+    component.uploadedPhotos = component.uploadedPhotos || {};
+    component.uploadedPhotos.push = jest.fn();
+    component.base64Images = component.base64Images || {};
+    component.base64Images.push = jest.fn();
+    component.onFileSelected({
+      target: {
+        files: {}
+      }
+    });
+    // expect(component.uploadedPhotos.push).toHaveBeenCalled();
+    // expect(component.base64Images.push).toHaveBeenCalled();
+  });
+
+  it('should run #onDeletePhoto()', async () => {
+    component.uploadedPhotos = component.uploadedPhotos || {};
+    component.uploadedPhotos.indexOf = jest.fn();
+    component.uploadedPhotos.splice = jest.fn();
+    component.base64Images = component.base64Images || {};
+    component.base64Images.splice = jest.fn();
+    component.onDeletePhoto({});
+    // expect(component.uploadedPhotos.indexOf).toHaveBeenCalled();
+    // expect(component.uploadedPhotos.splice).toHaveBeenCalled();
+    // expect(component.base64Images.splice).toHaveBeenCalled();
+  });
+
   it('should run #onSubmit()', async () => {
     component.propertyForm = component.propertyForm || {};
     component.propertyForm.invalid = 'invalid';
+    component.propertyForm.controls = 'controls';
+    component.propertyForm.get = jest.fn().mockReturnValue({
+      errors: {},
+      valid: {}
+    });
     component.propertyForm.value = {
-      title: {},
-      address: {},
-      listingDate: {}
+      imageUrls: {}
     };
-    component.capitalizeFirstLetter = jest.fn();
     component.propertyService = component.propertyService || {};
     component.propertyService.createProperty = jest.fn().mockReturnValue(observableOf({}));
     component.router = component.router || {};
     component.router.navigate = jest.fn();
     component.onSubmit();
-    // expect(component.capitalizeFirstLetter).toHaveBeenCalled();
+    // expect(component.propertyForm.get).toHaveBeenCalled();
     // expect(component.propertyService.createProperty).toHaveBeenCalled();
     // expect(component.router.navigate).toHaveBeenCalled();
   });
 
   it('should run #capitalizeFirstLetter()', async () => {
-
-    component.capitalizeFirstLetter({});
-
+    const result = component.capitalizeFirstLetter("test string");
+    expect(result).toBe("Test String");
   });
 
 });

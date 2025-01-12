@@ -26,9 +26,9 @@ export class AccountComponent implements OnInit {
   isLoadingProperties: boolean = false;
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private propertyService: PropertyService,
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly propertyService: PropertyService,
     public router: Router
   ) {}
 

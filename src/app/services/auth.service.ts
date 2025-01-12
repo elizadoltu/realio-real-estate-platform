@@ -7,10 +7,10 @@ import { throwError, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl =
+  private readonly apiUrl =
     'https://abundant-reflection-production.up.railway.app/api/Auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   login(data: { email: string; password: string }): Observable<any> {
     return this.http

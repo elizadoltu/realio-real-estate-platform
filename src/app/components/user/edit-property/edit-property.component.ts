@@ -19,10 +19,10 @@ export class EditPropertyComponent implements OnInit {
   base64Images: string[] = []; // Imaginile codificate pentru backend
 
   constructor(
-    private fb: FormBuilder,
-    private propertyService: PropertyService,
-    private route: ActivatedRoute,
-    private location: Location
+    private readonly fb: FormBuilder,
+    private readonly propertyService: PropertyService,
+    private readonly route: ActivatedRoute,
+    private readonly location: Location
   ) {
     this.editPropertyForm = this.fb.group({
       title: ['', Validators.required],

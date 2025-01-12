@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { PropertyListing } from '../../../models/property.model';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule, Location, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { ContactComponent } from "../contact/contact.component";
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
 import { HttpClient } from '@angular/common/http';
 
@@ -23,12 +22,12 @@ export class SinglePropertyComponent implements OnInit {
   userId: string = '';
   userDetails: any;
   constructor(
-    private route: ActivatedRoute,
-    private propertyService: PropertyService,
-    private userService: UserService,
-    private location: Location,
-    private datePipe: DatePipe,
-    private http: HttpClient
+    private readonly route: ActivatedRoute,
+    private readonly propertyService: PropertyService,
+    private readonly userService: UserService,
+    private readonly location: Location,
+    private readonly datePipe: DatePipe,
+    private readonly http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -121,36 +120,4 @@ export class SinglePropertyComponent implements OnInit {
     });
   }
   
-
-  // fetchPropertyDetails(id: string): void {
-  //   this.propertyService.getPropertyById(id).subscribe(
-  //     (response) => {
-  //       if (response) {
-  //         console.log(response);
-  //         this.property = response;
-  //         this.userID = this.property.userID;
-  //       } else {
-  //         this.property = null;
-  //       }
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching property', error);
-  //       this.property = null;
-  //     }
-  //   );
-  // }
-
-  // fetchUserDetails(): void {
-  //   if (this.userID){
-  //     this.userService.getUserDetailsById(this.userID).subscribe(
-  //       (response) => {
-  //         this.userDetails = response;
-  //         console.log('User details:', response);
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching user details:', error);
-  //       }
-  //     )
-  //   }
-  // }
 }

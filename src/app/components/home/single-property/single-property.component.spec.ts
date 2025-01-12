@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Observable, of as observableOf, throwError } from 'rxjs';
 
-import { Component } from '@angular/core';
+import { Component,OnDestroy } from '@angular/core';
 import { SinglePropertyComponent } from './single-property.component';
 import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
@@ -23,6 +23,12 @@ class MockUserService {}
 @Injectable()
 class MockHttpClient {
   post() {};
+}
+
+class MockDatePipe implements PipeTransform {
+  transform(value: any): any {
+    return value; // or mock the desired transformation here
+  }
 }
 
 @Directive({ selector: '[myCustom]' })
@@ -81,11 +87,6 @@ describe('SinglePropertyComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(SinglePropertyComponent);
     component = fixture.debugElement.componentInstance;
-  });
-
-  afterEach(() => {
-    component.ngOnDestroy = function() {};
-    fixture.destroy();
   });
 
   it('should run #constructor()', async () => {
