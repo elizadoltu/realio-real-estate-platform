@@ -86,7 +86,7 @@ The application will run locally on ``` http://localhost:4200/ ```
 
 Run unit tests ising Angular's testing suite:
 ```bash
-ng test --no-watch --code-coverage
+npm run test:coverage
 ```
 
 * **`Code Coverage`**: Achieved 80% coverage for all frontend components
