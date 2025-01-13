@@ -15,7 +15,7 @@
   <!-- Main Content -->
   <div class="flex-1 flex bg-[#1A1A1A]">
     <!-- Sidebar -->
-    <div class="w-1/4 border-r border-primary-white flex flex-col justify-between pl-12 bg-[#1A1A1A]">
+    <div class="w-1/4 border-r border-primary-white flex flex-col justify-between desktop:pl-12 tablet:pl-12 mobile:pl-5 bg-[#1A1A1A]">
       <div class="mt-10">
         <!-- Profile Section -->
         <span
@@ -25,7 +25,7 @@
           (click)="activeSection = 'profile'"
         >
           <img src="assets/profile.png" alt="Profile" class="w-6 h-6" />
-          <span>Profile</span>
+          <span class="mobile:hidden tablet:block desktop:block">Profile</span>
         </span>
 
         <div class="border-t border-primary-white mx-6 my-6"></div>
@@ -37,68 +37,68 @@
           [class.text-white]="activeSection === 'properties'"
           (click)="showProperties()"
         >
-          <img src="assets/profile-properties.png" alt="Properties" class="w-6 h-6" />
-          <span>Properties</span>
+          <img src="assets/profile-properties.png" alt="Properties" class="object-cover w-6 h-6" />
+          <span class="mobile:hidden tablet:block desktop:block">Properties</span>
         </span>
       </div>
 
       <!-- Logout Button -->
       <div class="border border-t-primary-white p-4 bg-primary-white text-primary-black font-general-semibold" (click)="onLogout()">
-        <span class="flex items-center px-4 space-x-4 hover:text-gray-600 cursor-pointer">
-          <img src="assets/logout-png.png" alt="Logout" class="w-6 h-6" />
-          <span>Logout</span>
+        <span class="flex items-center desktop:px-4 space-x-4 hover:text-gray-600 cursor-pointer">
+          <img src="assets/logout-png.png" alt="Logout" class="w-6 h-6 object-cover" />
+          <span class="mobile:hidden tablet:block desktop:block">Logout</span>
         </span>
       </div>
     </div>
 
     <!-- Content Area -->
-    <div class="flex-1 flex flex-col items-center p-10 bg-[#1A1A1A]">
+    <div class="flex-1 flex flex-col items-center desktop:p-10 tablet:p-10 mobile:py-10 mobile:px-5 bg-[#1A1A1A]">
       <!-- Profile Section -->
-      <div *ngIf="activeSection === 'profile'" class="w-full max-w-3xl space-y-6 pr-12">
-        <h2 class="text-xl font-general-semibold text-white mb-4">Your Profile</h2>
+      <div *ngIf="activeSection === 'profile'" class="w-full desktop:max-w-3xl space-y-6 desktop:pr-12">
+        <h2 class="desktop:text-xl mobile:text-sm font-general-semibold text-white mb-4">Your Profile</h2>
         <!-- Profile Details -->
-        <div class="flex justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold" for="name">Full Name</label>
-          <div class="flex items-center space-x-4 w-1/2 justify-end">
+        <div class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2">
+          <label class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm" for="name">Full Name</label>
+          <div class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end">
             <input
               id="name"
               type="text"
               [(ngModel)]="userDetails.name"
-              class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full text-right"
+              class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full desktop:text-xl mobile:text-sm desktop:text-right tablet:text-right"
             />
           </div>
         </div>
         <!-- Email -->
-        <div class="flex justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold" for="email">Email</label>
-          <div class="flex items-center space-x-4 w-1/2 justify-end">
+        <div class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2">
+          <label class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm" for="email">Email</label>
+          <div class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end">
             <input
               id="email"
               type="email"
               [(ngModel)]="userDetails.email"
-              class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full text-right"
+              class="bg-transparent border-b border-gray-600 desktop:text-xl mobile:text-sm focus:outline-none text-primary-white w-full desktop:text-right tablet:text-right"
             />
           </div>
         </div>
         <!-- Phone -->
-        <div class="flex justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold" for="phone">Phone Number</label>
-          <div class="flex items-center space-x-4 w-1/2 justify-end">
+        <div class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2">
+          <label class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm" for="phone">Phone Number</label>
+          <div class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end">
             <input
               id="phone"
               type="text"
               [(ngModel)]="userDetails.phoneNumber"
-              class="bg-transparent border-b border-gray-600 focus:outline-none text-primary-white w-full text-right"
+              class="bg-transparent border-b border-gray-600 desktop:text-xl mobile:text-sm focus:outline-none text-primary-white w-full desktop:text-right tablet:text-right"
             />
           </div>
         </div>
         <div class="mt-8">
-          <button (click)="onSave()" class="bg-primary-white text-primary-black font-semibold px-6 py-2 rounded-lg hover:bg-gray-300">
+          <button (click)="onSave()" class="bg-primary-white text-primary-black font-semibold desktop:text-xl mobile:text-sm px-6 py-2 rounded-lg hover:bg-gray-300">
             Save
           </button>
         </div>
         <div class="mt-8">
-          <button (click)="onDelete()" class="bg-red-600 text-primary-white font-semibold px-6 py-2 rounded-lg hover:bg-red-900">
+          <button (click)="onDelete()" class="bg-red-600 text-primary-white font-semibold px-6 py-2 desktop:text-xl mobile:text-sm rounded-lg hover:bg-red-900">
             Delete
           </button>
         </div>

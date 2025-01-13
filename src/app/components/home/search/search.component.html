@@ -25,7 +25,7 @@
 <div
   class="flex justify-between font-general-medium text-lg ml-4 mr-4 border border-b-slate-500 border-t-0 border-r-0 border-l-0 p-2 mobile:mt-20 desktop:mt-10"
 >
-  <div class="flex items-center space-x-6">
+  <div class="flex mobile:flex-col desktop:flex-row tablet:flex-row desktop:items-center tablet:items-center mobile:items-start desktop:space-x-6 tablet:space-x-6 mobile:space-y-2">
     <div class="flex items-center space-x-2">
       <p>Filter</p>
       <img
@@ -60,10 +60,6 @@
     </button>
   </div>
 
-  <div class="flex items-center">
-    <img src="assets/grid-png.png" alt="grid icon" class="w-5 h-5" />
-    <img src="assets/list-png.png" alt="list icon" class="ml-2 w-5 h-5" />
-  </div>
 </div>
 
 <div
@@ -163,7 +159,7 @@
 </div>
 
 <div
-  class="grid desktop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-3 gap-3 mt-4 ml-4 mr-4"
+  class="grid desktop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-3 gap-2 mt-4 ml-4 mr-4"
 >
 <ng-container *ngFor="let property of properties">
   <div
@@ -173,7 +169,7 @@
   >
     <img [src]="property.imageURLs" alt="property" />
     <div
-      class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular text-lg"
+      class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular desktop:text-lg tablet:text-base mobile:text-sm"
     >
       <div>
         <h2 class="font-switzer-bold text-2xl">
@@ -219,7 +215,7 @@
   </ng-template>
 </div>
 
-<div class="pagination-controls flex justify-center items-center mt-4 font-general-semibold text-xl p-10 mb-20">
+<div class="pagination-controls flex justify-center items-center mt-4 font-general-semibold desktop:text-xl tablet:text-lg mobile:text-base p-10 mb-20">
   <button
     (click)="goToPage(currentPage - 1)"
     [disabled]="currentPage === 1"

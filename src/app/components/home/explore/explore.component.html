@@ -36,10 +36,6 @@
       />
     </div>
   </div>
-  <div class="flex">
-    <img src="assets/grid-png.png" alt="grid icon" />
-    <img src="assets/list-png.png" alt="list icon" class="ml-4" />
-  </div>
 </div>
 
 <div
@@ -149,7 +145,7 @@
   >
     <img [src]="property.imageURLs" alt="property image" />
     <div
-      class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular text-lg"
+      class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular desktop:text-lg tablet:text-base mobile:text-sm"
     >
       <div>
         <h2 class="font-switzer-bold text-2xl">
@@ -195,7 +191,7 @@
   </ng-template>
 </div>
 
-<div class="pagination-controls flex justify-center items-center mt-4 font-general-semibold text-xl p-10 mb-20">
+<div class="pagination-controls flex justify-center items-center mt-4 font-general-semibold desktop:text-xl tablet:text-lg mobile:text-base p-10 mb-20">
   <button
     (click)="goToPage(currentPage - 1)"
     [disabled]="currentPage === 1"
