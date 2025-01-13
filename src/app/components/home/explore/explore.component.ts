@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,12 +11,12 @@ import { ContactComponent } from "../contact/contact.component";
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ContactComponent],
+  imports: [CommonModule, FormsModule, ContactComponent],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.css',
 })
 export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
-  properties: PropertyListing[] = [];
+  properties: any[] = [];
   totalPages: number = 0;
   currentPage: number = 1;
   pageSize: number = 16;
@@ -28,31 +28,21 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     status: '',
     squareFootage: 0,
   };
-  isFilterOpen: boolean = false; 
+  isFilterOpen: boolean = false;
   private readonly lenis: Lenis | undefined;
 
-  testImages = [
-    'assets/testimage-1.jpg',
-    'assets/testimage-2.jpg',
-    'assets/testimage-3.jpg',
-    'assets/testimage-4.jpg',
-    'assets/testimage-5.jpg',
-    'assets/testimage-6.jpg',
-    'assets/testimage-7.jpg',
-  ];
-
-  randomImage: string = '';
-  isLoading: boolean = true; 
-
-  constructor(private readonly router: Router, private readonly propertyService: PropertyService) {}
+  constructor(
+    private readonly router: Router,
+    private readonly propertyService: PropertyService
+  ) {}
 
   toggleFilters() {
     this.isFilterOpen = !this.isFilterOpen;
   }
 
   applyFilters() {
-    this.currentPage = 1; 
-    this.fetchProperties();
+    this.currentPage = 1;
+    this.fetchPropertiesWithImages();
   }
 
   navigateToSearch() {
@@ -71,37 +61,8 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  getRandomImage(): string {
-    return this.testImages[Math.floor(Math.random() * this.testImages.length)];
-  }
-
-  preloadImages(images: string[]): Promise<void[]> {
-    return Promise.all(
-      images.map((image) => {
-        return new Promise<void>((resolve, reject) => {
-          const img = new Image();
-          img.src = image;
-          img.onload = () => resolve();
-          img.onerror = (err) => reject(err);
-        });
-      })
-    );
-  }
-
   ngOnInit(): void {
-    this.preloadImages(this.testImages)
-      .then(() => {
-        console.log('Images preloaded successfully');
-        this.randomImage = this.getRandomImage();
-        this.fetchProperties();
-      })
-      .catch((error) => {
-        console.error('Error preloading images:', error);
-        this.fetchProperties(); 
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+    this.fetchPropertiesWithImages();
   }
 
   ngAfterViewInit(): void {
@@ -114,7 +75,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         duration: 1.5,
       });
-  
+
       gsap.to('.headline', {
         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
         ease: 'power4.inOut',
@@ -131,35 +92,48 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     gsap.ticker.remove((time) => this.lenis?.raf(time * 1000));
   }
 
-  fetchProperties() {
-    this.propertyService
-      .getPaginatedProperties(this.currentPage, this.pageSize, this.filters)
-      .subscribe(
-        (response) => {
-          console.log('API Response:', response);
-          if (response.isSuccess) {
-            this.properties = response.data.data.map((property: PropertyListing) => {
-              console.log('Property ID:', property.propertyId);  
-              return {
-                ...property,
-                imageURLs: this.getRandomImage(),
-              };
-            });
-            this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
-          } else {
-            console.error('Error fetching properties:', response.errorMessage);
-          }
-        },
-        (error) => {
-          console.error('Error fetching properties:', error);
+  fetchPropertiesWithImages() {
+    this.propertyService.getPaginatedProperties(this.currentPage, this.pageSize, this.filters).subscribe(
+      (response: any) => {
+        console.log('API Response:', response);
+        if (response.isSuccess) {
+          this.properties = response.data.data.map((property: any) => {
+            console.log('Property:', property);
+            const firstImage = this.extractFirstImage(property.imageURLs);
+            return {
+              ...property,
+              firstImage, // Afișează doar prima imagine
+            };
+          });
+          this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
+        } else {
+          console.error('Error fetching properties:', response.errorMessage);
         }
-      );
+      },
+      (error: any) => {
+        console.error('Error fetching properties:', error);
+      }
+    );
   }
   
+  extractFirstImage(imageUrls: string): string {
+    if (!imageUrls) {
+      return '';
+    }
+  
+    try {
+      const imagesArray = JSON.parse(imageUrls); // Parsează șirul JSON într-un array
+      return imagesArray.length > 0 ? `data:image/jpeg;base64,${imagesArray[0].trim()}` : '';
+    } catch (error: any) {
+      console.error('Error parsing image URLs:', error);
+      return '';
+    }
+  }  
+
 
   goToPage(page: number) {
     this.currentPage = page;
-    this.fetchProperties();
+    this.fetchPropertiesWithImages();
   }
 
   clearFilters() {
@@ -173,7 +147,7 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this.currentPage = 1;
-    this.fetchProperties();
+    this.fetchPropertiesWithImages();
   }
 
   navigateToPropertyDetail(propertyId: string | undefined) {
@@ -183,5 +157,4 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error('Property ID is undefined');
     }
   }
-  
 }

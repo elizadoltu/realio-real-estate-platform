@@ -12,4 +12,5 @@ export interface PropertyListing {
     listingDate: string;
     imageURLs: string;
     userID?: string;
+    firstImage?: string;
 }

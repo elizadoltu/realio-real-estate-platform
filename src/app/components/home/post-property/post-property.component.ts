@@ -104,8 +104,8 @@ export class PostPropertyComponent implements OnInit {
             const ctx = canvas.getContext('2d');
             
             // Set the desired resolution (e.g., 800x600)
-            const MAX_WIDTH = 800;
-            const MAX_HEIGHT = 600;
+            const MAX_WIDTH = 1200;
+            const MAX_HEIGHT = 1000;
             let width = img.width;
             let height = img.height;
   
@@ -129,9 +129,8 @@ export class PostPropertyComponent implements OnInit {
             }
   
             // Convert the canvas to a Base64 string
-            const resizedBase64 = canvas.toDataURL('image/jpeg', 0.8); // Adjust quality (0.8 = 80%)
+            const resizedBase64 = canvas.toDataURL('image/jpeg', 1); // Adjust quality (0.8 = 80%)
             
-            // Add the resized image for preview and backend processing
             this.uploadedPhotos.push(resizedBase64); // Preview
             const base64String = resizedBase64.split(',')[1];
             this.base64Images.push(base64String); // Prepare for backend

@@ -12,8 +12,8 @@ import { ContactComponent } from "../contact/contact.component";
   selector: 'app-search',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, ContactComponent],
-  templateUrl: './search.component.html', // asigură-te că ai fișierul search.component.html
-  styleUrls: ['./search.component.css'],  // asigură-te că ai fișierul search.component.css
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   properties: PropertyListing[] = [];
@@ -28,22 +28,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     status: '',
     squareFootage: 0,
   };
-  isFilterOpen: boolean = false; 
+  isFilterOpen: boolean = false;
   searchTerm: string = '';
   private readonly lenis: Lenis | undefined;
 
-  testImages = [
-    'assets/testimage-1.jpg',
-    'assets/testimage-2.jpg',
-    'assets/testimage-3.jpg',
-    'assets/testimage-4.jpg',
-    'assets/testimage-5.jpg',
-    'assets/testimage-6.jpg',
-    'assets/testimage-7.jpg',
-  ];
-
-  randomImage: string = '';
-  isLoading: boolean = true; 
+  isLoading: boolean = true;
 
   constructor(private readonly router: Router, private readonly propertyService: PropertyService) {}
 
@@ -52,44 +41,38 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   applyFilters() {
-    this.currentPage = 1; 
+    this.currentPage = 1;
     this.fetchProperties();
   }
 
   clearSearch(): void {
-    this.searchTerm = ''; 
-    this.fetchProperties(); 
+    this.searchTerm = '';
+    this.fetchProperties();
   }
 
   performSearch(): void {
-    const trimmedSearchTerm = this.searchTerm.trim(); 
+    const trimmedSearchTerm = this.searchTerm.trim();
     if (trimmedSearchTerm) {
       this.propertyService.searchClientInquiries(trimmedSearchTerm).subscribe(
-        (response) => {
-          console.log('Search API Response:', response); 
+        (response: any) => {
           if (response.isSuccess) {
-            this.properties = response.data.map((property: PropertyListing) => {
-              console.log('Property ID:', property.propertyId); 
-              return {
-                ...property,
-                imageURLs: this.getRandomImage(), 
-              };
-            });
+            this.properties = response.data.map((property: any) => ({
+              ...property,
+              firstImage: this.extractFirstImage(property.imageURLs),
+            }));
           } else {
             console.error('Error fetching data:', response.errorMessage);
-            this.properties = []; 
+            this.properties = [];
           }
         },
-        (error) => {
+        (error: any) => {
           console.error('API error:', error);
-          this.clearSearch();
         }
       );
     } else {
-      this.clearSearch();
+      this.fetchProperties();
     }
   }
-  
 
   navigateToSearch() {
     this.router.navigate(['/search']);
@@ -107,37 +90,8 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  getRandomImage(): string {
-    return this.testImages[Math.floor(Math.random() * this.testImages.length)];
-  }
-
-  preloadImages(images: string[]): Promise<void[]> {
-    return Promise.all(
-      images.map((image) => {
-        return new Promise<void>((resolve, reject) => {
-          const img = new Image();
-          img.src = image;
-          img.onload = () => resolve();
-          img.onerror = (err) => reject(err);
-        });
-      })
-    );
-  }
-
   ngOnInit(): void {
-    this.preloadImages(this.testImages)
-      .then(() => {
-        console.log('Images preloaded successfully');
-        this.randomImage = this.getRandomImage();
-        this.fetchProperties();
-      })
-      .catch((error) => {
-        console.error('Error preloading images:', error);
-        this.fetchProperties(); 
-      })
-      .finally(() => {
-        this.isLoading = false;
-      });
+    this.fetchProperties();
   }
 
   ngAfterViewInit(): void {
@@ -150,7 +104,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         duration: 1.5,
       });
-  
+
       gsap.to('.headline', {
         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
         ease: 'power4.inOut',
@@ -167,29 +121,34 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     gsap.ticker.remove((time) => this.lenis?.raf(time * 1000));
   }
 
-  fetchProperties() {
-    this.propertyService
-      .getPaginatedProperties(this.currentPage, this.pageSize, this.filters)
-      .subscribe(
-        (response) => {
-          console.log('API Response:', response);
-          if (response.isSuccess) {
-            this.properties = response.data.data.map((property: PropertyListing) => {
-              console.log('Property ID:', property.propertyId);  
-              return {
-                ...property,
-                imageURLs: this.getRandomImage(),
-              };
-            });
-            this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
-          } else {
-            console.error('Error fetching properties:', response.errorMessage);
-          }
-        },
-        (error) => {
-          console.error('Error fetching properties:', error);
+  fetchProperties(): void {
+    this.propertyService.getPaginatedProperties(this.currentPage, this.pageSize, this.filters).subscribe(
+      (response: any) => {
+        if (response.isSuccess) {
+          this.properties = response.data.data.map((property: any) => ({
+            ...property,
+            firstImage: this.extractFirstImage(property.imageURLs),
+          }));
+          this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
+        } else {
+          console.error('Error fetching properties:', response.errorMessage);
         }
-      );
+      },
+      (error: any) => {
+        console.error('Error fetching properties:', error);
+      }
+    );
+  }
+
+  extractFirstImage(imageUrls: string): string {
+    if (!imageUrls) return '';
+    try {
+      const imagesArray = JSON.parse(imageUrls);
+      return imagesArray.length > 0 ? `data:image/jpeg;base64,${imagesArray[0].trim()}` : '';
+    } catch (error: any) {
+      console.error('Error parsing image URLs:', error);
+      return '';
+    }
   }
 
   goToPage(page: number) {
@@ -212,7 +171,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       nrOfBedrooms: 0,
       status: '',
       squareFootage: 0,
-      query: ''
+      query: '',
     };
 
     this.searchTerm = '';
@@ -227,5 +186,4 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error('Property ID is undefined');
     }
   }
-
 }
