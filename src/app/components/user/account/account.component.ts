@@ -33,6 +33,7 @@ export class AccountComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.properties = [];
     const token = localStorage.getItem('authToken');
     if (token) {
       this.userService.getUserDetails().subscribe(

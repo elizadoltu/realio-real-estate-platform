@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationStart } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +31,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   isFilterOpen: boolean = false;
   searchTerm: string = '';
   private readonly lenis: Lenis | undefined;
+  private routerSubscription: any;
 
   isLoading: boolean = true;
 
@@ -91,6 +92,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
     this.fetchProperties();
   }
 

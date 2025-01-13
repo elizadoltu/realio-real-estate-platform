@@ -7,6 +7,8 @@ import { UserService } from '../../../services/user.service';
 import { ContactComponent } from "../contact/contact.component";
 import { catchError, switchMap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { NavigationStart, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-single-property',
@@ -20,6 +22,7 @@ export class SinglePropertyComponent implements OnInit {
   property: any;
   userId: string = '';
   userDetails: any;
+  private routerSubscription: any;
   decodedImages: string[] = [];
 
   constructor(
@@ -28,10 +31,16 @@ export class SinglePropertyComponent implements OnInit {
     private readonly userService: UserService,
     private readonly location: Location,
     private readonly datePipe: DatePipe,
-    private readonly http: HttpClient
+    private readonly http: HttpClient,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
+    this.routerSubscription = this.router.events.subscribe((event) => {
+          if (event instanceof NavigationStart) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
     const propertyId = this.route.snapshot.paramMap.get('id');
     if (propertyId) {
       this.propertyService
@@ -85,12 +94,12 @@ export class SinglePropertyComponent implements OnInit {
   onBuyAction(): void {
     const apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Transactions';
     const token = localStorage.getItem('authToken');
-
+  
     if (!token) {
       alert('You are not authenticated. Please log in and try again.');
       return;
     }
-
+  
     let buyerId: string;
     try {
       const decodedToken: any = JSON.parse(atob(token.split('.')[1])); // Decode JWT
@@ -99,18 +108,25 @@ export class SinglePropertyComponent implements OnInit {
       alert('Authentication token is invalid. Please log in again.');
       return;
     }
-
+  
     const sellerId = this.userId;
     const propertyId = this.property?.propertyId;
     const salePrice = this.property?.price;
-
+  
     if (!propertyId || !salePrice || !sellerId) {
       alert('Unable to process the transaction. Please try again later.');
       return;
     }
-
+  
+    // Check if the buyer and seller are the same
+    if (buyerId === sellerId) {
+      alert('You cannot buy your own property.');
+      return;
+    }
+  
     const data = { propertyId, buyerId, sellerId, salePrice };
     console.log(data);
+  
     this.http
       .post<any>(`${apiUrl}`, data, {
         headers: { 'Content-Type': 'application/json' },
@@ -131,4 +147,5 @@ export class SinglePropertyComponent implements OnInit {
         },
       });
   }
+  
 }

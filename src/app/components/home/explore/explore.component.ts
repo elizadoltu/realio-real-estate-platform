@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,6 +30,8 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   isFilterOpen: boolean = false;
   private readonly lenis: Lenis | undefined;
+  private routerSubscription: any;
+
 
   constructor(
     private readonly router: Router,
@@ -61,7 +63,11 @@ export class ExploreComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {this.routerSubscription = this.router.events.subscribe((event) => {
+    if (event instanceof NavigationStart) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
     this.fetchPropertiesWithImages();
   }
 

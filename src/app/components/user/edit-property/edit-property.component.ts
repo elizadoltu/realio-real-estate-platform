@@ -38,6 +38,7 @@ export class EditPropertyComponent implements OnInit {
     });
   }
 
+  
   ngOnInit(): void {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     console.log('Property ID received:', this.propertyId); // Debugging
@@ -104,21 +105,71 @@ export class EditPropertyComponent implements OnInit {
     if (input.files) {
       Array.from(input.files).forEach((file) => {
         const reader = new FileReader();
+  
         reader.onload = (e: any) => {
-          const base64String = e.target.result.split(',')[1];
-          this.uploadedPhotos.push(e.target.result);
-          this.base64Images.push(base64String);
+          const img = new Image();
+          img.onload = () => {
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const MAX_WIDTH = 1000;
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+  
+            // Maintain the aspect ratio
+            if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+              if (width > height) {
+                height = (MAX_HEIGHT / width) * height;
+                width = MAX_WIDTH;
+              } else {
+                width = (MAX_WIDTH / height) * width;
+                height = MAX_HEIGHT;
+              }
+            }
+  
+            canvas.width = width;
+            canvas.height = height;
+  
+            // Draw the resized image onto the canvas
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+            }
+  
+            // Convert the canvas to a Base64 string
+            const resizedBase64 = canvas.toDataURL('image/jpeg', 1); // Adjust quality (0.8 = 80%)
+            
+            this.uploadedPhotos.push(resizedBase64); // Preview
+            const base64String = resizedBase64.split(',')[1];
+            this.base64Images.push(base64String); // Prepare for backend
+          };
+  
+          // Set the image source to the uploaded file
+          img.src = e.target.result;
         };
+  
         reader.readAsDataURL(file);
       });
     }
   }
 
   onDeletePhoto(photo: string): void {
-    const index = this.uploadedPhotos.indexOf(photo);
-    if (index > -1) {
-      this.uploadedPhotos.splice(index, 1);
-      this.base64Images.splice(index, 1);
+    // Remove photo from uploadedPhotos
+    const uploadedPhotoIndex = this.uploadedPhotos.findIndex((uploadedPhoto) => uploadedPhoto === photo);
+    if (uploadedPhotoIndex > -1) {
+      this.uploadedPhotos.splice(uploadedPhotoIndex, 1);
+      this.base64Images.splice(uploadedPhotoIndex, 1); // Synchronize base64Images
+      console.log('Photo deleted from uploadedPhotos:', photo);
+    } else if (this.property?.imageURLs) {
+      // Remove from existing backend images
+      let existingImages = JSON.parse(this.property.imageURLs);
+      existingImages = existingImages.filter((existingPhoto: string) => existingPhoto !== photo);
+      this.property.imageURLs = JSON.stringify(existingImages);
+      this.editPropertyForm.patchValue({ imageURLs: existingImages });
+      console.log('Photo deleted from existingImages:', photo);
+    } else {
+      console.warn('No matching photo found to delete.');
     }
   }
 
@@ -132,17 +183,18 @@ export class EditPropertyComponent implements OnInit {
     if (this.editPropertyForm.valid) {
       const updatedProperty = this.editPropertyForm.value;
   
-      const existingImages = this.property?.imageURLs
-        ? JSON.parse(this.property.imageURLs)
-        : [];
-  
+      // Combine only the non-deleted images
+      const existingImages = JSON.parse(this.property?.imageURLs || '[]');
       const mergedImages = [...existingImages, ...this.base64Images];
   
-      const uniqueImages = Array.from(new Set(mergedImages));
+      // Remove duplicates and ensure deleted images are excluded
+      const uniqueImages = mergedImages.filter((image) =>
+        this.uploadedPhotos.includes(`data:image/jpeg;base64,${image}`)
+      );
   
       updatedProperty.imageURLs = JSON.stringify(uniqueImages);
   
-      const userID = this.property?.userID || ''; 
+      const userID = this.property?.userID || '';
   
       this.propertyService.updateProperty(propertyId, updatedProperty, userID).subscribe(
         () => {
@@ -160,8 +212,6 @@ export class EditPropertyComponent implements OnInit {
     }
   }
   
-  
-
   onDeleteProperty(propertyId: string | null): void {
     if (!propertyId) {
       console.error('Property ID is null!');
