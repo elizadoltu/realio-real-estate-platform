@@ -116,7 +116,7 @@
     </div>
     <div>
       <label for="squareFootage" class="block text-sm font-medium"
-        >Min Square Footage</label
+        >Min Square Meters</label
       >
       <input
         type="number"
@@ -124,7 +124,7 @@
         [(ngModel)]="filters.squareFootage"
         name="squareFootage"
         class="mt-1 block w-full border rounded-md"
-        placeholder="Enter min square footage"
+        placeholder="Enter min square meters"
       />
     </div>
     <div>
@@ -194,7 +194,7 @@
               alt="square meters icon"
               class="mr-1"
             />
-            {{ property.squareFootage | number }} sq ft
+            {{ property.squareFootage | number }} sq meters
           </p>
         </div>
 

@@ -37,7 +37,7 @@ export class LoginComponent implements OnDestroy {
           this.router.navigate(['/']);
         },
         (error) => {
-          console.error('Login failed', error);
+          console.log('Login failed', error);
           alert("Wrong credentials!");
         }
       );
