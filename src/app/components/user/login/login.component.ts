@@ -38,6 +38,7 @@ export class LoginComponent implements OnDestroy {
         },
         (error) => {
           console.error('Login failed', error);
+          alert("Wrong credentials!");
         }
       );
     }
