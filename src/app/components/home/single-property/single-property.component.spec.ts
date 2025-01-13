@@ -101,7 +101,7 @@ describe('SinglePropertyComponent', () => {
     component.property = propertyData;
     component.userId = '456';
 
-    const transactionData = { propertyId: '123', buyerId: '789', sellerId: '456', propertyPrice: 100000 };
+    const transactionData = { propertyId: '123', buyerId: '789', sellerId: '456', salePrice: 100000 };
 
     const apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Transactions';
     const httpMockResponse = { success: true };
@@ -145,7 +145,7 @@ describe('SinglePropertyComponent', () => {
     component.userId = '456';
 
     const apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Transactions';
-    const transactionData = { propertyId: '123', buyerId: '789', sellerId: '456', propertyPrice: 100000 };
+    const transactionData = { propertyId: '123', buyerId: '789', sellerId: '456', salePrice: 100000 };
 
     const postSpy = jest.spyOn(httpMock as unknown as { post: jest.Mock }, 'post').mockReturnValue(throwError(() => new Error('Transaction failed')));
 

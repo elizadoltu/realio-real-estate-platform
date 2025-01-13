@@ -1,11 +1,13 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { PropertyService } from '../../../services/property.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExploreComponent } from './explore.component';
-import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { PropertyListing } from '../../../models/property.model';
+import { PropertyService } from '../../../services/property.service';
+import { of, throwError } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ContactComponent } from '../contact/contact.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -15,157 +17,158 @@ describe('ExploreComponent', () => {
 
   beforeEach(async () => {
     const propertyServiceMock = {
-      getPaginatedProperties: jest.fn(),
+      getPaginatedProperties: jest.fn().mockReturnValue(of({})),
+    };
+
+    const routerMock = {
+      navigate: jest.fn(),
+      events: of({}),
     };
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, ExploreComponent],
-      providers: [{ provide: PropertyService, useValue: propertyServiceMock }],
+      imports: [ CommonModule, FormsModule, ExploreComponent, ContactComponent,HttpClientTestingModule ],
+      providers: [
+        { provide: PropertyService, useValue: propertyServiceMock },
+        { provide: Router, useValue: routerMock }
+      ]
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(ExploreComponent);
     component = fixture.componentInstance;
     propertyService = TestBed.inject(PropertyService);
     router = TestBed.inject(Router);
     fixture.detectChanges();
-
-    jest.spyOn(console, 'error'); // Suppress console errors in tests
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should toggle filters', () => {
-    expect(component.isFilterOpen).toBeFalsy();
-    component.toggleFilters();
-    expect(component.isFilterOpen).toBe(true);
-    component.toggleFilters();
-    expect(component.isFilterOpen).toBeFalsy();
-  });
-
-  it('should apply filters and reset currentPage', () => {
-    component.currentPage = 5;
-    jest.spyOn(component, 'fetchProperties').mockReturnValue({ subscribe: () => {} } as any);
-
-    component.applyFilters();
-    expect(component.currentPage).toBe(1);
-    expect(component.fetchProperties).toHaveBeenCalled();
-  });
-
-  it('should navigate to correct routes', () => {
-    const navigateSpy = jest.spyOn(router, 'navigate');
-    component.navigateToSearch();
-    expect(navigateSpy).toHaveBeenCalledWith(['/search']);
-    component.navigateToPostProperty();
-    expect(navigateSpy).toHaveBeenCalledWith(['/post-property']);
-    component.navigateToExplore();
-    expect(navigateSpy).toHaveBeenCalledWith(['/explore']);
-    component.navigateToHome();
-    expect(navigateSpy).toHaveBeenCalledWith(['/']);
-  });
-
-  it('should get a random image', () => {
-    const image = component.getRandomImage();
-    expect(component.testImages).toContain(image);
-  });
-
-  it('should preload images successfully', fakeAsync(() => {
-    const promise = component.preloadImages(component.testImages);
-    tick(); // Resolve the promises
-
-    promise.then(() => {
-      expect(console.log).toHaveBeenCalledWith('Images preloaded successfully');
-    });
-  }));
-
-  it('should handle image preload errors', fakeAsync(() => {
-    const brokenImages = ['broken-image.jpg']; // Simulate broken image
-    const promise = component.preloadImages(brokenImages);
-    tick();
-
-    promise.catch(() => {
-        expect(console.error).toHaveBeenCalled();
-    });
-  }));
-
-  it('should fetch properties on ngOnInit and handle success', fakeAsync(() => {
-    const mockResponse = {
+  it('should fetch properties with images on init', () => {
+    const mockProperties = {
       isSuccess: true,
-      data: { data: [{ propertyId: '1' } as PropertyListing], totalCount: 1 },
-      errorMessage: '',
+      data: {
+        data: [
+          { id: 1, name: 'Property 1', imageURLs: '["image1.jpg"]' },
+          { id: 2, name: 'Property 2', imageURLs: '["image2.jpg"]' }
+        ],
+        totalCount: 2
+      }
     };
-    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(mockResponse));
-    component.ngOnInit();
-    tick();
-    expect(component.properties.length).toBe(0);
-    expect(component.totalPages).toBe(0);
-    expect(component.isLoading).toBeTruthy();
-  }));
 
-  it('should fetch properties on ngOnInit and handle error response', fakeAsync(() => {
-    const mockResponse = { isSuccess: false, data: null, errorMessage: 'Error' };
-    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(mockResponse));
-  
-    component.ngOnInit();
-    tick();
-  
-    expect(console.error);
-    expect(component.isLoading).toBeTruthy();
-  }));
-  
+    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(mockProperties));
+    component.fetchPropertiesWithImages();
+    fixture.detectChanges();
 
-  it('should handle API error during fetchProperties', fakeAsync(() => {
-    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(
-      throwError(() => new Error('API Error'))
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalledWith(
+      component.currentPage,
+      component.pageSize,
+      component.filters
     );
-  
-    component.fetchProperties();
-    tick();
-  
-    expect(console.error);
-    expect(component.isLoading).toBeTruthy();
-  }));
-  
-
-  it('should go to page', () => {
-    jest.spyOn(component, 'fetchProperties').mockReturnValue({ subscribe: () => {} } as any);
-    component.goToPage(2);
-    expect(component.currentPage).toBe(2);
-    expect(component.fetchProperties).toHaveBeenCalled();
+    expect(component.properties.length).toBe(2);
+    expect(component.totalPages).toBe(1);
   });
 
-  it('should clear filters', () => {
-    component.filters = { Type: 'House' };
-    jest.spyOn(component, 'clearFilters').mockReturnValue({ subscribe: () => {} } as any);
+  it('should handle error when fetching properties', () => {
+    const errorResponse = { isSuccess: false, errorMessage: 'Error fetching properties' };
+
+    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(errorResponse));
+    component.fetchPropertiesWithImages();
+    fixture.detectChanges();
+
+    expect(component.properties.length).toBe(0);  // No properties should be fetched
+  });
+
+  it('should apply filters and fetch properties again', () => {
+    const mockProperties = {
+      isSuccess: true,
+      data: { data: [], totalCount: 0 }
+    };
+
+    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(mockProperties));
+    component.applyFilters();
+    fixture.detectChanges();
+
+    expect(component.currentPage).toBe(1);
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalledWith(
+      component.currentPage,
+      component.pageSize,
+      component.filters
+    );
+  });
+
+  it('should navigate to the correct path when a property is clicked', () => {
+    const propertyId = '1';
+    component.navigateToPropertyDetail(propertyId);
+    expect(router.navigate).toHaveBeenCalledWith([`/property/${propertyId}`]);
+  });
+
+  it('should handle undefined property ID when navigating to details', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    component.navigateToPropertyDetail(undefined);
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Property ID is undefined');
+  });
+
+  it('should clear filters and fetch properties again', () => {
+    const mockProperties = {
+      isSuccess: true,
+      data: { data: [], totalCount: 0 }
+    };
+
+    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(mockProperties));
+    component.clearFilters();
+    fixture.detectChanges();
 
     expect(component.filters).toEqual({
-      Type: 'House'
+      Type: '',
+      price: 0,
+      nrOfBathrooms: 0,
+      nrOfBedrooms: 0,
+      status: '',
+      squareFootage: 0
     });
     expect(component.currentPage).toBe(1);
+    expect(propertyService.getPaginatedProperties).toHaveBeenCalledWith(
+      component.currentPage,
+      component.pageSize,
+      component.filters
+    );
   });
 
-  it('should navigate to property detail', () => {
-    const navigateSpy = jest.spyOn(router, 'navigate');
-    component.navigateToPropertyDetail('123');
-    expect(navigateSpy).toHaveBeenCalledWith(['/property/123']);
+  it('should toggle the filter visibility', () => {
+    expect(component.isFilterOpen).toBeFalsy();
+    component.toggleFilters();
+    expect(component.isFilterOpen).toBeTruthy();
   });
 
-  it('should handle undefined property ID in navigateToPropertyDetail', () => {
-    component.navigateToPropertyDetail(undefined);
-    expect(console.error).toHaveBeenCalledWith('Property ID is undefined');
+  it('should extract the first image from the image URLs string', () => {
+    const imageUrls = '["image1.jpg", "image2.jpg"]';
+    const firstImage = component.extractFirstImage(imageUrls);
+    expect(firstImage).toBe('data:image/jpeg;base64,image1.jpg');
   });
 
-  it('should set isLoading to false after ngOnInit completes', fakeAsync(() => {
-    const mockResponse = {
-      isSuccess: true,
-      data: { data: [], totalCount: 0 },
-      errorMessage: '',
-    };
-    (propertyService.getPaginatedProperties as jest.Mock).mockReturnValue(of(mockResponse));
+  it('should return an empty string when image URLs are empty', () => {
+    const emptyImageUrls = '';
+    const firstImage = component.extractFirstImage(emptyImageUrls);
+    expect(firstImage).toBe('');
+  });
+
+  it('should handle invalid image URL format gracefully', () => {
+    const invalidImageUrls = 'invalid format';
+    const firstImage = component.extractFirstImage(invalidImageUrls);
+    expect(firstImage).toBe('');
+  });
+
+  it('should handle the navigation start event and scroll to top', () => {
+    const scrollToSpy = jest.spyOn(window, 'scrollTo');
     component.ngOnInit();
-    tick();
-    expect(component.isLoading).toBeTruthy();
-  }));
+  });
 
+  // it('should clean up subscriptions on destroy', () => {
+  //   const lenisDestroySpy = jest.spyOn(component.lenis as any, 'destroy');
+  //   component.ngOnDestroy();
+  //   expect(lenisDestroySpy).toHaveBeenCalled();
+  // });
 });

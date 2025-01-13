@@ -1,195 +1,163 @@
-// @ts-nocheck
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Pipe, PipeTransform, Injectable, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Directive, Input, Output } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { Observable, of as observableOf, throwError } from 'rxjs';
-
-import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditPropertyComponent } from './edit-property.component';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PropertyService } from '../../../services/property.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { Location } from '@angular/common';
-
-@Injectable()
-class MockPropertyService {}
-
-@Directive({ selector: '[myCustom]' })
-class MyCustomDirective {
-  @Input() myCustom;
-}
-
-@Pipe({name: 'translate'})
-class TranslatePipe implements PipeTransform {
-  transform(value) { return value; }
-}
-
-@Pipe({name: 'phoneNumber'})
-class PhoneNumberPipe implements PipeTransform {
-  transform(value) { return value; }
-}
-
-@Pipe({name: 'safeHtml'})
-class SafeHtmlPipe implements PipeTransform {
-  transform(value) { return value; }
-}
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('EditPropertyComponent', () => {
-  let fixture;
-  let component;
+  let component: EditPropertyComponent;
+  let fixture: ComponentFixture<EditPropertyComponent>;
+  let propertyService: jest.Mocked<PropertyService>;
+  let activatedRoute: jest.Mocked<ActivatedRoute>;
+  let router: jest.Mocked<Router>;
+  let location: jest.Mocked<Location>;
+
+  beforeEach(async () => {
+    const propertyServiceMock = {
+      getPropertyById: jest.fn(),
+      updateProperty: jest.fn(),
+      deleteProperty: jest.fn(),
+    };
+
+    const activatedRouteMock = {
+      snapshot: {
+        paramMap: {
+          get: jest.fn(),
+        },
+      },
+    };
+
+    const routerMock = {
+      navigate: jest.fn(),
+    };
+
+    const locationMock = {
+      back: jest.fn(),
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, EditPropertyComponent],
+      providers: [
+        { provide: PropertyService, useValue: propertyServiceMock },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: Router, useValue: routerMock },
+        { provide: Location, useValue: locationMock },
+        FormBuilder,
+      ],
+      schemas: [NO_ERRORS_SCHEMA], // Ignore unknown elements or attributes
+    }).compileComponents();
+  });
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ FormsModule, ReactiveFormsModule, EditPropertyComponent ],
-      declarations: [
-        TranslatePipe, PhoneNumberPipe, SafeHtmlPipe,
-        MyCustomDirective
-      ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
-      providers: [
-        FormBuilder,
-        { provide: PropertyService, useClass: MockPropertyService },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {url: 'url', params: {}, queryParams: {}, data: {}},
-            url: observableOf('url'),
-            params: observableOf({}),
-            queryParams: observableOf({}),
-            fragment: observableOf('fragment'),
-            data: observableOf({})
-          }
-        },
-        Location
-      ]
-    }).overrideComponent(EditPropertyComponent, {
-
-    }).compileComponents();
     fixture = TestBed.createComponent(EditPropertyComponent);
-    component = fixture.debugElement.componentInstance;
+    component = fixture.componentInstance;
+    propertyService = TestBed.inject(PropertyService) as jest.Mocked<PropertyService>;
+    activatedRoute = TestBed.inject(ActivatedRoute) as jest.Mocked<ActivatedRoute>;
+    router = TestBed.inject(Router) as jest.Mocked<Router>;
+    location = TestBed.inject(Location) as jest.Mocked<Location>;
+
+    (activatedRoute.snapshot.paramMap.get as jest.Mock).mockReturnValue('1'); // Mock propertyId
   });
 
-  afterEach(() => {
-    component.ngOnDestroy = function() {};
-    fixture.destroy();
-  });
-
-  it('should run #constructor()', async () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should run #ngOnInit()', async () => {
-    component.route = component.route || {};
-    component.route.snapshot = {
-      paramMap: {
-        get: function() {}
-      }
+  it('should initialize with property details if propertyId exists', () => {
+    const mockProperty = {
+      title: 'Test Property',
+      address: '123 Test St',
+      type: 'House',
+      price: 100000,
+      numberOfBedrooms: 3,
+      numberOfBathrooms: 2,
+      squareFootage: 1200,
+      description: 'A nice house',
+      imageURLs: '["image1.jpg", "image2.jpg"]',
     };
-    component.loadPropertyDetailsWithImages = jest.fn();
+
+    propertyService.getPropertyById.mockReturnValue(of(mockProperty));
+
     component.ngOnInit();
-    // expect(component.loadPropertyDetailsWithImages).toHaveBeenCalled();
+
+    expect(propertyService.getPropertyById).toHaveBeenCalledWith('1');
+    expect(component.editPropertyForm.value.title).toBe('Test Property');
   });
 
-  it('should run #loadPropertyDetailsWithImages()', async () => {
-    component.propertyService = component.propertyService || {};
-    component.propertyService.getPropertyById = jest.fn().mockReturnValue(observableOf({}));
-    component.populateForm = jest.fn();
-    component.extractAndDecodeImages = jest.fn();
-    component.loadPropertyDetailsWithImages();
-    // expect(component.propertyService.getPropertyById).toHaveBeenCalled();
-    // expect(component.populateForm).toHaveBeenCalled();
-    // expect(component.extractAndDecodeImages).toHaveBeenCalled();
+  it('should handle error when property details cannot be loaded', () => {
+    propertyService.getPropertyById.mockReturnValue(throwError('Error loading property'));
+
+    console.error = jest.fn(); // Mock console error
+    component.ngOnInit();
+
+    expect(console.error).toHaveBeenCalledWith('Error loading property details:', 'Error loading property');
   });
 
-  it('should run #populateForm()', async () => {
-    component.editPropertyForm = component.editPropertyForm || {};
-    component.editPropertyForm.patchValue = jest.fn();
-    component.populateForm({
-      title: {},
-      address: {},
-      type: {},
-      price: {},
-      numberOfBedrooms: {},
-      numberOfBathrooms: {},
-      squareFootage: {},
-      description: {}
-    });
-    // expect(component.editPropertyForm.patchValue).toHaveBeenCalled();
-  });
-
-  it('should run #extractAndDecodeImages()', async () => {
-
-    component.extractAndDecodeImages({});
-
-  });
-
-  it('should run #onFileSelected()', async () => {
-    component.uploadedPhotos = component.uploadedPhotos || {};
-    component.uploadedPhotos.push = jest.fn();
-    component.base64Images = component.base64Images || {};
-    component.base64Images.push = jest.fn();
-    component.onFileSelected({
-      target: {
-        files: {}
-      }
-    });
-    // expect(component.uploadedPhotos.push).toHaveBeenCalled();
-    // expect(component.base64Images.push).toHaveBeenCalled();
-  });
-
-  it('should run #onDeletePhoto()', async () => {
-    component.uploadedPhotos = component.uploadedPhotos || {};
-    component.uploadedPhotos.indexOf = jest.fn();
-    component.uploadedPhotos.splice = jest.fn();
-    component.base64Images = component.base64Images || {};
-    component.base64Images.splice = jest.fn();
-    component.onDeletePhoto({});
-    // expect(component.uploadedPhotos.indexOf).toHaveBeenCalled();
-    // expect(component.uploadedPhotos.splice).toHaveBeenCalled();
-    // expect(component.base64Images.splice).toHaveBeenCalled();
-  });
-
-  it('should run #onSaveProperty()', async () => {
-    component.editPropertyForm = component.editPropertyForm || {};
-    
-    // Mocking the form group and its controls
-    const mockFormControl = {
-      valid: true,  // You can mock valid as a boolean
-      value: {
-        imageURLs: ['base64Image1']
-      }
+  it('should call updateProperty on save with correct data', () => {
+    const mockProperty = {
+      title: 'Test Property',
+      address: '123 Test St',
+      type: 'House',
+      price: 100000,
+      numberOfBedrooms: 3,
+      numberOfBathrooms: 2,
+      squareFootage: 1200,
+      description: 'A nice house',
+      imageURLs: '[]',
     };
-    
-    component.editPropertyForm = mockFormControl as any;  // Casting to any to allow the form control mock
-  
-    component.property = component.property || {};
-    component.property.userID = 'userID';
-    
-    component.propertyService = component.propertyService || {};
-    component.propertyService.updateProperty = jest.fn().mockReturnValue(observableOf({}));
-    
-    component.onSaveProperty('propertyId');
-    
-    // Expecting the update property function to be called
-    expect(component.propertyService.updateProperty).toHaveBeenCalled();
+
+    component.editPropertyForm.setValue(mockProperty);
+    propertyService.updateProperty.mockReturnValue(of(null)); // Simulate successful update
+
+    component.onSaveProperty('1');
+
+    expect(propertyService.updateProperty).toHaveBeenCalledWith('1', mockProperty, '');
+    expect(router.navigate).toHaveBeenCalledWith(['/account']);
   });
 
-  it('should run #onDeleteProperty()', async () => {
-    component.propertyService = component.propertyService || {};
-    component.propertyService.deleteProperty = jest.fn().mockReturnValue(observableOf({}));
-    component.goBack = jest.fn();
-    component.onDeleteProperty({});
-    // expect(component.propertyService.deleteProperty).toHaveBeenCalled();
-    // expect(component.goBack).toHaveBeenCalled();
+  it('should handle error on updateProperty if the API fails', () => {
+    const mockProperty = {
+      title: 'Test Property',
+      address: '123 Test St',
+      type: 'House',
+      price: 100000,
+      numberOfBedrooms: 3,
+      numberOfBathrooms: 2,
+      squareFootage: 1200,
+      description: 'A nice house',
+      imageURLs: '["image1.jpg", "image2.jpg"]',
+    };
+
+    component.editPropertyForm.setValue(mockProperty);
+    propertyService.updateProperty.mockReturnValue(throwError('Error updating property'));
+
+    console.error = jest.fn(); // Mock console error
+    component.onSaveProperty('1');
+
+    expect(console.error).toHaveBeenCalledWith('Error updating property:', 'Error updating property');
   });
 
-  it('should run #goBack()', async () => {
-    component.location = component.location || {};
-    component.location.back = jest.fn();
+  it('should call deleteProperty on delete and navigate back', () => {
+    const propertyId = '1';
+    propertyService.deleteProperty.mockReturnValue(of(null));
+
+    component.onDeleteProperty(propertyId);
+
+    expect(location.back).toHaveBeenCalled();
+  });
+
+  it('should not delete property if propertyId is null', () => {
+    component.onDeleteProperty(null);
+
+    expect(propertyService.deleteProperty).not.toHaveBeenCalled();
+  });
+
+  it('should go back when goBack() is called', () => {
     component.goBack();
-    // expect(component.location.back).toHaveBeenCalled();
-  });
 
+    expect(location.back).toHaveBeenCalled();
+  });
 });
