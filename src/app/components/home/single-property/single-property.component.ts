@@ -102,17 +102,17 @@ export class SinglePropertyComponent implements OnInit {
 
     const sellerId = this.userId;
     const propertyId = this.property?.propertyId;
-    const propertyPrice = this.property?.price;
+    const salePrice = this.property?.price;
 
-    if (!propertyId || !propertyPrice || !sellerId) {
+    if (!propertyId || !salePrice || !sellerId) {
       alert('Unable to process the transaction. Please try again later.');
       return;
     }
 
-    const data = { propertyId, buyerId, sellerId, propertyPrice };
-
+    const data = { propertyId, buyerId, sellerId, salePrice };
+    console.log(data);
     this.http
-      .post<any>(apiUrl, data, {
+      .post<any>(`${apiUrl}`, data, {
         headers: { 'Content-Type': 'application/json' },
       })
       .pipe(
