@@ -167,8 +167,12 @@
     *ngIf="property.status === 'available'"
     (click)="navigateToPropertyDetail(property.propertyId)"
   >
-  <img *ngIf="property.firstImage" [src]="property.firstImage" alt="Property Image" />
-    
+  <img
+  *ngIf="property.firstImage"
+  [src]="property.firstImage"
+  alt="Property Image"
+  class="rounded-md w-full h-64 object-cover"
+/>
     <div
       class="flex flex-col justify-between ml-2 mt-2 font-switzer-regular desktop:text-lg tablet:text-base mobile:text-sm"
     >
