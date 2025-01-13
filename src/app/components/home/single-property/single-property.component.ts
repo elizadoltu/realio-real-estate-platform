@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { ContactComponent } from "../contact/contact.component";
 import { catchError, switchMap, throwError } from 'rxjs';
-import { jwtDecode } from "jwt-decode";
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -14,13 +13,15 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, ContactComponent],
   templateUrl: './single-property.component.html',
-  styleUrl: './single-property.component.css',
-  providers: [DatePipe]
+  styleUrls: ['./single-property.component.css'],
+  providers: [DatePipe],
 })
 export class SinglePropertyComponent implements OnInit {
   property: any;
   userId: string = '';
   userDetails: any;
+  decodedImages: string[] = [];
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly propertyService: PropertyService,
@@ -32,36 +33,50 @@ export class SinglePropertyComponent implements OnInit {
 
   ngOnInit(): void {
     const propertyId = this.route.snapshot.paramMap.get('id');
-    console.log(propertyId);
-    
     if (propertyId) {
-      this.propertyService.getPropertyById(propertyId).pipe(
-        switchMap((response) => {
-          console.log(response); 
-  
-          if (response && response.propertyId) {
-            this.property = response;
-            console.log('Property:', this.property);
-  
-            this.userId = this.property.userID;
-            console.log('User ID:', this.userId);
-  
-            return this.userService.getUserDetailsById(this.userId);
-          } else {
-            throw new Error('Property not found');
+      this.propertyService
+        .getPropertyById(propertyId)
+        .pipe(
+          switchMap((response) => {
+            if (response && response.propertyId) {
+              this.property = response;
+
+              // Decodăm imaginile și le stocăm corect în lista `decodedImages`
+              this.decodedImages = this.extractImages(response.imageURLs);
+              console.log('Decoded Images:', this.decodedImages);
+
+              this.userId = this.property.userID;
+              return this.userService.getUserDetailsById(this.userId);
+            } else {
+              throw new Error('Property not found');
+            }
+          })
+        )
+        .subscribe(
+          (userDetails) => {
+            this.userDetails = userDetails;
+          },
+          (error) => {
+            console.error('Error fetching data:', error);
           }
-        })
-      ).subscribe(
-        (userDetails) => {
-          this.userDetails = userDetails;
-          console.log('User details:', userDetails);
-        },
-        (error) => {
-          console.error('Error fetching data:', error);
-        }
-      );
+        );
     }
-  }  
+  }
+
+  extractImages(imageUrls: string): string[] {
+    if (!imageUrls) return [];
+    try {
+      const imagesArray = JSON.parse(imageUrls); // Parsează șirul JSON în array
+      if (!Array.isArray(imagesArray)) {
+        console.error('imageURLs is not an array:', imagesArray);
+        return [];
+      }
+      return imagesArray.map((image: string) => `data:image/jpeg;base64,${image.trim()}`);
+    } catch (error) {
+      console.error('Error parsing image URLs:', error);
+      return [];
+    }
+  }
 
   goBack(): void {
     this.location.back();
@@ -70,54 +85,50 @@ export class SinglePropertyComponent implements OnInit {
   onBuyAction(): void {
     const apiUrl = 'https://abundant-reflection-production.up.railway.app/api/Transactions';
     const token = localStorage.getItem('authToken');
-    console.log('Token:', token);
-  
+
     if (!token) {
-      console.error('No authentication token found');
       alert('You are not authenticated. Please log in and try again.');
       return;
     }
-  
+
     let buyerId: string;
     try {
-      const decodedToken: any = jwtDecode(token);
-      console.log('Decoded token:', decodedToken);
+      const decodedToken: any = JSON.parse(atob(token.split('.')[1])); // Decode JWT
       buyerId = decodedToken.nameid;
-    } catch (err) {
-      console.error('Error decoding token:', err);
+    } catch {
       alert('Authentication token is invalid. Please log in again.');
       return;
     }
-  
+
     const sellerId = this.userId;
-    const propertyId = this.property?.data?.propertyId;
-    const propertyPrice = this.property?.data?.price;
-  
+    const propertyId = this.property?.propertyId;
+    const propertyPrice = this.property?.price;
+
     if (!propertyId || !propertyPrice || !sellerId) {
-      console.error('Invalid property or user data:', { propertyId, propertyPrice, sellerId });
       alert('Unable to process the transaction. Please try again later.');
       return;
     }
-  
+
     const data = { propertyId, buyerId, sellerId, propertyPrice };
-    console.log('Request payload:', data);
-  
-    this.http.post<any>(`${apiUrl}`, data, {
-      headers: { 'Content-Type': 'application/json' },
-    }).pipe(
-      catchError((error) => {
-        console.error('Error at POST transaction:', error);
-        alert('Transaction failed. Please try again.');
-        return throwError(() => new Error('Error at POST transaction'));
+
+    this.http
+      .post<any>(apiUrl, data, {
+        headers: { 'Content-Type': 'application/json' },
       })
-    ).subscribe({
-      next: (response) => {
-        console.log('Transaction successful:', response);
-      },
-      error: (error) => {
-        console.error('Error during transaction:', error);
-      }
-    });
+      .pipe(
+        catchError((error) => {
+          alert('Transaction failed. Please try again.');
+          return throwError(() => new Error('Error at POST transaction'));
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Transaction successful:', response);
+          alert('Transaction successful!');
+        },
+        error: (error) => {
+          console.error('Error during transaction:', error);
+        },
+      });
   }
-  
 }
