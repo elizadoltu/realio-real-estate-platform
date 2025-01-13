@@ -57,7 +57,7 @@
       </div>
     </div>
     <div>
-      <img *ngIf="decodedImages[0]" [src]="decodedImages[0]" alt="a property" class="rounded-md" />
+      <img *ngIf="decodedImages[0]" [src]="decodedImages[0]" alt="a property" class="rounded-md w-full h-auto object-cover" />
     </div>
   </div>
 
@@ -67,8 +67,8 @@
   </div>
 
   <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 gap-2 mt-10">
-    <img *ngIf="decodedImages[1]" [src]="decodedImages[1]" alt="a property" class="rounded-md" />
-  <img *ngIf="decodedImages[2]" [src]="decodedImages[2]" alt="a property" class="rounded-md" />
+    <img *ngIf="decodedImages[1]" [src]="decodedImages[1]" alt="a property" class="rounded-md w-full h-auto object-cover" />
+  <img *ngIf="decodedImages[2]" [src]="decodedImages[2]" alt="a property" class="rounded-md w-full h-auto object-cover" />
   </div>  
   
   <div class="grid desktop:grid-cols-2 mobile:grid-cols-1 p-3 border-t border-slate-600 mt-5 mx-3">
