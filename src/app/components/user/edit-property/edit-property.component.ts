@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PropertyService } from '../../../services/property.service';
 import { CommonModule, Location } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-property',
@@ -22,7 +22,8 @@ export class EditPropertyComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly propertyService: PropertyService,
     private readonly route: ActivatedRoute,
-    private readonly location: Location
+    private readonly location: Location,
+    private readonly router: Router
   ) {
     this.editPropertyForm = this.fb.group({
       title: ['', Validators.required],
@@ -33,6 +34,7 @@ export class EditPropertyComponent implements OnInit {
       numberOfBathrooms: ['', [Validators.required, Validators.min(0)]],
       squareFootage: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
+      imageURLs: [''],
     });
   }
 
@@ -78,6 +80,7 @@ export class EditPropertyComponent implements OnInit {
       numberOfBathrooms: property.numberOfBathrooms,
       squareFootage: property.squareFootage,
       description: property.description,
+      imageURLs: JSON.parse(property.imageURLs || '[]')
     });
   }
 
@@ -128,13 +131,24 @@ export class EditPropertyComponent implements OnInit {
   
     if (this.editPropertyForm.valid) {
       const updatedProperty = this.editPropertyForm.value;
-      updatedProperty.imageURLs = JSON.stringify(this.base64Images); // Include imaginile noi
-      const userID = this.property?.userID || ''; // Obține userID din detalii proprietate sau fallback
+  
+      const existingImages = this.property?.imageURLs
+        ? JSON.parse(this.property.imageURLs)
+        : [];
+  
+      const mergedImages = [...existingImages, ...this.base64Images];
+  
+      const uniqueImages = Array.from(new Set(mergedImages));
+  
+      updatedProperty.imageURLs = JSON.stringify(uniqueImages);
+  
+      const userID = this.property?.userID || ''; 
   
       this.propertyService.updateProperty(propertyId, updatedProperty, userID).subscribe(
         () => {
           console.log('Property updated successfully.');
           alert('Property updated successfully.');
+          this.router.navigate(['/account']);
         },
         (error) => {
           console.error('Error updating property:', error);
@@ -144,7 +158,9 @@ export class EditPropertyComponent implements OnInit {
     } else {
       console.error('Form is invalid. Please check the fields.');
     }
-  }  
+  }
+  
+  
 
   onDeleteProperty(propertyId: string | null): void {
     if (!propertyId) {
