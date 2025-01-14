@@ -22,7 +22,10 @@ export class AccountComponent implements OnInit {
   };
 
   properties: any[] = [];
-  activeSection: 'profile' | 'properties' = 'profile';
+  transactions: any[] = [];
+  activeSection: 'profile' | 'properties' | 'transactions' = 'profile';
+  transactionsWithProperties: any[] = [];
+  isLoadingTransactions: boolean = false;
   isLoadingProperties: boolean = false;
 
   constructor(
@@ -43,6 +46,7 @@ export class AccountComponent implements OnInit {
 
           // Începe încărcarea proprietăților imediat
           this.loadPropertiesWithImages();
+          this.loadTransactions(1, 10);
         },
         (error: any) => {
           console.error('Error fetching user details:', error);
@@ -52,6 +56,70 @@ export class AccountComponent implements OnInit {
       console.error('No auth token found');
       alert('No authentication token found');
     }
+  }
+
+  loadTransactions(page: number, pageSize: number): void {
+    this.isLoadingTransactions = true;
+  
+    const buyerId = this.userDetails.userId;
+    if (!buyerId) {
+      console.error('Buyer ID is missing');
+      this.isLoadingTransactions = false;
+      return;
+    }
+  
+    this.propertyService.getTransactionsByBuyerId(buyerId, page, pageSize).subscribe(
+      (response: any) => {
+        if (response?.data) {
+          this.transactions = response.data;
+  
+          // Extract property IDs and fetch property details concurrently
+          const propertyRequests = this.transactions.map((transaction) =>
+            this.propertyService.getPropertyById(transaction.propertyId).toPromise().catch((error) => {
+              console.error(`Error fetching property with ID ${transaction.propertyId}:`, error);
+              return null; // Gracefully handle error by returning `null`
+            })
+          );
+  
+          Promise.all(propertyRequests).then(
+            (properties: any[]) => {
+              this.transactionsWithProperties = this.transactions.map((transaction, index) => {
+                const property = properties[index];
+                if (property) {
+                  const imageKey = property.imageUrls ? 'imageUrls' : 'imageURLs';
+                  const images = this.extractAndDecodeImages(property[imageKey]);
+  
+                  return {
+                    ...transaction,
+                    property: {
+                      ...property,
+                      images,
+                    },
+                  };
+                }
+  
+                // Fallback if property details are missing
+                return { ...transaction, property: null };
+              });
+  
+              console.log('Transactions with properties:', this.transactionsWithProperties);
+              this.isLoadingTransactions = false;
+            },
+            (error) => {
+              console.error('Error fetching property details:', error);
+              this.isLoadingTransactions = false;
+            }
+          );
+        } else {
+          console.error('Unexpected response format:', response);
+          this.isLoadingTransactions = false;
+        }
+      },
+      (error: any) => {
+        console.error('Error fetching transactions:', error);
+        this.isLoadingTransactions = false;
+      }
+    );
   }
 
   onSave(): void {

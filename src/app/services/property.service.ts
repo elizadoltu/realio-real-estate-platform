@@ -15,6 +15,7 @@ export interface PropertyResponse {
 })
 export class PropertyService {
 
+  private readonly baseUrl = "https://abundant-reflection-production.up.railway.app/api";
   private readonly apiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListings";
   private readonly predictionApiUrl = "https://abundant-reflection-production.up.railway.app/api/PropertyListingPricePrediction"
   constructor( private readonly http: HttpClient, private readonly authService: AuthService ) { }
@@ -68,6 +69,11 @@ export class PropertyService {
   public getPropertiesByUserId(userId: string): Observable<PropertyResponse> {
     const endpoint = `${this.apiUrl}/user/${userId}`;
     return this.http.get<PropertyResponse>(endpoint);
+  }
+
+  getTransactionsByBuyerId(buyerId: string, page: number, pageSize: number): Observable<any> {
+    const url = `${this.baseUrl}/Transactions/buyer/${buyerId}?page=${page}&pageSize=${pageSize}`;
+    return this.http.get(url);
   }
 
   public generatePricePrediction(

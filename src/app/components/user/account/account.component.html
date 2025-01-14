@@ -1,4 +1,6 @@
-<div class="min-h-screen bg-[#1A1A1A] text-primary-white flex flex-col font-general-semibold">
+<div
+  class="min-h-screen bg-[#1A1A1A] text-primary-white flex flex-col font-general-semibold"
+>
   <!-- Header -->
   <div class="p-6 pl-12 bg-[#1A1A1A]">
     <button
@@ -15,7 +17,9 @@
   <!-- Main Content -->
   <div class="flex-1 flex bg-[#1A1A1A]">
     <!-- Sidebar -->
-    <div class="w-1/4 border-r border-primary-white flex flex-col justify-between desktop:pl-12 tablet:pl-12 mobile:pl-5 bg-[#1A1A1A]">
+    <div
+      class="w-1/4 border-r border-primary-white flex flex-col justify-between desktop:pl-12 tablet:pl-12 mobile:pl-5 bg-[#1A1A1A]"
+    >
       <div class="mt-10">
         <!-- Profile Section -->
         <span
@@ -37,29 +41,77 @@
           [class.text-white]="activeSection === 'properties'"
           (click)="showProperties()"
         >
-          <img src="assets/profile-properties.png" alt="Properties" class="object-cover w-6 h-6" />
-          <span class="mobile:hidden tablet:block desktop:block">Properties</span>
+          <img
+            src="assets/profile-properties.png"
+            alt="Properties"
+            class="object-cover w-6 h-6"
+          />
+          <span class="mobile:hidden tablet:block desktop:block"
+            >Properties</span
+          >
+        </span>
+        <div class="border-t border-primary-white mx-6 my-6"></div>
+        <span
+          class="flex items-center px-4 space-x-4 text-gray-400 hover:text-white cursor-pointer font-general-semibold"
+          [class.text-gray-400]="activeSection !== 'transactions'"
+          [class.text-white]="activeSection === 'transactions'"
+          (click)="activeSection = 'transactions'"
+        >
+          <img
+            src="assets/transactions.png"
+            alt="Transactions"
+            class="object-cover w-6 h-6"
+          />
+          <span class="mobile:hidden tablet:block desktop:block"
+            >Transactions</span
+          >
         </span>
       </div>
 
       <!-- Logout Button -->
-      <div class="border border-t-primary-white p-4 bg-primary-white text-primary-black font-general-semibold" (click)="onLogout()">
-        <span class="flex items-center desktop:px-4 space-x-4 hover:text-gray-600 cursor-pointer">
-          <img src="assets/logout-png.png" alt="Logout" class="w-6 h-6 object-cover" />
+      <div
+        class="border border-t-primary-white p-4 bg-primary-white text-primary-black font-general-semibold"
+        (click)="onLogout()"
+      >
+        <span
+          class="flex items-center desktop:px-4 space-x-4 hover:text-gray-600 cursor-pointer"
+        >
+          <img
+            src="assets/logout-png.png"
+            alt="Logout"
+            class="w-6 h-6 object-cover"
+          />
           <span class="mobile:hidden tablet:block desktop:block">Logout</span>
         </span>
       </div>
     </div>
 
     <!-- Content Area -->
-    <div class="flex-1 flex flex-col items-center desktop:p-10 tablet:p-10 mobile:py-10 mobile:px-5 bg-[#1A1A1A]">
+    <div
+      class="flex-1 flex flex-col items-center desktop:p-10 tablet:p-10 mobile:py-10 mobile:px-5 bg-[#1A1A1A]"
+    >
       <!-- Profile Section -->
-      <div *ngIf="activeSection === 'profile'" class="w-full desktop:max-w-3xl space-y-6 desktop:pr-12">
-        <h2 class="desktop:text-xl mobile:text-sm font-general-semibold text-white mb-4">Your Profile</h2>
+      <div
+        *ngIf="activeSection === 'profile'"
+        class="w-full desktop:max-w-3xl space-y-6 desktop:pr-12"
+      >
+        <h2
+          class="desktop:text-xl mobile:text-sm font-general-semibold text-white mb-4"
+        >
+          Your Profile
+        </h2>
         <!-- Profile Details -->
-        <div class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm" for="name">Full Name</label>
-          <div class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end">
+        <div
+          class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2"
+        >
+          <label
+            class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm"
+            for="name"
+            >Full Name</label
+          >
+          <div
+            class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end"
+          >
             <input
               id="name"
               type="text"
@@ -69,9 +121,17 @@
           </div>
         </div>
         <!-- Email -->
-        <div class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm" for="email">Email</label>
-          <div class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end">
+        <div
+          class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2"
+        >
+          <label
+            class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm"
+            for="email"
+            >Email</label
+          >
+          <div
+            class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end"
+          >
             <input
               id="email"
               type="email"
@@ -81,9 +141,17 @@
           </div>
         </div>
         <!-- Phone -->
-        <div class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2">
-          <label class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm" for="phone">Phone Number</label>
-          <div class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end">
+        <div
+          class="flex desktop:flex-row tablet:flex-row mobile:flex-col justify-end border-b border-primary-white pb-2"
+        >
+          <label
+            class="text-gray-400 w-1/2 font-general-semibold desktop:text-xl mobile:text-sm"
+            for="phone"
+            >Phone Number</label
+          >
+          <div
+            class="flex items-center space-x-4 desktop:w-1/2 tablet:w-1/2 justify-end"
+          >
             <input
               id="phone"
               type="text"
@@ -93,10 +161,16 @@
           </div>
         </div>
         <div class="mt-8 flex justify-between items-center">
-          <button (click)="onSave()" class="bg-primary-white text-primary-black font-semibold desktop:text-xl mobile:text-sm px-6 py-2 rounded-lg hover:bg-gray-300">
+          <button
+            (click)="onSave()"
+            class="bg-primary-white text-primary-black font-semibold desktop:text-xl mobile:text-sm px-6 py-2 rounded-lg hover:bg-gray-300"
+          >
             Save
           </button>
-          <button (click)="onDelete()" class="bg-red-600 text-primary-white font-semibold px-6 py-2 desktop:text-xl mobile:text-sm rounded-lg hover:bg-red-900">
+          <button
+            (click)="onDelete()"
+            class="bg-red-600 text-primary-white font-semibold px-6 py-2 desktop:text-xl mobile:text-sm rounded-lg hover:bg-red-900"
+          >
             Delete
           </button>
         </div>
@@ -104,45 +178,124 @@
 
       <!-- Properties Section -->
       <!-- Properties Section -->
-<div *ngIf="activeSection === 'properties'" class="w-full max-w-6xl mt-8">
-  <h2 class="text-xl font-general-semibold text-white mb-6">Your Properties</h2>
+      <div *ngIf="activeSection === 'properties'" class="w-full max-w-6xl mt-8">
+        <h2 class="text-xl font-general-semibold text-white mb-6">
+          Your Properties
+        </h2>
 
-  <!-- Loading Indicator -->
-  <div *ngIf="isLoadingProperties" class="flex items-center justify-center h-full w-full">
-    <p class="text-white text-xl font-general-semibold">Loading properties...</p>
-  </div>
+        <!-- Loading Indicator -->
+        <div
+          *ngIf="isLoadingProperties"
+          class="flex items-center justify-center h-full w-full"
+        >
+          <p class="text-white text-xl font-general-semibold">
+            Loading properties...
+          </p>
+        </div>
 
-  <!-- Properties List -->
-  <div *ngIf="!isLoadingProperties">
-    <div *ngIf="properties.length > 0; else noProperties" class="grid grid-cols-1 gap-6">
-      <div
-        *ngFor="let property of properties"
-        class="flex bg-[#1A1A1A] border border-gray-600 rounded-lg overflow-hidden shadow-md cursor-pointer"
-        (click)="onEditProperty(property.propertyId)"
-      >
-        <img
-          [src]="property.images?.[0]"
-          alt="Property Image"
-          class="w-1/3 object-cover"
-        />
-        <div class="flex flex-col p-6 w-2/3">
-          <h3 class="text-lg font-general-semibold text-white mb-2">{{ property.title }}</h3>
-          <p class="text-sm text-gray-400 mb-1"><i class="fas fa-map-marker-alt"></i> {{ property.address }}</p>
-          <p class="text-sm text-gray-400 mb-4"><i class="fas fa-home"></i> {{ property.type }}</p>
-          <p class="text-sm text-gray-400 mb-4"><i class="fas fa-ruler-combined"></i> {{ property.squareFootage }} sq meters</p>
-          <p class="text-sm text-gray-400 mb-4"><i class="fas fa-dollar-sign"></i> {{ property.price | currency }}</p>
-          <p class="text-sm text-gray-400 mb-4"><i class="fas fa-check-circle"></i> Status: {{ property.status }}</p>
+        <!-- Properties List -->
+        <div *ngIf="!isLoadingProperties">
+          <div
+            *ngIf="properties.length > 0; else noProperties"
+            class="grid grid-cols-1 gap-6"
+          >
+            <div
+              *ngFor="let property of properties"
+              class="flex desktop:flex-row tablet:flex-row mobile:flex-col bg-[#1A1A1A] border border-gray-600 rounded-lg overflow-hidden shadow-md cursor-pointer"
+              (click)="onEditProperty(property.propertyId)"
+            >
+              <img
+                [src]="property.images?.[0]"
+                alt="Property Image"
+                class="desktop:w-1/3 tablet:w-1/3 object-cover"
+              />
+              <div class="flex flex-col p-6 desktop:w-2/3 tablet:w-2/3">
+                <h3 class="text-lg font-general-semibold text-white mb-2">
+                  {{ property.title }}
+                </h3>
+                <p class="text-sm text-gray-400 mb-1">
+                  <i class="fas fa-map-marker-alt"></i> {{ property.address }}
+                </p>
+                <p class="text-sm text-gray-400 mb-4">
+                  <i class="fas fa-home"></i> {{ property.type }}
+                </p>
+                <p class="text-sm text-gray-400 mb-4">
+                  <i class="fas fa-ruler-combined"></i>
+                  {{ property.squareFootage }} sq meters
+                </p>
+                <p class="text-sm text-gray-400 mb-4">
+                  <i class="fas fa-dollar-sign"></i>
+                  {{ property.price | currency }}
+                </p>
+                <p class="text-sm text-gray-400 mb-4">
+                  <i class="fas fa-check-circle"></i> Status:
+                  {{ property.status }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Properties Message -->
+          <ng-template #noProperties>
+            <p class="text-gray-400 text-center">
+              You don't have any properties to show. Start by posting a new
+              property!
+            </p>
+          </ng-template>
         </div>
       </div>
-    </div>
-
-    <!-- No Properties Message -->
-    <ng-template #noProperties>
-      <p class="text-gray-400 text-center">You don't have any properties to show. Start by posting a new property!</p>
-    </ng-template>
-  </div>
-</div>
-
-    </div>
+      <div *ngIf="activeSection === 'transactions'" class="w-full max-w-6xl mt-8">
+        <h2 class="text-xl font-general-semibold text-white mb-6">
+          Your Transactions
+        </h2>
+      
+        <!-- Loading Indicator -->
+        <div *ngIf="isLoadingTransactions" class="flex items-center justify-center h-full w-full">
+          <p class="text-white text-xl font-general-semibold">
+            Loading transactions...
+          </p>
+        </div>
+      
+        <!-- Transactions List -->
+        <div *ngIf="!isLoadingTransactions">
+          <div *ngIf="transactionsWithProperties.length > 0; else noTransactions" class="grid grid-cols-1 gap-6">
+            <div
+              *ngFor="let transaction of transactionsWithProperties"
+              class="flex desktop:flex-row tablet:flex-row mobile:flex-col bg-[#1A1A1A] border border-gray-600 rounded-lg overflow-hidden shadow-md"
+            >
+              <img
+                [src]="transaction.property.images?.[0]"
+                alt="Property Image"
+                class="desktop:w-1/3 tablet:w-1/3 object-cover"
+              />
+              <div class="flex flex-col p-6 desktop:w-2/3 tablet:w-2/3">
+                <h3 class="text-lg font-general-semibold text-white mb-2">
+                  {{ transaction.property.title }}
+                </h3>
+                <p class="text-sm text-gray-400 mb-1">
+                  <i class="fas fa-map-marker-alt"></i> {{ transaction.property.address }}
+                </p>
+                <p class="text-sm text-gray-400 mb-4">
+                  <i class="fas fa-home"></i> {{ transaction.property.type }}
+                </p>
+                <p class="text-sm text-gray-400 mb-4">
+                  <i class="fas fa-dollar-sign"></i> Sale Price: {{ transaction.salePrice | currency }}
+                </p>
+                <p class="text-sm text-gray-400">
+                  <i class="fas fa-check-circle"></i> Status: {{ transaction.property.status }}
+                </p>
+              </div>
+            </div>
+          </div>
+      
+          <!-- No Transactions Message -->
+          <ng-template #noTransactions>
+            <p class="text-gray-400 text-center">
+              You don't have any transactions to show.
+            </p>
+          </ng-template>
+        </div>
+      </div>
+      
   </div>
 </div>
