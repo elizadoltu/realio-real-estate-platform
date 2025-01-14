@@ -124,6 +124,16 @@ export class SinglePropertyComponent implements OnInit {
       return;
     }
   
+    // Add confirmation prompt
+    const confirmation = confirm(
+      `Are you sure you want to buy this property for ${salePrice}? This action cannot be undone.`
+    );
+  
+    if (!confirmation) {
+      alert('Transaction canceled.');
+      return;
+    }
+  
     const data = { propertyId, buyerId, sellerId, salePrice };
     console.log(data);
   
@@ -146,6 +156,5 @@ export class SinglePropertyComponent implements OnInit {
           console.error('Error during transaction:', error);
         },
       });
-  }
-  
+  }  
 }
